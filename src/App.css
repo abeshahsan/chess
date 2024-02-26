@@ -1,5 +1,31 @@
+.main-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    margin: 100px auto;
+}
+
 .ch-chessboard{
-    min-width: 100%;
-    border: thin solid rgb(183, 183, 183);
+    width: 100%;
+    border: thin solid rgb(136, 16, 16);
     border-radius: 5px;
+}
+
+
+.grid-column {
+    outline: 1px solid orange;/* for test */
+}
+
+.container-grid {
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(8, 1fr);
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+}
+.container-grid .grid-column {
+    aspect-ratio: 1;
+    width: 100%;
 }

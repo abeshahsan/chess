@@ -1,25 +1,16 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
+import GridRow from "./GridComponents/grid-row";
+import Grid from "./GridComponents/grid";
 
-function App() {
+function App({ len }) {
     return (
         <>
-        <div className="main-container">
-            
-            <div className="container ch-chessboard">
-                <div className="row justify-content-center">
-                    <div className="col-sm">
-                        One of three columns
-                    </div>
-                    <div className="col-sm">
-                        One of three columns
-                    </div>
-                    <div className="col-sm">
-                        One of three columns
-                    </div>
+            <div className="main-container">
+                <div className="ch-chessboard">
+                    <Grid></Grid>
                 </div>
             </div>
-        </div>
         </>
     );
 }
