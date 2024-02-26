@@ -1,24 +1,21 @@
-import GridRow from "./grid-row";
-
-
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./grid.css"
 
-function Grid({ len }) {
-    const gridElements = [];
 
-    for (let i = 0; i < 8; i++) {
-        const key = `row-${i}`;
-        gridElements.push(
-            <GridRow key={key}></GridRow>
-        );
-    }
-
+const Grid = ({ matrix }) => {
     return (
         <>
-            {gridElements}
+            {matrix.map((row, rowIndex) => (
+                <div key={rowIndex} className="grid-row">
+                    {row.map((item, columnIndex) => (
+                        <div key={columnIndex} className="grid-column casper-cell">
+                            {item}
+                        </div>
+                    ))}
+                </div>
+            ))}
         </>
     );
-}
+};
 
 export default Grid;

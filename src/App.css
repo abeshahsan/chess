@@ -1,5 +1,8 @@
 .main-container{
-    width: 40%;
+
+    
+    border: thin dotted black;
+    width: 50%;
     margin: 100px auto;
 }
 
@@ -8,15 +11,3 @@
     border: thin solid rgb(205, 16, 16);
 }
 
-.grid-column {
-    outline: 1px solid orange; /*for test*/
-    aspect-ratio: 1;
-}
-
-.grid-row {
-    display: grid;
-    grid-auto-rows: 1fr;
-    grid-template-columns: repeat(8, 1fr);
-    grid-column-gap: 0;
-    grid-row-gap: 0;
-}

@@ -1,0 +1,33 @@
+.grid-column {
+    outline: 1px solid orange; /*for test*/
+    aspect-ratio: 1;
+}
+
+.grid-row {
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(8, 1fr);
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+}
+
+
+.casper-cell {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+    user-select: none;
+}
+
+.casper-cell:hover{
+    background-color: rgb(223, 223, 223);
+}
