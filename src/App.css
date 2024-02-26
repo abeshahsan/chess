@@ -1,31 +1,22 @@
 .main-container{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
+    width: 40%;
     margin: 100px auto;
 }
 
 .ch-chessboard{
-    width: 100%;
-    border: thin solid rgb(136, 16, 16);
-    border-radius: 5px;
+    aspect-ratio: 1;
+    border: thin solid rgb(205, 16, 16);
 }
-
 
 .grid-column {
-    outline: 1px solid orange;/* for test */
+    outline: 1px solid orange; /*for test*/
+    aspect-ratio: 1;
 }
 
-.container-grid {
+.grid-row {
     display: grid;
     grid-auto-rows: 1fr;
     grid-template-columns: repeat(8, 1fr);
     grid-column-gap: 0;
     grid-row-gap: 0;
-}
-.container-grid .grid-column {
-    aspect-ratio: 1;
-    width: 100%;
 }

@@ -14,7 +14,7 @@ function GridRow() {
 
     return (
         <>
-        <div className="row row-cols-8 container-grid">
+        <div className="grid-row">
             {gridElements}
         </div>
         </>

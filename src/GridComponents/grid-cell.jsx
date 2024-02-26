@@ -5,7 +5,7 @@ import "./grid-cell.css"
 function GridCell() {
     return (
         <>
-        <div className="casper-cell">
+        <div className="casper-cell ">
             Cell
         </div>
         </>

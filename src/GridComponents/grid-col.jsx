@@ -3,7 +3,7 @@ import GridCell from "./grid-cell";
 
 function GridCol() {
     return (
-        <div className="col border d-flex align-items-center justify-content-center grid-column">
+        <div className="grid-column">
             <GridCell></GridCell>
         </div>
     );
