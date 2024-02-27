@@ -38,11 +38,12 @@ const Grid = ({ matrix }) => {
 
     return (
         <>
-            {matrix.map((row, rowIndex) => (
-                <div key={rowIndex} className="grid-row">
-                    {row.map((item, columnIndex) => (
-                        <div key={columnIndex} onClick={onClickCell} className={`${rowIndex}${columnIndex} grid-column casper-cell 
-                            ${isAnyCellSelected && rowIndex == selectedRow && columnIndex == selectedCol ? "active":""}`}>
+            {matrix.map((row, r) => (
+                <div key={r} className="grid-row">
+                    {row.map((item, c) => (
+                        <div key={c} onClick={onClickCell} className={`${r}${c} grid-column casper-cell 
+                            ${isAnyCellSelected && r == selectedRow && c == selectedCol ? "active":""}
+                            ${(r + c) % 2 == 0 ? "black":"white"}`}>
                             {item}
                         </div>
                     ))}

@@ -39,11 +39,11 @@ const App = () => {
     return (
         <>
             <div className="main-container">
-                    <ChessboardContext.Provider value={gridMatrix}>
-                        <div className="ch-chessboard">
-                                <Grid matrix={gridMatrix} />
-                        </div>
-                    </ChessboardContext.Provider>
+                <ChessboardContext.Provider value={gridMatrix}>
+                    <div className="ch-chessboard">
+                            <Grid matrix={gridMatrix} />
+                    </div>
+                </ChessboardContext.Provider>
             </div>
         </>
     );
