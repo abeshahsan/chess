@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "./grid.css"
 import ChessboardContext from "../contexts/chessboard-context";
 import { useContext, useState } from "react";
+import { findValidMoves } from "../pieces/pieces-logics";
 
 
 const Grid = ({ matrix }) => {
@@ -31,23 +32,25 @@ const Grid = ({ matrix }) => {
             selectedRow = s[0];
             selectedCol = s[1];
             
-            if(gridMatrix[previousRow][previousCol] && !(previousRow == selectedRow && previousCol == selectedCol)) {
+            if(validMoves[`${selectedRow}${selectedCol}`]) {
                 gridMatrix[selectedRow][selectedCol] = gridMatrix[previousRow][previousCol];
                 gridMatrix[previousRow][previousCol] = null;
             }
-
         }
         else {
             isAnyCellSelected = true;
             selectedRow = s[0];
             selectedCol = s[1];
             if(!gridMatrix[selectedRow][selectedCol]) isAnyCellSelected = false;
+            else {
+                let validMoves =  findValidMoves["whitePawn"](`${selectedRow}${selectedCol}`)
+                setValidMoves(validMoves);
+            }
         }
 
         setSelectedCell(()=>{
             return [isAnyCellSelected, selectedRow, selectedCol];
         });
-
     }
 
     return (
