@@ -13,24 +13,20 @@ const Grid = ({ matrix }) => {
     let gridMatrix =  useContext(ChessboardContext)
 
     
-    let [validMoves, setValidMoves] = useState({
-        "11": true,
-        "44": true
-    })
+    let [validMoves, setValidMoves] = useState({})
 
 
     let onClickCell = (event) => {
-
         let s = event.target.className.split(" ")[0];
-
+        
         if(isAnyCellSelected) {
             isAnyCellSelected = false;
-
+            
             let previousRow = selectedRow;
             let previousCol = selectedCol;
             
-            selectedRow = s[0];
-            selectedCol = s[1];
+            selectedRow = parseInt(s[0]);
+            selectedCol = parseInt(s[1]);
             
             if(validMoves[`${selectedRow}${selectedCol}`]) {
                 gridMatrix[selectedRow][selectedCol] = gridMatrix[previousRow][previousCol];
@@ -39,11 +35,12 @@ const Grid = ({ matrix }) => {
         }
         else {
             isAnyCellSelected = true;
-            selectedRow = s[0];
-            selectedCol = s[1];
+            selectedRow = parseInt(s[0]);
+            selectedCol = parseInt(s[1]);
             if(!gridMatrix[selectedRow][selectedCol]) isAnyCellSelected = false;
             else {
-                let validMoves =  findValidMoves["whitePawn"](`${selectedRow}${selectedCol}`)
+                let pieceLogic = gridMatrix[selectedRow][selectedCol].pieceLogic;
+                let validMoves =  findValidMoves[pieceLogic](gridMatrix, selectedRow, selectedCol)
                 setValidMoves(validMoves);
             }
         }
@@ -62,7 +59,7 @@ const Grid = ({ matrix }) => {
                             ${isAnyCellSelected && r == selectedRow && c == selectedCol ? "active":""}
                             ${isAnyCellSelected && validMoves[`${r}${c}`] ? "valid":""}
                             ${(r + c) % 2 == 0 ? "black":"white"}`}>
-                            {item}
+                            {item && item.pieceComponent}
                         </div>
                     ))}
                 </div>
