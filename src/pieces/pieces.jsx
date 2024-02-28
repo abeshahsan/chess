@@ -6,7 +6,6 @@ import blackKingIcon from "../Images/black-king.png";
 import blackQueenIcon from "../Images/black-queen.png";
 
 
-
 import whitePawnIcon from "../Images/white-pawn.png";
 import whiteKnightIcon from "../Images/white-knight.png";
 import whiteRookIcon from "../Images/white-rook.png";

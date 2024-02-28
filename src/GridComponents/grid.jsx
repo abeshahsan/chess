@@ -11,6 +11,13 @@ const Grid = ({ matrix }) => {
 
     let gridMatrix =  useContext(ChessboardContext)
 
+    
+    let [validMoves, setValidMoves] = useState({
+        "11": true,
+        "44": true
+    })
+
+
     let onClickCell = (event) => {
 
         let s = event.target.className.split(" ")[0];
@@ -18,22 +25,29 @@ const Grid = ({ matrix }) => {
         if(isAnyCellSelected) {
             isAnyCellSelected = false;
 
-            let previousRow = s[0];
-            let previousCol = s[1];
+            let previousRow = selectedRow;
+            let previousCol = selectedCol;
+            
+            selectedRow = s[0];
+            selectedCol = s[1];
+            
+            if(gridMatrix[previousRow][previousCol] && !(previousRow == selectedRow && previousCol == selectedCol)) {
+                gridMatrix[selectedRow][selectedCol] = gridMatrix[previousRow][previousCol];
+                gridMatrix[previousRow][previousCol] = null;
+            }
 
-            let temp = gridMatrix[previousRow][previousCol];
-            gridMatrix[previousRow][previousCol] = gridMatrix[selectedRow][selectedCol];
-            gridMatrix[selectedRow][selectedCol] = temp;
         }
         else {
             isAnyCellSelected = true;
             selectedRow = s[0];
             selectedCol = s[1];
+            if(!gridMatrix[selectedRow][selectedCol]) isAnyCellSelected = false;
         }
 
         setSelectedCell(()=>{
             return [isAnyCellSelected, selectedRow, selectedCol];
         });
+
     }
 
     return (
@@ -43,6 +57,7 @@ const Grid = ({ matrix }) => {
                     {row.map((item, c) => (
                         <div key={c} onClick={onClickCell} className={`${r}${c} grid-column casper-cell 
                             ${isAnyCellSelected && r == selectedRow && c == selectedCol ? "active":""}
+                            ${isAnyCellSelected && validMoves[`${r}${c}`] ? "valid":""}
                             ${(r + c) % 2 == 0 ? "black":"white"}`}>
                             {item}
                         </div>

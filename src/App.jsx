@@ -18,23 +18,26 @@ const App = () => {
         [null, null, null, null, null, null, null, null],
     ]);
 
-    for (let i = 0; i < 8; i++) {
-        gridMatrix[1][i] = <BlackPawn/>
-    }
-    gridMatrix[0][0] = gridMatrix[0][7] = <BlackRook/>
-    gridMatrix[0][1] = gridMatrix[0][6] = <BlackKnight/>
-    gridMatrix[0][2] = gridMatrix[0][5] = <BlackBishop/>
-    gridMatrix[0][3] = <BlackKing/>
-    gridMatrix[0][4] = <BlackQueen/>
+    // for (let i = 0; i < 8; i++) {
+    //     gridMatrix[1][i] = <BlackPawn/>
+    // }
+
+    gridMatrix[4][3] = <WhitePawn/>
+
+    // gridMatrix[0][0] = gridMatrix[0][7] = <BlackRook/>
+    // gridMatrix[0][1] = gridMatrix[0][6] = <BlackKnight/>
+    // gridMatrix[0][2] = gridMatrix[0][5] = <BlackBishop/>
+    // gridMatrix[0][3] = <BlackKing/>
+    // gridMatrix[0][4] = <BlackQueen/>
     
-    for (let i = 0; i < 8; i++) {
-        gridMatrix[6][i] = <WhitePawn/>
-    }
-    gridMatrix[7][0] = gridMatrix[7][7] = <WhiteRook></WhiteRook>
-    gridMatrix[7][1] = gridMatrix[7][6] = <WhiteKnight></WhiteKnight>
-    gridMatrix[7][2] = gridMatrix[7][5] = <WhiteBishop></WhiteBishop>
-    gridMatrix[7][3] = <WhiteKing></WhiteKing>
-    gridMatrix[7][4] = <WhiteQueen></WhiteQueen>
+    // for (let i = 0; i < 8; i++) {
+    //     gridMatrix[6][i] = <WhitePawn/>
+    // }
+    // gridMatrix[7][0] = gridMatrix[7][7] = <WhiteRook></WhiteRook>
+    // gridMatrix[7][1] = gridMatrix[7][6] = <WhiteKnight></WhiteKnight>
+    // gridMatrix[7][2] = gridMatrix[7][5] = <WhiteBishop></WhiteBishop>
+    // gridMatrix[7][3] = <WhiteKing></WhiteKing>
+    // gridMatrix[7][4] = <WhiteQueen></WhiteQueen>
 
     return (
         <>
