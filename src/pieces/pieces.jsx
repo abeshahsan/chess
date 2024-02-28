@@ -18,7 +18,7 @@ import "../App.css"
 export const BlackPawn = () => {
     return (
         <>
-            <img className="piece-icon" src={blackPawnIcon}></img>
+            <img className="piece-icon blackPawn" src={blackPawnIcon}></img>
         </>
     );
 }
@@ -26,7 +26,7 @@ export const BlackPawn = () => {
 export const BlackRook = () => {
     return (
         <>
-            <img className="piece-icon" src={blackRookIcon}></img>
+            <img className="piece-icon blaclRook" src={blackRookIcon}></img>
         </>
     );
 }
@@ -34,7 +34,7 @@ export const BlackRook = () => {
 export const BlackKnight = () => {
     return (
         <>
-            <img className="piece-icon" src={blackKnightIcon}></img>
+            <img className="piece-icon blackKnight" src={blackKnightIcon}></img>
         </>
     );
 }
@@ -42,7 +42,7 @@ export const BlackKnight = () => {
 export const BlackBishop = () => {
     return (
         <>
-            <img className="piece-icon" src={blackBishopIcon}></img>
+            <img className="piece-icon blackBishop" src={blackBishopIcon}></img>
         </>
     );
 }
@@ -50,7 +50,7 @@ export const BlackBishop = () => {
 export const BlackKing = () => {
     return (
         <>
-            <img className="piece-icon" src={blackKingIcon}></img>
+            <img className="piece-icon blackKing" src={blackKingIcon}></img>
         </>
     );
 }
@@ -58,7 +58,7 @@ export const BlackKing = () => {
 export const BlackQueen = () => {
     return (
         <>
-            <img className="piece-icon" src={blackQueenIcon}></img>
+            <img className="piece-icon blackQueen" src={blackQueenIcon}></img>
         </>
     );
 }
@@ -73,7 +73,7 @@ export const BlackQueen = () => {
 export const WhitePawn = () => {
     return (
         <>
-            <img className="piece-icon" src={whitePawnIcon}></img>
+            <img className="piece-icon whitePawn" src={whitePawnIcon}></img>
         </>
     );
 }
@@ -81,7 +81,7 @@ export const WhitePawn = () => {
 export const WhiteRook = () => {
     return (
         <>
-            <img className="piece-icon" src={whiteRookIcon}></img>
+            <img className="piece-icon whiteRook" src={whiteRookIcon}></img>
         </>
     );
 }
@@ -89,7 +89,7 @@ export const WhiteRook = () => {
 export const WhiteKnight = () => {
     return (
         <>
-            <img className="piece-icon" src={whiteKnightIcon}></img>
+            <img className="piece-icon whiteKnight" src={whiteKnightIcon}></img>
         </>
     );
 }
@@ -97,7 +97,7 @@ export const WhiteKnight = () => {
 export const WhiteBishop = () => {
     return (
         <>
-            <img className="piece-icon" src={whiteBishopIcon}></img>
+            <img className="piece-icon whiteBishop" src={whiteBishopIcon}></img>
         </>
     );
 }
@@ -105,7 +105,7 @@ export const WhiteBishop = () => {
 export const WhiteKing = () => {
     return (
         <>
-            <img className="piece-icon" src={whiteKingIcon}></img>
+            <img className="piece-icon whiteKing" src={whiteKingIcon}></img>
         </>
     );
 }
@@ -113,7 +113,7 @@ export const WhiteKing = () => {
 export const WhiteQueen = () => {
     return (
         <>
-            <img className="piece-icon" src={whiteQueenIcon}></img>
+            <img className="piece-icon whiteQueen" src={whiteQueenIcon}></img>
         </>
     );
 }
