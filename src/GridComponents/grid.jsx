@@ -1,8 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./grid.css"
-import ChessboardContext from "../contexts/chessboard-context";
+import {ChessboardContext, OccupiedBlockedCells} from "../contexts/chessboard-context";
 import { useContext, useState } from "react";
-import { findValidMoves } from "../pieces/pieces-logics";
+import { findValidMoves, updateOccupiedCells} from "../pieces/pieces-logics";
 
 
 const Grid = ({ matrix }) => {
@@ -11,6 +11,8 @@ const Grid = ({ matrix }) => {
     let [isAnyCellSelected, selectedRow, selectedCol] = selectedCell;
 
     let gridMatrix =  useContext(ChessboardContext)
+
+    let occupiedBlockedCells = useContext(OccupiedBlockedCells);
 
     
     let [validMoves, setValidMoves] = useState({})
@@ -31,6 +33,10 @@ const Grid = ({ matrix }) => {
             if(validMoves[`${selectedRow}${selectedCol}`]) {
                 gridMatrix[selectedRow][selectedCol] = gridMatrix[previousRow][previousCol];
                 gridMatrix[previousRow][previousCol] = null;
+                
+
+                //porer kaaj
+                updateOccupiedCells(occupiedBlockedCells, gridMatrix);
             }
         }
         else {
@@ -40,7 +46,7 @@ const Grid = ({ matrix }) => {
             if(!gridMatrix[selectedRow][selectedCol]) isAnyCellSelected = false;
             else {
                 let pieceLogic = gridMatrix[selectedRow][selectedCol].pieceLogic;
-                let validMoves =  findValidMoves[pieceLogic](gridMatrix, selectedRow, selectedCol)
+                let validMoves =  findValidMoves[pieceLogic](gridMatrix, selectedRow, selectedCol, occupiedBlockedCells);
                 setValidMoves(validMoves);
             }
         }

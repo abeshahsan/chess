@@ -1,5 +1,8 @@
+import { useContext } from "react";
+import { OccupiedBlockedCells } from "../contexts/chessboard-context";
+
 export const findValidMoves = {
-    "whitePawn": (gridMatrix, currentRow, currentCol) => {
+    "whitePawn": (gridMatrix, currentRow, currentCol, occupiedBlockedCells) => {
         let moveR = [-1, -1, -1];
         let moveC = [ 0, -1,  1];
 
@@ -26,7 +29,7 @@ export const findValidMoves = {
         return validMoves;
     },
 
-    "blackPawn": (gridMatrix, currentRow, currentCol) => {
+    "blackPawn": (gridMatrix, currentRow, currentCol, occupiedBlockedCells) => {
         let moveR = [1,  1,  1];
         let moveC = [0, -1,  1];
 
@@ -52,7 +55,7 @@ export const findValidMoves = {
         return validMoves;
     },
 
-    "knight": (gridMatrix, currentRow, currentCol) => {
+    "knight": (gridMatrix, currentRow, currentCol, occupiedBlockedCells) => {
         let moveR = [-2, -2, 2,  2, -1, -1,  1, 1];
         let moveC = [ 1, -1, 1, -1, -2,  2, -2, 2];
         
@@ -80,7 +83,7 @@ export const findValidMoves = {
         return validMoves;
     },
 
-    "king": (gridMatrix, currentRow, currentCol) => {
+    "king": (gridMatrix, currentRow, currentCol, occupiedBlockedCells) => {
         let moveR = [-1, -1, -1,  1, 1, 1,  0, 0]
         let moveC = [-1,  1,  0, -1, 1, 0, -1, 1]
         
@@ -91,6 +94,15 @@ export const findValidMoves = {
             let validCol = currentCol + moveC[i];
 
             if(validRow < 0 || validRow >= 8 || validCol < 0 || validCol >= 8) {
+                continue;
+            }
+            
+            let whichKing = gridMatrix[currentRow][currentCol].pieceType
+            
+            if(whichKing == "white" && occupiedBlockedCells[validRow][validCol].blocked["black"]) {
+                continue;
+            }
+            else if(whichKing == "black" && occupiedBlockedCells[validRow][validCol].blocked["white"]) {
                 continue;
             }
 
@@ -108,7 +120,7 @@ export const findValidMoves = {
         return validMoves;
     },
 
-    "bishop": (gridMatrix, currentRow, currentCol) => {
+    "bishop": (gridMatrix, currentRow, currentCol, occupiedBlockedCells) => {
         let moveR = [-1, -1,  1,  1]
         let moveC = [-1,  1, -1,  1]
         
@@ -141,7 +153,7 @@ export const findValidMoves = {
         return validMoves;
     },
 
-    "queen": (gridMatrix, currentRow, currentCol) => {
+    "queen": (gridMatrix, currentRow, currentCol, occupiedBlockedCells) => {
         let moveR = [-1, -1,  -1,  1,  1, 1,  0, 0]
         let moveC = [-1,  1,   0, -1,  1, 0, -1, 1]
         
@@ -174,7 +186,7 @@ export const findValidMoves = {
         return validMoves;
     },
 
-    "rook": (gridMatrix, currentRow, currentCol) => {
+    "rook": (gridMatrix, currentRow, currentCol, occupiedBlockedCells) => {
         let moveR = [-1, 1,  0, 0]
         let moveC = [ 0, 0, -1, 1]
         
@@ -206,4 +218,55 @@ export const findValidMoves = {
 
         return validMoves;
     },
+}
+
+export let updateOccupiedCells = (occupiedBlockedCells, gridMatrix) => {
+    for(let i = 0; i < 8; i++) {
+        for(let j = 0; j < 8; j++) {
+            occupiedBlockedCells[i][j] = {
+                occupied: null,
+                blocked: {},
+            }
+        }
+    }
+
+    let whiteKingRow, whiteKingCol, blackKingRow, blackKingCol;
+
+    for(let i = 0; i < 8; i++) {
+        for(let j = 0; j < 8; j++) {
+            if(gridMatrix[i][j]) {
+                occupiedBlockedCells[i][j].occupied = gridMatrix[i][j].pieceType;
+
+                let piece = gridMatrix[i][j];
+                
+                if(piece.pieceLogic == "king") {
+                    if(piece.pieceType == "white") {
+                        whiteKingRow = i, whiteKingCol = j;
+                    }
+                    else {
+                        blackKingRow = i, blackKingCol = j;
+                    }
+                }
+                
+                let valiedMoves = findValidMoves[piece.pieceLogic](gridMatrix, i, j, occupiedBlockedCells);
+
+                for(let key in valiedMoves) {
+                    occupiedBlockedCells[`${key[0]}`][`${key[1]}`].blocked[`${piece.pieceType}`] = true;
+                }
+
+            } else {
+                occupiedBlockedCells[i][j].occupied = null;
+            }
+        }
+    }
+
+    let valiedMoves = findValidMoves["king"](gridMatrix, whiteKingRow, whiteKingCol, occupiedBlockedCells);
+    for(let key in valiedMoves) {
+        occupiedBlockedCells[`${key[0]}`][`${key[1]}`].blocked["white"] = true;
+    }
+    valiedMoves = findValidMoves["king"](gridMatrix, blackKingRow, blackKingCol, occupiedBlockedCells);
+    for(let key in valiedMoves) {
+        occupiedBlockedCells[`${key[0]}`][`${key[1]}`].blocked["black"] = true;
+    }
+
 }

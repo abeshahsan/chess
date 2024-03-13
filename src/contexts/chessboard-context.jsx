@@ -1,5 +1,7 @@
 import React from 'react';
 
-const ChessboardContext = React.createContext([]);
+export const ChessboardContext = React.createContext([]);
 
-export default ChessboardContext;
+
+export const OccupiedBlockedCells = React.createContext([]);
+
