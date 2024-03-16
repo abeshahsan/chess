@@ -1,8 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./grid.css"
-import {ChessboardContext, OccupiedBlockedCells} from "../contexts/chessboard-context";
+import {ChessboardContext} from "../contexts/chessboard-context";
 import { useContext, useState } from "react";
-import { findValidMoves, updateOccupiedCells} from "../pieces/pieces-logics";
+import { checkForCheck, findValidMoves} from "../pieces/pieces-logics";
 
 
 const Grid = ({ matrix }) => {
@@ -11,8 +11,6 @@ const Grid = ({ matrix }) => {
     let [isAnyCellSelected, selectedRow, selectedCol] = selectedCell;
 
     let gridMatrix =  useContext(ChessboardContext)
-
-    let occupiedBlockedCells = useContext(OccupiedBlockedCells);
 
     
     let [validMoves, setValidMoves] = useState({})
@@ -31,12 +29,20 @@ const Grid = ({ matrix }) => {
             selectedCol = parseInt(s[1]);
             
             if(validMoves[`${selectedRow}${selectedCol}`]) {
+                if(gridMatrix[selectedRow][selectedCol]) {
+                    gridMatrix[selectedRow][selectedCol].alive = false;
+                }
+
                 gridMatrix[selectedRow][selectedCol] = gridMatrix[previousRow][previousCol];
                 gridMatrix[previousRow][previousCol] = null;
                 
+                gridMatrix[selectedRow][selectedCol].row = selectedRow;
+                gridMatrix[selectedRow][selectedCol].col = selectedCol;
+
+                console.log(gridMatrix[selectedRow][selectedCol].pieceType);
 
                 //porer kaaj
-                updateOccupiedCells(occupiedBlockedCells, gridMatrix);
+                console.log(checkForCheck(gridMatrix, gridMatrix[selectedRow][selectedCol].pieceType == "White" ? "black" : "white"));
             }
         }
         else {
@@ -46,7 +52,7 @@ const Grid = ({ matrix }) => {
             if(!gridMatrix[selectedRow][selectedCol]) isAnyCellSelected = false;
             else {
                 let pieceLogic = gridMatrix[selectedRow][selectedCol].pieceLogic;
-                let validMoves =  findValidMoves[pieceLogic](gridMatrix, selectedRow, selectedCol, occupiedBlockedCells);
+                let validMoves =  findValidMoves[pieceLogic](gridMatrix, selectedRow, selectedCol);
                 setValidMoves(validMoves);
             }
         }
