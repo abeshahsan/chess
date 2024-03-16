@@ -181,7 +181,7 @@ export const findValidMoves = {
         return validMoves;
     },
 
-    "king": (gridMatrix, currentRow, currentCol) => {
+    "king": (gridMatrix, currentRow, currentCol, checkAttackingPieces = true) => {
         let moveR = [-1, -1, -1,  1, 1, 1,  0, 0]
         let moveC = [-1,  1,  0, -1, 1, 0, -1, 1]
         
@@ -196,33 +196,35 @@ export const findValidMoves = {
             }
 
             if(!gridMatrix[validRow][validCol] || gridMatrix[validRow][validCol].pieceType != gridMatrix[currentRow][currentCol].pieceType) {
-                let temp = gridMatrix[validRow][validCol];
-                gridMatrix[validRow][validCol] = null;
-                let makeItValid = true;
-                
-                let oppositePieces;
-                
-                if(gridMatrix[currentRow][currentCol].pieceType == "white") {
-                    oppositePieces = blackPieces;
+                if(checkAttackingPieces) {
+                    let temp = gridMatrix[validRow][validCol];
+                    gridMatrix[validRow][validCol] = null;
+                    
+                    
+                    let makeItValid = true;
+                    let oppositePieces;
+                    if(gridMatrix[currentRow][currentCol].pieceType == "white") {
+                        oppositePieces = blackPieces;
+                    }
+                    else {
+                        oppositePieces = whitePieces;
+                    }
+                    for(let i = 0; i < oppositePieces.length; i++) {
+                        let piece = oppositePieces[i];
+                        if(!piece.alive || piece == temp) continue;
+    
+                        let tempMoves = findValidMoves[piece.pieceLogic](gridMatrix, piece.row, piece.col, false);
+                        if(tempMoves[`${validRow}${validCol}`]) {
+                            makeItValid = false;
+                            break;
+                        }
+                    }
+                    gridMatrix[validRow][validCol] = temp;
+                    if(makeItValid) validMoves[`${validRow}${validCol}`] = true;
                 }
                 else {
-                    oppositePieces = whitePieces;
+                    validMoves[`${validRow}${validCol}`] = true;
                 }
-                for(let i = 0; i < oppositePieces.length; i++) {
-                    let piece = oppositePieces[i];
-                    if(!piece.alive || piece == temp) continue;
-
-
-                    if(piece.pieceLogic == "king") continue;
-
-                    let tempMoves = findValidMoves[piece.pieceLogic](gridMatrix, piece.row, piece.col);
-                    if(tempMoves[`${validRow}${validCol}`]) {
-                        makeItValid = false;
-                        break;
-                    }
-                }
-                gridMatrix[validRow][validCol] = temp;
-                if(makeItValid) validMoves[`${validRow}${validCol}`] = true;
             }
         }
     
@@ -235,7 +237,6 @@ export function checkForCheck(gridMatrix, kingColor)
     let oppositePieces, kingRow, kingCol;
     
     if(kingColor == "white") {
-        console.log("lol");
         oppositePieces = blackPieces;
         kingRow = whiteKing.row;
         kingCol = whiteKing.col;
@@ -251,8 +252,6 @@ export function checkForCheck(gridMatrix, kingColor)
 
         let tempMoves = findValidMoves[piece.pieceLogic](gridMatrix, piece.row, piece.col);
 
-        if(piece.pieceLogic == "queen") console.log(kingRow, kingCol, piece);
-
         if(tempMoves[`${kingRow}${kingCol}`]) {
             return true;
         }
@@ -263,9 +262,9 @@ export function checkForCheck(gridMatrix, kingColor)
 export function checkForCheckMate(gridMatrix, color)
 {
     if(color == "white") {
-        return Object.keys(findValidMoves["king"](gridMatrix, whiteKing.row, whiteKing.col)).length;
+        return Object.keys(findValidMoves["king"](gridMatrix, whiteKing.row, whiteKing.col)).length == 0;
     }
     else {
-        return Object.keys(findValidMoves["king"](gridMatrix, blackKing.row, blackKing.col)).length;
+        return Object.keys(findValidMoves["king"](gridMatrix, blackKing.row, blackKing.col)).length == 0;
     }
 }

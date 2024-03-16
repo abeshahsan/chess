@@ -1,8 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./grid.css"
-import {ChessboardContext} from "../contexts/chessboard-context";
+import {GridMatrixContext} from "../contexts/chessboard-context";
 import { useContext, useState } from "react";
-import { checkForCheck, findValidMoves} from "../pieces/pieces-logics";
+import { checkForCheck, checkForCheckMate, findValidMoves} from "../pieces/pieces-logics";
 
 
 const Grid = ({ matrix }) => {
@@ -10,7 +10,7 @@ const Grid = ({ matrix }) => {
 
     let [isAnyCellSelected, selectedRow, selectedCol] = selectedCell;
 
-    let gridMatrix =  useContext(ChessboardContext)
+    let gridMatrix =  useContext(GridMatrixContext)
 
     
     let [validMoves, setValidMoves] = useState({})
@@ -39,10 +39,9 @@ const Grid = ({ matrix }) => {
                 gridMatrix[selectedRow][selectedCol].row = selectedRow;
                 gridMatrix[selectedRow][selectedCol].col = selectedCol;
 
-                console.log(gridMatrix[selectedRow][selectedCol].pieceType);
-
                 //porer kaaj
-                console.log(checkForCheck(gridMatrix, gridMatrix[selectedRow][selectedCol].pieceType == "White" ? "black" : "white"));
+                console.log(checkForCheck(gridMatrix, gridMatrix[selectedRow][selectedCol].pieceType == "white" ? "black" : "white"));
+                console.log(checkForCheckMate(gridMatrix, gridMatrix[selectedRow][selectedCol].pieceType == "white" ? "black" : "white"));
             }
         }
         else {

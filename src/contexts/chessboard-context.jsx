@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BlackBishop, BlackKing, BlackKnight, BlackPawn, BlackQueen, BlackRook, WhiteBishop, WhiteKing, WhiteKnight, WhitePawn, WhiteQueen, WhiteRook } from '../pieces/pieces';
+import Grid from '../GridComponents/grid';
 
-export const ChessboardContext = React.createContext([]);
+export const GridMatrixContext = React.createContext([]);
 
-export const PiecesContext = React.createContext();
+export const PiecesInfoContext = React.createContext({
+    blackPieces: [],
+    whitePieces: []
+});
 
 export let blackPieces = [
     {
@@ -25,8 +29,6 @@ export let blackPieces = [
 ];
 
 export let whitePieces = [
-    //Black Pieces
-
     {
         alive: true,
         pieceComponent: <WhiteQueen/>,
@@ -48,8 +50,8 @@ export let whitePieces = [
         pieceComponent: <WhiteKing/>,
         pieceType: "white",
         pieceLogic: "king",
-        row: 6,
-        col: 5
+        row: 1,
+        col: 3
     },
     
 
@@ -328,3 +330,37 @@ export let blackKing, whiteKing;
     });
 })();
 
+
+export function PiecesInfoContextProvider({children}) {
+    return (
+        <PiecesInfoContext.Provider value={{
+            blackPieces,
+            whitePieces,
+        }}>
+            {children}
+        </PiecesInfoContext.Provider>
+    );
+}
+
+export function GridMatrixContextProvider({children}) {
+    let [gridMatrix, setGridMatrix] = useState(new Array(8).fill().map(() => new Array(8).fill(null)));
+
+    for(let index in whitePieces) {
+        let piece = whitePieces[index];
+        gridMatrix[piece.row][piece.col] = piece;
+    }
+    for(let index in blackPieces) {
+        let piece = blackPieces[index];
+        gridMatrix[piece.row][piece.col] = piece;
+    }
+
+    return (
+        <GridMatrixContext.Provider value={{
+            gridMatrix,
+        }}>
+            <div className="ch-chessboard">
+                <Grid matrix={gridMatrix} />
+            </div>
+        </GridMatrixContext.Provider>
+    );
+}
