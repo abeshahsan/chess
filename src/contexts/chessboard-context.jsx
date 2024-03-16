@@ -342,7 +342,7 @@ export function PiecesInfoContextProvider({children}) {
     );
 }
 
-export function GridMatrixContextProvider({children}) {
+export function GridMatrixContextProvider() {
     let [gridMatrix, setGridMatrix] = useState(new Array(8).fill().map(() => new Array(8).fill(null)));
 
     for(let index in whitePieces) {
@@ -359,7 +359,7 @@ export function GridMatrixContextProvider({children}) {
             gridMatrix,
         }}>
             <div className="ch-chessboard">
-                <Grid matrix={gridMatrix} />
+                <Grid gridMatrix={gridMatrix} />
             </div>
         </GridMatrixContext.Provider>
     );

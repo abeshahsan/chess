@@ -5,14 +5,11 @@ import { useContext, useState } from "react";
 import { checkForCheck, checkForCheckMate, findValidMoves} from "../pieces/pieces-logics";
 
 
-const Grid = ({ matrix }) => {
+const Grid = ({ gridMatrix }) => {
     let [selectedCell, setSelectedCell] = useState([false, 1, 1]);
 
     let [isAnyCellSelected, selectedRow, selectedCol] = selectedCell;
 
-    let gridMatrix =  useContext(GridMatrixContext)
-
-    
     let [validMoves, setValidMoves] = useState({})
 
 
@@ -63,7 +60,7 @@ const Grid = ({ matrix }) => {
 
     return (
         <>
-            {matrix.map((row, r) => (
+            {gridMatrix.map((row, r) => (
                 <div key={r} className="grid-row">
                     {row.map((item, c) => (
                         <div key={c} onClick={onClickCell} className={`${r}${c} grid-column casper-cell 
