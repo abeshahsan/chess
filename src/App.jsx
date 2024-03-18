@@ -1,22 +1,45 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
 
-import { GridMatrixContextProvider, PiecesInfoContextProvider, blackPieces, whitePieces } from "./contexts/chessboard-context";
+import {GoogleOAuthProvider} from "@react-oauth/google";
+import Login from "./login";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
+import {GridMatrixContextProvider, PiecesInfoContextProvider} from "./store/chessboard-context.jsx";
+import { useContext, useRef, useState } from "react";
+import UserContextProvider, { UserContext } from "./store/user-context.jsx";
+
 const App = () => {
+
+ 
+    let [path, setPath] = useState("");
+
+    function onClickLoginBtn(event) {
+        setPath("login");
+    }
+
     return (
         <>
-            <Header></Header>
-            <div className="main-container d-flex align-items-center justify-content-center">
-                <Sidebar></Sidebar>
-                <div className="container game-container">
-                    <GridMatrixContextProvider>
-                        <PiecesInfoContextProvider/>
-                    </GridMatrixContextProvider>
-                </div>
-            </div>
+        <GoogleOAuthProvider clientId="929768303544-st9fu3ts2jsgeavkta8c1lp4g3qe891k.apps.googleusercontent.com">
+                {path == "" ? 
+                (
+                    <>
+                        <Header onClick={onClickLoginBtn}></Header>
+                        <div className="main-container d-flex align-items-center justify-content-center">
+                            <Sidebar></Sidebar>
+                            <div className="container game-container">
+                                <GridMatrixContextProvider>
+                                    <PiecesInfoContextProvider/>
+                                </GridMatrixContextProvider>
+                            </div>
+                        </div>
+                    </>
+                )
+                : path == "login" && <Login setpath={setPath}/>
+                
+                }
+        </GoogleOAuthProvider>
         </>
     );
 };

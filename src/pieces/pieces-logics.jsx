@@ -1,4 +1,4 @@
-import { blackKing, blackPieces, whiteKing, whitePieces } from "../contexts/chessboard-context";
+import { blackKing, blackPieces, whiteKing, whitePieces } from "../store/chessboard-context";
 
 export const findValidMoves = {
     "whitePawn": (gridMatrix, currentRow, currentCol) => {

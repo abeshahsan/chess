@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./grid.css"
-import {GridMatrixContext} from "../contexts/chessboard-context";
+import {GridMatrixContext} from "../store/chessboard-context";
 import { useContext, useState } from "react";
 import { checkForCheck, checkForCheckMate, findValidMoves} from "../pieces/pieces-logics";
 
