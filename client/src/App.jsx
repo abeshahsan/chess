@@ -7,8 +7,7 @@ import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
 import {GridMatrixContextProvider, PiecesInfoContextProvider} from "./store/chessboard-context.jsx";
-import { useContext, useRef, useState } from "react";
-import UserContextProvider, { UserContext } from "./store/user-context.jsx";
+import { useState } from "react";
 
 const App = () => {
 
