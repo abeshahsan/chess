@@ -7,10 +7,22 @@ import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
 import {GridMatrixContextProvider, PiecesInfoContextProvider} from "./store/chessboard-context.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const App = () => {
 
+    useEffect(() => {
+        fetch(`/api/comments`)
+            .then((res) => {
+                console.log(res);
+                res.json().then((data) =>{
+                    console.log(data);
+                })
+            })
+            .catch((err) => {
+                 console.log(err);
+             })
+    }, [])
  
     let [path, setPath] = useState("");
 
