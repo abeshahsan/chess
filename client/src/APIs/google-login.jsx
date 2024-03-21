@@ -18,6 +18,7 @@ export default function GoogleSiginIn({setPath}) {
                         email: decodedJSON.email,
                         picture: decodedJSON.picture
                     });
+                    console.log(decodedJSON.picture)
                     setPath("");
                 }}
                 onError={() => {

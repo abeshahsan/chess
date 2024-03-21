@@ -1,9 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css"
 
 import {GoogleOAuthProvider} from "@react-oauth/google";
 import Login from "./login";
-import { Header } from "./header";
+import { Header } from "./header-components/header.jsx";
 import { Sidebar } from "./sidebar";
 
 import {GridMatrixContextProvider, PiecesInfoContextProvider} from "./store/chessboard-context.jsx";
@@ -34,7 +35,7 @@ const App = () => {
                 {path == "" ? 
                 (
                     <>
-                        <Header onClick={onClickLoginBtn}></Header>
+                        <Header onClickLoginBtn={onClickLoginBtn}></Header>
                         <div className="main-container d-flex align-items-center justify-content-center">
                             <Sidebar></Sidebar>
                             <div className="container game-container">
