@@ -1,9 +1,15 @@
+import { getCredentials } from "../../../../data/data";
+
 export async function GET() {
-    return Response.json([
-        {
-            "s": 200,
-        },
-    ]) ;
+
+    const { data, errMsg } = await getCredentials();
+
+    if (errMsg)
+        console.log(errMsg);
+
+        console.log(data);
+
+    return Response.json(data);
 }
 
 
@@ -13,5 +19,5 @@ export async function POST() {
         {
             "s": 200,
         },
-    ]) ;
+    ]);
 }
