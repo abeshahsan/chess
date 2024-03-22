@@ -7,7 +7,7 @@ import CredentialsModel from "@/models/CredentialsModel";
 export async function getCredentials() {
   try {
     await connectDB();
-    const data = await CredentialsModel.find({});
+    const data = await CredentialsModel.find();
 
     // throw new Error('Error!')
 

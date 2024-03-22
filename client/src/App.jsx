@@ -10,17 +10,17 @@ import {GridMatrixContextProvider, PiecesInfoContextProvider} from "./store/ches
 import { useEffect, useState } from "react";
 
 const App = () => {
-    // useEffect(() => {
-    //     fetch(`/api/comments`)
-    //         .then((res) => {
-    //             res.json().then((data) =>{
-    //                 console.log(data);
-    //             })
-    //         })
-    //         .catch((err) => {
-    //              console.log(err);
-    //          })
-    // }, [])
+    useEffect(() => {
+        fetch(`/api/comments`)
+            .then((res) => {
+                res.json().then((data) =>{
+                    console.log(data);
+                })
+            })
+            .catch((err) => {
+                 console.log(err);
+             })
+    }, [])
  
     let [path, setPath] = useState("");
 
