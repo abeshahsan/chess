@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import "./sidebar.css"
 import { UserContext } from "./store/user-context";
+import { Link } from "react-router-dom";
 
 export function Sidebar() {
 
@@ -10,10 +11,10 @@ export function Sidebar() {
             <hr style={{ visibility: "hidden" }} />
             <ul className="nav nav-pills flex-column mb-auto">
                 <li className="nav-item">
-                    <a href="#" className="nav-link active" aria-current="page">
+                    <Link to="/" className="nav-link active" aria-current="page">
                         <svg className="bi pe-none me-2" width="16" height="16"><use xlinkHref="#home"></use></svg>
                         Home
-                    </a>
+                    </Link>
                 </li>
                 <li>
                     <a href="#" className="nav-link link-body-emphasis">
