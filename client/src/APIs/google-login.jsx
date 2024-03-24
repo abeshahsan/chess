@@ -1,11 +1,13 @@
 
-import {GoogleLogin, googleLogout} from "@react-oauth/google";
-import {jwtDecode} from "jwt-decode";
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 import { useContext } from "react";
 import { UserContext } from "../store/user-context";
 
-export default function GoogleSiginIn({register}) {
+export default function GoogleSiginIn({ register }) {
     let [user, setUser] = useContext(UserContext);
+
+    googleLogout();
 
     return (
         <>

@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import "./header.css";
 import { UserContext } from "../store/user-context";
-import LoginComponent from "./login-component";
-import UserComponent from "./user-component";
+import LoginComponent from "./login-panel";
+import UserComponent from "./user-panel";
 
 export function Header({ onClickLoginBtn }) {
 

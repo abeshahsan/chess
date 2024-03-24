@@ -62,6 +62,13 @@ const App = () => {
                     >
                     </Route>
                     <Route
+                        path="/register"
+                        element={
+                            <Login register={true}></Login>
+                        }
+                    >
+                    </Route>
+                    <Route
                         path="*"
                         element={
                             <NotFoundPage></NotFoundPage>
