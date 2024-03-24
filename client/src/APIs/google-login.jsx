@@ -3,15 +3,18 @@ import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useContext, useState } from "react";
 import { UserContext } from "../store/user-context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 
-let navigate;
+let navigate, location;
 
-export default function GoogleSiginIn({ register, setError }) {
+export default function GoogleSiginIn({ setError }) {
     let [user, setUser] = useContext(UserContext);
 
     navigate = useNavigate();
+    location = useLocation();
+
+    let register = location.pathname == "/register";
 
     googleLogout();
 
@@ -54,9 +57,12 @@ function handleLoginRequest(credentialResponse, setUser) {
         return response.json();
     })
     .then((data) => {
-        setUser(data);
+        setUser(data[0]);
         navigate("/")
-    });
+    })
+    .catch((err) => {
+        console.log(err);
+    })
 }
 
 function handleRegisterRequest(credentialResponse, setUser) {
@@ -65,5 +71,27 @@ function handleRegisterRequest(credentialResponse, setUser) {
         name: decodedJSON.name,
         email: decodedJSON.email,
         picture: decodedJSON.picture
+    });
+    fetch("/api/register", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: decodedJSON.name,
+            email: decodedJSON.email,
+            picture: decodedJSON.picture
+        })
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .then((res) => {
+        console.log(res);
+        navigate("/")
+    })
+    .catch((err) => {
+        console.log(err);
     });
 }
