@@ -1,6 +1,6 @@
 'use server'
 
-import connectDB from "@/lib/db";
+import connectDB from "@/_lib/db";
 import CredentialsModel from "@/models/CredentialsModel";
 
 (async () => {

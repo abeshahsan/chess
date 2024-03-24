@@ -1,5 +1,6 @@
 // import { getCredentials } from "../../../../data/data";
 
+import { setCurrentUser } from "@/_lib/user";
 import { findUser } from "../../../../data/data";
 
 // export async function GET() {
@@ -19,7 +20,8 @@ export async function POST(req) {
     try {
         let body = await req.json();
         let user = await findUser(body.email);
-        return Response.json(user.data);
+        setCurrentUser(user.data[0]);
+        return Response.json(user.data[0]);
     } catch (error) {
         return Response.status(400).json({ error: error.message });
     }

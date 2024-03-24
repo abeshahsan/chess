@@ -53,16 +53,16 @@ function handleLoginRequest(credentialResponse, setUser) {
             email: decodedJSON.email,
         })
     })
-    .then((response) => {
-        return response.json();
-    })
-    .then((data) => {
-        setUser(data[0]);
-        navigate("/")
-    })
-    .catch((err) => {
-        console.log(err);
-    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            setUser(data[0]);
+            navigate("/")
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 }
 
 function handleRegisterRequest(credentialResponse, setUser) {
@@ -84,14 +84,14 @@ function handleRegisterRequest(credentialResponse, setUser) {
             picture: decodedJSON.picture
         })
     })
-    .then((response) => {
-        return response.json();
-    })
-    .then((res) => {
-        console.log(res);
-        navigate("/")
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+        .then((response) => {
+            return response.json();
+        })
+        .then((res) => {
+            console.log(res);
+            navigate("/")
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }

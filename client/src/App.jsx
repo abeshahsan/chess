@@ -14,8 +14,6 @@ import NotFoundPage from "./NotFound.jsx";
 import Register from "./register.jsx";
 
 const App = () => {
-    let [path, setPath] = useState("");
-
     return (
         <>
             <BrowserRouter>
@@ -25,7 +23,7 @@ const App = () => {
                         path="/"
                         element={
                             <>
-                                <Header/>
+                                <Header />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <div className="container game-container">
