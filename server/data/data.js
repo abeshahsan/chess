@@ -3,16 +3,26 @@
 import connectDB from "@/lib/db";
 import CredentialsModel from "@/models/CredentialsModel";
 
+(async () => {
+    await connectDB();
+})();
 
 export async function getCredentials() {
-  try {
-    await connectDB();
-    const data = await CredentialsModel.find();
+    try {
+        const data = await CredentialsModel.find();
 
-    // throw new Error('Error!')
+        return { data }
+    } catch (error) {
+        return { errMsg: error.message }
+    }
+}
 
-    return { data }
-  } catch (error) {
-    return { errMsg: error.message }
-  }
+export async function findUser(email) {
+    try {
+        const data = await CredentialsModel.find({ email });
+
+        return { data: data[0] }
+    } catch (error) {
+        return { errMsg: error.message }
+    }
 }

@@ -1,11 +1,17 @@
 
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../store/user-context";
+import { useNavigate } from "react-router-dom";
 
-export default function GoogleSiginIn({ register }) {
+
+let navigate;
+
+export default function GoogleSiginIn({ register, setError }) {
     let [user, setUser] = useContext(UserContext);
+
+    navigate = useNavigate();
 
     googleLogout();
 
@@ -13,20 +19,51 @@ export default function GoogleSiginIn({ register }) {
         <>
             <GoogleLogin
                 buttonText={`${register ? "Sign up" : "Sign in"} with Google`}
-                onSuccess={credentialResponse => {
-                    let decodedJSON = jwtDecode(credentialResponse.credential);
-                    setUser({
-                        id: decodedJSON.sub,
-                        name: decodedJSON.name,
-                        email: decodedJSON.email,
-                        picture: decodedJSON.picture
-                    });
-                    console.log(decodedJSON)
-                }}
+                onSuccess={credentialResponse => handleSuccess(credentialResponse, register, setUser)}
                 onError={() => {
-                    console.log('Login Failed');
+                    setError(true);
                 }}
             />
         </>
     );
 };
+
+function handleSuccess(credentialResponse, register, setUser) {
+    if (register) {
+        handleRegisterRequest(credentialResponse, setUser, navigate);
+        // console.log(decodedJSON)
+    }
+    else {
+        handleLoginRequest(credentialResponse, setUser, navigate);
+    }
+}
+
+function handleLoginRequest(credentialResponse, setUser) {
+    let decodedJSON = jwtDecode(credentialResponse.credential);
+    fetch("/api/login", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: decodedJSON.email,
+        })
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+        setUser(data);
+        navigate("/")
+    });
+}
+
+function handleRegisterRequest(credentialResponse, setUser) {
+    let decodedJSON = jwtDecode(credentialResponse.credential);
+    setUser({
+        name: decodedJSON.name,
+        email: decodedJSON.email,
+        picture: decodedJSON.picture
+    });
+}

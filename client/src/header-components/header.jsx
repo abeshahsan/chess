@@ -4,7 +4,7 @@ import { UserContext } from "../store/user-context";
 import LoginComponent from "./login-panel";
 import UserComponent from "./user-panel";
 
-export function Header({ onClickLoginBtn }) {
+export function Header() {
 
     let [user, setUser] = useContext(UserContext);
 
@@ -26,7 +26,7 @@ export function Header({ onClickLoginBtn }) {
                     
                     :
                     
-                    <LoginComponent onClickLoginBtn={onClickLoginBtn}></LoginComponent>
+                    <LoginComponent></LoginComponent>
                 }
 
             </header>
