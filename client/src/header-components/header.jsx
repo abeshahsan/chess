@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import "./header.css";
 import { UserContext } from "../store/user-context";
 import LoginPanel from "./login-panel";
-import UserComponent from "./user-panel";
+import UserPanel from "./user-panel";
 import { Link, useLocation } from "react-router-dom";
 
 export function Header() {
@@ -43,7 +43,7 @@ export function Header() {
                 {
                     !fetchingUser &&
                     (user ?
-                        <UserComponent></UserComponent>
+                        <UserPanel></UserPanel>
 
                         :
 

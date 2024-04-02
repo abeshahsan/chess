@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-export default function UserComponent() {
+export default function UserPanel() {
 
     let [user, setUser] = useContext(UserContext);
 

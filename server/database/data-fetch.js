@@ -40,8 +40,20 @@ async function insertUser(user) {
     }
 }
 
+async function getAllUsers() {
+    try {
+        const data = await CredentialsModel.find();
+
+        return { data }
+    } catch (error) {
+        console.log(`${error.message}`);
+        throw new Error(error.message);
+    }
+}
+
 module.exports = {
     getCredentials,
     findUser,
     insertUser,
+    getAllUsers,
 };

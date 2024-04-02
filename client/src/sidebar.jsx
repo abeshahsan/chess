@@ -17,10 +17,10 @@ export function Sidebar() {
                     </Link>
                 </li>
                 <li>
-                    <a href="#" className="nav-link link-body-emphasis">
+                    <Link to="/users" className="nav-link link-body-emphasis">
                         <svg className="bi pe-none me-2" width="16" height="16"><use xlinkHref="#speedometer2"></use></svg>
-                        Dashboard
-                    </a>
+                        Users
+                    </Link>
                 </li>
                 <li>
                     <a href="#" className="nav-link link-body-emphasis">

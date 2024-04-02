@@ -24,7 +24,8 @@ app.use(expressSession({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api', require('./api/user'));
+const requestsRouter = require('./api/requests');
+app.use('/api', requestsRouter);
 
 
 // catch 404 and forward to error handler

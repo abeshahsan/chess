@@ -1,5 +1,5 @@
 const express = require('express');
-const { findUser, insertUser } = require('../database/data-fetch');
+const { findUser, insertUser, getAllUsers } = require('../database/data-fetch');
 
 var router = express.Router();
 
@@ -60,6 +60,27 @@ router.get('/current-user', function (req, res, next) {
         user: req.session.user
     });
 });
+
+router.get('/get-all-users', async (req, res, next) => {
+
+    try {
+        let users = await getAllUsers();
+
+        // console.log(users);
+
+        return res.send({
+            users: users
+        });
+    } catch (error) {
+        console.log(error);
+        return res.send({
+            error: error.message,
+            status: 0,
+        });
+    }
+});
+
+
 
 router.post('/logout', function (req, res, next) {
 
