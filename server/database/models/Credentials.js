@@ -1,6 +1,4 @@
-
-
-import mongoose from 'mongoose';
+const {mongoose} = require('mongoose')
 
 const userSchema = new mongoose.Schema({
     name: String,
@@ -8,4 +6,4 @@ const userSchema = new mongoose.Schema({
 
 const CredentialsModel = mongoose.models.credentials || mongoose.model('credentials', userSchema);
 
-export default CredentialsModel;
+module.exports = CredentialsModel

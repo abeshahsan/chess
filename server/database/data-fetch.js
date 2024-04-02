@@ -1,13 +1,12 @@
-'use server'
+const connectDB = require('./connection')
+const CredentialsModel = require('./models/Credentials');
 
-import connectDB from "@/_lib/db";
-import CredentialsModel from "@/models/CredentialsModel";
 
 (async () => {
     await connectDB();
 })();
 
-export async function getCredentials() {
+async function getCredentials() {
     try {
         const data = await CredentialsModel.find();
 
@@ -17,26 +16,32 @@ export async function getCredentials() {
     }
 }
 
-export async function findUser(email) {
+async function findUser(email) {
     try {
         const data = await CredentialsModel.find({ email });
 
         return { data }
     } catch (error) {
-        return { errMsg: error.message }
+        throw new Error(error.message);
     }
 }
 
-export async function insertUser(user) {
+async function insertUser(user) {
     try {
         const data = await CredentialsModel.collection.insertOne({
             email: user.email,
             name: user.name,
             picture: user.picture,
-        })
+        });
         console.log(data);
         return { data: data[0] }
     } catch (error) {
-        return { errMsg: error.message }
+        throw new Error(error.message);
     }
 }
+
+module.exports = {
+    getCredentials,
+    findUser,
+    insertUser,
+};

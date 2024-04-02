@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 
-export default function LoginComponent() {
+export default function LoginPanel() {
     const navigate = useNavigate();
 
     return (

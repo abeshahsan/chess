@@ -16,16 +16,33 @@ export default function UserComponent() {
 
     function handleOnLogout() {
         setUser(null);
-        navigate("/");
+        fetch("/api/logout", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/json"
+            },
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                setUser(null)
+                navigate("/")
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     return (
         <>
             <div className={`dropdown ${dropdownShow ? "show" : ""}`}>
-                <button className="btn btn-sm rounded-circle p-1" type="button" style={{ aspectRatio: 1 }} id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                <button className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center" type="button" style={{ width: '37px', height: "37px"}} id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                     onClick={() => setDropdownToggle(() => { return !dropdownShow; })}
                 >
-                    <img className="rounded-circle" style={{ width: '35px', aspectRatio: "1" }} src={user.picture} />
+                    <img className="rounded-circle" style={{ width: '30px', height: "30px"}} src={user.picture} />
                 </button>
                 <div className={`dropdown-menu shadow p-2 ${dropdownShow ? "show" : ""}`} style={{ "right": "0", "left": "auto", "width": "240px" }} aria-labelledby="dropdownMenu2">
                     <div className="border rounded d-flex align-items-center flex-column justify-content-center m-2 p-2 shadow-sm bg-light" style={{ margin: "0 auto" }}>

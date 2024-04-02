@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import "./header.css";
 import { UserContext } from "../store/user-context";
-import LoginComponent from "./login-panel";
+import LoginPanel from "./login-panel";
 import UserComponent from "./user-panel";
 import { Link, useLocation } from "react-router-dom";
 
@@ -18,7 +18,7 @@ export function Header() {
             })
             .then((data) => {
                 console.log(data);
-                if (data.status == "OK") {
+                if (data.user) {
                     setUser(data.user);
                 }
                 else {
@@ -47,7 +47,7 @@ export function Header() {
 
                         :
 
-                        <LoginComponent></LoginComponent>)
+                        <LoginPanel></LoginPanel>)
                 }
 
             </header>
