@@ -1,0 +1,59 @@
+.grid-column {
+    aspect-ratio: 1;
+    display: flex;
+}
+
+.grid-row {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.casper-cell {
+    --cell-shape: 50px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--cell-shape);
+    height: var(--cell-shape);
+
+    cursor: pointer;
+
+    user-select: none;
+}
+
+.casper-cell.white{
+    background-color: white;
+}
+
+.casper-cell.black{
+    background-color: rgb(102, 102, 102);
+}
+
+.casper-cell.active {
+    background: radial-gradient(circle, transparent, transparent, rgb(215, 233, 249), rgb(197, 227, 247), rgb(180, 216, 247),  rgb(155, 197, 239));
+}
+
+
+.piece-icon{
+    width: 90%;
+    aspect-ratio: 1;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.casper-cell.valid {
+    position: relative;
+}
+
+.casper-cell.valid::after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: rgb(135, 248, 86); /* You can change the color of the circle */
+    border-radius: 30px;
+}
