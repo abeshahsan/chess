@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 import { UserContext } from "./store/user-context";
 
-const LoginForm = ({ setLoginModalOpen }) => {
+const RegisterForm = ({ setLoginModalOpen }) => {
     const { register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm();
 
     const [setUser] = useContext(UserContext);
@@ -74,15 +74,15 @@ const LoginForm = ({ setLoginModalOpen }) => {
             </Form.Group>
             <div className="mb-1 d-flex flex-column align-items-center justify-content-center p-1">
                 <Button className='w-50 bg-success' variant="primary" type="submit" disabled={isSubmitSuccessful && !loginError}>
-                    {isSubmitSuccessful && !loginError ? <Spinner animation="border" role="status" /> : <big>Login</big>}
+                    {isSubmitSuccessful && !loginError ? <Spinner animation="border" role="status" /> : <big>Create Account</big>}
                 </Button>
             </div>
         </Form>
     );
 };
 
-LoginForm.propTypes = {
+RegisterForm.propTypes = {
     setLoginModalOpen: PropTypes.func.isRequired
 };
 
-export default LoginForm;
+export default RegisterForm;

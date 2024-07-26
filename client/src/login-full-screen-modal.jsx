@@ -1,6 +1,7 @@
 
 import Modal from 'react-bootstrap/Modal';
 import LoginForm from "./login-form";
+import RegisterForm from "./register-form";
 
 import PropTypes from "prop-types"
 import Tabs from 'react-bootstrap/esm/Tabs';
@@ -51,10 +52,9 @@ function LoginModalTabs({setLoginModalOpen}) {
         >
             <Tab eventKey="login" title="Login">
                 <LoginForm setLoginModalOpen={setLoginModalOpen} />
-                sdgfnsdlkgvn
             </Tab>
             <Tab eventKey="register" title="Register">
-                Tab content for Profile
+                <RegisterForm setLoginModalOpen={setLoginModalOpen} />
             </Tab>
         </Tabs>
     );
