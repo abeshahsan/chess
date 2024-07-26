@@ -17,6 +17,7 @@ import { UserContext } from "./store/user-context.jsx";
 import ChessboardComponent from "./chessboard-component.jsx";
 import LoginFullScreenOverlay from "./login-full-screen-modal.jsx";
 
+
 const App = () => {
     let [allUsers, setAllUsers] = useState(undefined);
 

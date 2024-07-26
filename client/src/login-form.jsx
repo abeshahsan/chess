@@ -40,9 +40,9 @@ const LoginForm = ({ setLoginModalOpen }) => {
     };
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form className='mt-3' onSubmit={handleSubmit(onSubmit)}>
             {loginError && <Alert variant="danger">{loginError}</Alert>}
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3" controlId="loginFormBasicEmail">
                 <Form.Control
                     type="input"
                     placeholder="Email"
@@ -61,7 +61,7 @@ const LoginForm = ({ setLoginModalOpen }) => {
                     {errors.email?.message}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3" controlId="loginFormBasicPassword">
                 <Form.Control
                     type="password"
                     placeholder="Password"
