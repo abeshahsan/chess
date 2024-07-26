@@ -1,31 +1,49 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
+import Alert from 'react-bootstrap/Alert';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+
 import PropTypes from 'prop-types';
+
 
 import { UserContext } from "./store/user-context";
 
 const LoginForm = ({ setLoginModalOpen }) => {
     const { register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm();
 
-    const [user, setUser] = useContext(UserContext);
+    const [setUser] = useContext(UserContext);
+    const [loginError, setLoginError] = useState("");
 
 
     const onSubmit = (data) => {
-        console.log(data);
+        // If there were multiple login attempts, clear the previous error message
+        setLoginError("");
+
+        // verify the login credentials from server
+        let isLoginSuccess = false;
+
         setTimeout(() => {
-            setLoginModalOpen(false);
-            setUser({
-                name: 'John Doe',
-                email: data.email
-            });
+            if (isLoginSuccess) {
+                setLoginError("");
+                setUser({
+                    name: "John Doe",
+                    email: data.email,
+                });
+                setLoginModalOpen(false);
+            } else {
+                setLoginModalOpen(true);
+                setLoginError("Wrong Credentials");
+            }
         }, 1000);
     };
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
+            {loginError && <Alert variant="danger">{loginError}</Alert>}
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Control
                     type="input"
@@ -57,8 +75,8 @@ const LoginForm = ({ setLoginModalOpen }) => {
                 </Form.Control.Feedback>
             </Form.Group>
             <div className="mb-1 d-flex flex-column align-items-center justify-content-center p-1">
-                <Button className='w-50 bg-success' variant="primary" type="submit" disabled={isSubmitSuccessful}>
-                    {isSubmitSuccessful ? <Spinner animation="border" role="status" /> : <big>Submit</big>}
+                <Button className='w-50 bg-success' variant="primary" type="submit" disabled={isSubmitSuccessful && !loginError}>
+                    {isSubmitSuccessful && !loginError ? <Spinner animation="border" role="status" /> : <big>Submit</big>}
                 </Button>
             </div>
         </Form>

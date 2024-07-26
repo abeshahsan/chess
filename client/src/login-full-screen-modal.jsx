@@ -3,6 +3,8 @@ import Modal from 'react-bootstrap/Modal';
 import LoginForm from "./login-form";
 
 import PropTypes from "prop-types"
+import Tabs from 'react-bootstrap/esm/Tabs';
+import Tab from 'react-bootstrap/esm/Tab';
 
 const LoginFullScreenOverlay = ({ loginModalOpen, setLoginModalOpen }) => {
     LoginFullScreenOverlay.propTypes = {
@@ -25,9 +27,9 @@ const LoginFullScreenOverlay = ({ loginModalOpen, setLoginModalOpen }) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className="login-full-screen-overlay container d-flex align-items-center justify-content-center">
-                    <div className="login-full-screen-overlay__content container">
-                        <LoginForm setLoginModalOpen={setLoginModalOpen}/>
+                <div className="container d-flex align-items-center justify-content-center">
+                    <div className="container">
+                        <LoginModalTabs setLoginModalOpen={setLoginModalOpen}/>
                     </div>
                 </div>
             </Modal.Body>
@@ -35,6 +37,26 @@ const LoginFullScreenOverlay = ({ loginModalOpen, setLoginModalOpen }) => {
 
             </Modal.Footer>
         </Modal>
+    );
+}
+
+function LoginModalTabs({setLoginModalOpen}) {
+    LoginModalTabs.propTypes = {
+        setLoginModalOpen: PropTypes.func.isRequired
+    }
+    return (
+        <Tabs
+            defaultActiveKey="login"
+            className="mb-3"
+        >
+            <Tab eventKey="login" title="Login">
+                <LoginForm setLoginModalOpen={setLoginModalOpen} />
+                sdgfnsdlkgvn
+            </Tab>
+            <Tab eventKey="register" title="Register">
+                Tab content for Profile
+            </Tab>
+        </Tabs>
     );
 }
 
