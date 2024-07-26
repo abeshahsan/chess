@@ -12,8 +12,8 @@ import "./login-full-screen-modal.css";
 
 const LoginFullScreenModal = ({ loginModalOpen, setLoginModalOpen }) => {
     LoginFullScreenModal.propTypes = {
-        loginModalOpen: PropTypes.bool,
-        setLoginModalOpen: PropTypes.func
+        loginModalOpen: PropTypes.bool.isRequired,
+        setLoginModalOpen: PropTypes.func.isRequired
     }
 
     return (

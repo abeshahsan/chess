@@ -13,7 +13,7 @@ import { UserContext } from "./store/user-context";
 const LoginForm = ({ setLoginModalOpen }) => {
     const { register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm();
 
-    const [setUser] = useContext(UserContext);
+    const [, setUser] = useContext(UserContext);
     const [loginError, setLoginError] = useState("");
 
 
@@ -21,22 +21,36 @@ const LoginForm = ({ setLoginModalOpen }) => {
         // If there were multiple login attempts, clear the previous error message
         setLoginError("");
 
-        // verify the login credentials from server
-        let isLoginSuccess = false;
+        fetch("/api/login", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                checkSuccessfulLogin(data);
+            })
+            .catch((err) => {
+                console.log(err);
+                checkSuccessfulLogin({ status: 0 });
+            });
 
-        setTimeout(() => {
-            if (isLoginSuccess) {
+        let checkSuccessfulLogin = (data) => {
+            if (data.status) {
                 setLoginError("");
-                setUser({
-                    name: "John Doe",
-                    email: data.email,
-                });
+                setUser(data.user);
                 setLoginModalOpen(false);
-            } else {
+            }
+            else {
                 setLoginModalOpen(true);
                 setLoginError("Wrong Credentials");
             }
-        }, 1000);
+        };
     };
 
     return (

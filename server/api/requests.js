@@ -5,14 +5,17 @@ var router = express.Router();
 
 /* GET home page. */
 router.post('/login', async (req, res, next) => {
-    let { data: queryResult } = await findUser(req.body.email);
+    let { data } = await findUser(req.body.email, req.body.password);
 
-    let user = queryResult[0];
+    let user = data[0];
+
+    // console.log(user);
 
     req.session.user = user
 
     return res.send({
-        status: "OK",
+        status: user ? 1 : 0,
+        user: user
     });
 });
 
