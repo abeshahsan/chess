@@ -10,6 +10,23 @@ import PropTypes from 'prop-types';
 
 import { UserContext } from "./store/user-context";
 
+/**
+ * Renders the login form component.
+ *
+ * The login form component contains the email and password fields.
+ * The user can submit the form to login.
+ *
+ * If the login is successful, the user is set in the context and the login modal is closed.
+ *
+ *@param {Object} props - The component props.
+ *@param {Function} props.setLoginModalOpen - The function to set the login modal open state.
+ *@returns {JSX.Element} The rendered component.
+ *@example
+ *<LoginForm setLoginModalOpen={setLoginModalOpen} />
+ *@example
+ *const [loginModalOpen, setLoginModalOpen] = useState(false);
+ *<LoginForm setLoginModalOpen={setLoginModalOpen} />
+ */
 const LoginForm = ({ setLoginModalOpen }) => {
     const { register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm();
 
@@ -21,6 +38,7 @@ const LoginForm = ({ setLoginModalOpen }) => {
         // If there were multiple login attempts, clear the previous error message
         setLoginError("");
 
+        // Send the login request to the server
         fetch("/api/login", {
             method: "POST",
             headers: {
@@ -40,6 +58,9 @@ const LoginForm = ({ setLoginModalOpen }) => {
                 checkSuccessfulLogin({ status: 0 });
             });
 
+        // Check if the login was successful
+        // If it was, set the user and close the login modal
+        // If it wasn't, display an error message
         let checkSuccessfulLogin = (data) => {
             if (data.status) {
                 setLoginError("");

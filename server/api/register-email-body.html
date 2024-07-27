@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(255, 255, 255);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .main-content {
+            align-items: center;
+            border: thin solid black;
+            border-radius: 20px;
+            background-color: #f3eeff;
+            width: 600px;
+            color: #1f1f1f;
+            padding: 20px;
+            margin: 0 auto;
+        }
+        .main-content p {
+            font-family: sans-serif;
+            font-size: 14px;
+            width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word; /* Add this line for better compatibility */
+        }
+        .otp-container {
+            text-align: center;
+        }
+        .otp {
+            border: 2px solid teal;
+            text-align: center;
+            font-size: 2em;
+            color: teal;
+            border-radius: 5px;
+            margin: 0 auto;
+            width: fit-content;
+            height: fit-content;
+            padding: 6px 30px;
+        }
+        .error-text {
+            margin-bottom: 5px;
+            color: #f36464;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+        .signature {
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+        .signature span {
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <p>
+            Thank you for registering an account with us. To get started, please verify your email address by entering the following OTP:
+        </p>
+        <div class="otp-container">
+            <div class="otp">
+                REPLACE_OTP
+            </div>
+        </div>
+        <p class="error-text">
+            If you didn't request this, or you believe this email was sent to you in error, please ignore it.
+        </p>
+        <p class="signature">
+            Sincerely,<br />ChessDuel<br />presented by &nbsp;
+            <span>
+                The Phoenix team.
+            </span>
+        </p>
+    </div>
+</body>
+</html>

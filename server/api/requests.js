@@ -1,4 +1,5 @@
 const express = require('express');
+const { senEmail } = require('./mailer');
 const { findUser, insertUser, getAllUsers } = require('../database/data-fetch');
 
 var router = express.Router();
@@ -95,6 +96,15 @@ router.post('/logout', function (req, res, next) {
 });
 
 
+router.post('/send-email', async function (req, res, next) {
+    console.log(req.body);
+
+    response = await senEmail(req.body.email);
+
+    return res.send({
+        status: "email sent",
+    });
+});
 
 router.post('*', async (req, res, next) => {
     let { data: queryResult } = await findUser(req.body.email);

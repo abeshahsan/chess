@@ -7,42 +7,79 @@ import Alert from 'react-bootstrap/Alert';
 
 import PropTypes from 'prop-types';
 
-
 import { UserContext } from "./store/user-context";
+
 
 const RegisterForm = ({ setLoginModalOpen }) => {
     const { register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm();
 
     const [setUser] = useContext(UserContext);
-    const [loginError, setLoginError] = useState("");
+    const [registrationError, setRegistrationError] = useState("");
 
 
     const onSubmit = (data) => {
-        // If there were multiple login attempts, clear the previous error message
-        setLoginError("");
+        setRegistrationError("");
+        console.log(data.email);
 
-        // verify the login credentials from server
-        let isLoginSuccess = false;
-
-        setTimeout(() => {
-            if (isLoginSuccess) {
-                setLoginError("");
-                setUser({
-                    name: "John Doe",
-                    email: data.email,
-                });
-                setLoginModalOpen(false);
-            } else {
+        fetch("/api/send-email", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email: data.email, type: "register" })
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                if (data.error) {
+                    setRegistrationError(data.error);
+                } else {
+                    setRegistrationError("");
+                    setLoginModalOpen(false);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
                 setLoginModalOpen(true);
-                setLoginError("Wrong Credentials");
+                setRegistrationError("An error occurred while registering");
             }
-        }, 1000);
+            );
+
+        // fetch("/api/register", {
+        //     method: "POST",
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(data)
+        // })
+        //     .then((response) => {
+        //         return response.json();
+        //     })
+        //     .then((data) => {
+        //         console.log(data);
+        //         if (data.error) {
+        //             setRegistrationError(data.error);
+        //         } else {
+        //             setRegistrationError("");
+        //             setLoginModalOpen(false);
+        //         }
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //         setRegistrationError("An error occurred while registering");
+        //     }
+        //     );
     };
 
     return (
         <Form className='mt-3' onSubmit={handleSubmit(onSubmit)}>
-            {loginError && <Alert variant="danger">{loginError}</Alert>}
+            {registrationError && <Alert variant="danger">{registrationError}</Alert>}
             <Form.Group className="mb-3" controlId="registerFormBasicEmail">
+                <Form.Label className="text-center w-100" style={{ fontSize: "12px" }}> An email will be sent to this address with an OTP</Form.Label>
                 <Form.Control
                     type="input"
                     placeholder="Email"
@@ -61,20 +98,10 @@ const RegisterForm = ({ setLoginModalOpen }) => {
                     {errors.email?.message}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="registerFormBasicPassword">
-                <Form.Control
-                    type="password"
-                    placeholder="Password"
-                    {...register('password', { required: 'Password is required' })}
-                    isInvalid={!!errors.password}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.password?.message}
-                </Form.Control.Feedback>
-            </Form.Group>
+
             <div className="mb-1 d-flex flex-column align-items-center justify-content-center p-1">
-                <Button className='w-50 bg-success' variant="primary" type="submit" disabled={isSubmitSuccessful && !loginError}>
-                    {isSubmitSuccessful && !loginError ? <Spinner animation="border" role="status" /> : <big>Create Account</big>}
+                <Button className='w-50 bg-success' variant="primary" type="submit" disabled={isSubmitSuccessful && !registrationError}>
+                    {isSubmitSuccessful && !registrationError ? <Spinner animation="border" role="status" /> : <big>Send OTP</big>}
                 </Button>
             </div>
         </Form>
