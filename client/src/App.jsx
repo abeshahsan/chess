@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
+import "./global.css"
 
 import Login from "./login.jsx";
 import { Header } from "./header-components/header.jsx";
