@@ -35,7 +35,7 @@ const App = () => {
             })
     }, []);
 
-    let [user, setUser, userLoggedIn] = useContext(UserContext);
+    let [user, setUser, userLoggedIn, ] = useContext(UserContext);
 
     let [fetchingUser, setFetchingUser] = useState(true);
 

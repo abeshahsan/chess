@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form, Button, InputGroup, Alert, Spinner } from 'react-bootstrap';
 
 import PropTypes from 'prop-types';
+import { UserContext } from './store/user-context';
 
 const STEPS = {
     EMAIL: "email",
@@ -242,6 +243,8 @@ const PasswordForm = ({ setLoginModalOpen, email }) => {
 
     const [passwordStepError, setPasswordStepError] = useState("");
 
+    let [, setUser,] = useContext(UserContext);
+
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };
@@ -250,7 +253,7 @@ const PasswordForm = ({ setLoginModalOpen, email }) => {
         setConfirmPasswordVisible(!confirmPasswordVisible);
     };
 
-    const onSubmit = (data) => {
+    const onSubmit = (formData) => {
         setPasswordStepError("");
 
         fetch("/api/register", {
@@ -261,17 +264,17 @@ const PasswordForm = ({ setLoginModalOpen, email }) => {
             },
             body: JSON.stringify({
                 email: email,
-                username: data.username,
-                password: data.password,
+                username: formData.username,
+                password: formData.password,
                 step: STEPS.PASSWORD
             })
         })
             .then((response) => {
                 return response.json();
             })
-            .then((data) => {
-                console.log(data);
-                checkSuccessfulPassword(data);
+            .then((response) => {
+                console.log(response);
+                checkSuccessfulPassword(response);
             })
             .catch((err) => {
                 console.log(err);
@@ -286,6 +289,10 @@ const PasswordForm = ({ setLoginModalOpen, email }) => {
             if (data.status === 1) {
                 setPasswordStepError("");
                 setLoginModalOpen(false);
+                setUser({
+                    email: email,
+                    username: formData.username,
+                });
             }
             else {
                 setPasswordStepError("An error occurred while setting the password");

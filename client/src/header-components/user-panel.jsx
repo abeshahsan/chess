@@ -47,7 +47,7 @@ export default function UserPanel() {
                 </button>
                 <div className={`dropdown-menu shadow p-2 ${dropdownShow ? "show" : ""}`} style={{ "right": "0", "left": "auto", "width": "240px" }} aria-labelledby="dropdownMenu2">
                     <div className="border rounded d-flex align-items-center flex-column justify-content-center m-2 p-2 shadow-sm bg-light" style={{ margin: "0 auto" }}>
-                        <span className="" style={{ fontSize: 13, fontWeight: "bold" }}>{user.name}</span>
+                        <span className="" style={{ fontSize: 13, fontWeight: "bold" }}>{user.username}</span>
                         <span style={{ fontSize: 11 }}>{user.email}</span>
                     </div>
                     <button className="dropdown-item" type="button" onClick={() => { navigate(`/${user._id}/profile`); }}>Profile</button>

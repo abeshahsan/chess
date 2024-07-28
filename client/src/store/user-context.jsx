@@ -1,10 +1,15 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 export const UserContext = React.createContext([]);
 
-export default function UserContextProvider(props) {
+export default function UserContextProvider({children}) {
+    UserContextProvider.propTypes = {
+        children: PropTypes.node.isRequired,
+    };
+
     const [user, setUser] = useState({
-        name: "",
+        username: "",
         email: "",
         pfp: null,
     });
@@ -12,7 +17,7 @@ export default function UserContextProvider(props) {
 
     return (
         <UserContext.Provider value={[user, setUser, userLoggedIn, setUserLoggedIn]}>
-            {props.children}
+            {children}
         </UserContext.Provider>
     );
 }
