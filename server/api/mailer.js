@@ -12,7 +12,8 @@ const senEmail = async (receiverAddress) => {
 
     let fileContents = fs.readFileSync('F:/React/React/chess/server/api/register-email-body.html', 'utf-8');
 
-    let emailBody = fileContents.replace('REPLACE_OTP', gererateOTP());
+    let otp = gererateOTP();
+    let emailBody = fileContents.replace('REPLACE_OTP', otp);
 
     let mailOptions = {
         from: 'phoenixmailer3@gmail.com',
@@ -28,7 +29,7 @@ const senEmail = async (receiverAddress) => {
                 reject(error);
             } else {
                 console.log('Email sent: ' + info.response);
-                resolve(info.response);
+                resolve({response: info.response, otp});
             }
         });
     });

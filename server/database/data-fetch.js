@@ -26,14 +26,26 @@ async function findUser(email, password) {
     }
 }
 
+async function checkIfEmailExists(email) {
+    try {
+        const data = await CredentialsModel.findOne({ email });
+
+        return { exists: !!data }
+    }
+    catch (error) {
+        throw new Error(error.message);
+    }
+}
+
 async function insertUser(user) {
     try {
         const data = await CredentialsModel.collection.insertOne({
             email: user.email,
-            name: user.name,
-            picture: user.picture,
+            password: user.password,
+            username: user.username,
+
         });
-        console.log(data);
+        // console.log(data);
         return { data: data[0] }
     } catch (error) {
         throw new Error(error.message);
@@ -56,4 +68,5 @@ module.exports = {
     findUser,
     insertUser,
     getAllUsers,
+    checkIfEmailExists,
 };

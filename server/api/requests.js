@@ -1,6 +1,6 @@
 const express = require('express');
-const { senEmail } = require('./mailer');
-const { findUser, insertUser, getAllUsers } = require('../database/data-fetch');
+const { senEmail: sendEmail } = require('./mailer');
+const { findUser, insertUser, getAllUsers, checkIfEmailExists } = require('../database/data-fetch');
 
 var router = express.Router();
 
@@ -20,7 +20,7 @@ router.post('/login', async (req, res, next) => {
     });
 });
 
-router.post('/register', async (req, res, next) => {
+router.post('/register__', async (req, res, next) => {
     try {
         let { data: queryResult } = await findUser(req.body.email);
 
@@ -95,15 +95,113 @@ router.post('/logout', function (req, res, next) {
     });
 });
 
+const STEPS = {
+    EMAIL: "email",
+    OTP: "otp",
+    RESEND_OTP: "resend_otp",
+    PASSWORD: "password",
+}
 
-router.post('/send-email', async function (req, res, next) {
-    console.log(req.body);
 
-    response = await senEmail(req.body.email);
+const emailStep = async (req, res, next) => {
+    try {
+        let { exists } = await checkIfEmailExists(req.body.email);
+
+        console.log(exists);
+
+        if (exists) {
+            return res.send({
+                status: 2,
+            });
+        }
+
+        let { otp } = await sendEmail(req.body.email);
+        req.session.otp = otp;
+        req.session.email = req.body.email;
+
+        console.log("email sent");
+
+        return res.send({
+            status: 1,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.send({
+            status: 0,
+            error: error.message
+        });
+    }
+}
+
+const resendOtpStep = async (req, res, next) => {
+    try {
+        let { otp } = await sendEmail(req.body.email);
+        req.session.otp = otp;
+
+        return res.send({
+            status: 1,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        return res.send({
+            status: 0,
+            error: error.message
+        });
+    }
+}
+
+const otpStep = async (req, res, next) => {
+    if (req.body.otp === req.session.otp) {
+        return res.send({
+            status: 1,
+        });
+    }
 
     return res.send({
-        status: "email sent",
+        status: 0,
     });
+}
+
+const passwordStep = async (req, res, next) => {
+    try {
+        let user = {
+            email: req.body.email,
+            password: req.body.password,
+            username: req.body.username,
+        };
+        let { response } = await insertUser(user);
+        req.session.user = user;
+        return res.send({
+            status: 1,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.send({
+            status: 0,
+            error: error.message
+        });
+    }
+}
+
+router.post('/register', async function (req, res, next) {
+
+    console.log(req.body);
+
+    switch (req.body.step) {
+        case STEPS.EMAIL:
+            return emailStep(req, res, next);
+        case STEPS.OTP:
+            return otpStep(req, res, next);
+        case STEPS.RESEND_OTP:
+            return resendOtpStep(req, res, next);
+        case STEPS.PASSWORD:
+            return passwordStep(req, res, next);
+        default:
+            return res.send({
+                status: "no step",
+            });
+    }
 });
 
 router.post('*', async (req, res, next) => {
