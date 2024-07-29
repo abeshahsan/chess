@@ -1,3 +1,5 @@
+const argon2 = require('argon2');
+
 const connectDB = require('./connection')
 const CredentialsModel = require('./models/Credentials');
 
@@ -39,13 +41,19 @@ async function checkIfEmailExists(email) {
 
 async function insertUser(user) {
     try {
-        const data = await CredentialsModel.collection.insertOne({
-            email: user.email,
-            password: user.password,
-            username: user.username,
+        const cred = new CredentialsModel({...user});
 
-        });
-        // console.log(data);
+        const errors = await cred.validate();
+
+        if (errors) {
+            const errorMessages = Object.keys(errors.errors).map(key => errors.errors[key].message);
+            throw new Error(errorMessages);
+        }
+
+        cred.password = await argon2.hash(cred.password);
+
+        const data = await cred.save();
+
         return { data: data[0] }
     } catch (error) {
         throw new Error(error.message);

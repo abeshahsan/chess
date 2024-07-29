@@ -1,11 +1,25 @@
-const {mongoose} = require('mongoose')
+const { mongoose } = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-    username: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-}, {strict: true});
+    username: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+}, { strict: true });
 
-const CredentialsModel = mongoose.models.credentials || mongoose.model('credentials', userSchema);
+userSchema.path('email').validate(async (email) => {
+    const emailCount = await mongoose.models.credentials.countDocuments({ email });
+    return !emailCount;
+}, 'Email {VALUE} already exists');
 
-module.exports = CredentialsModel
+const schema = mongoose.models.credentials || mongoose.model('credentials', userSchema);
+
+module.exports = schema

@@ -10,8 +10,6 @@ const argon2 = require('argon2');
 
 const router = express.Router();
 
-
-
 router.post('/login', async (req, res, next) => {
     try {
         let { data: queryResult } = await findUser(req.body.email);
@@ -24,6 +22,7 @@ router.post('/login', async (req, res, next) => {
 
             if (valid) {
                 req.session.user = user;
+                console.log(user);
                 return res.send({
                     status: 1,
                 });
@@ -188,14 +187,8 @@ const otpStep = async (req, res, next) => {
 
 const passwordStep = async (req, res, next) => {
     try {
-        const hashedPassword = await argon2.hash(req.body.password);
-        let user = {
-            email: req.body.email,
-            password: hashedPassword,
-            username: req.body.username,
-        };
-        let { response } = await insertUser(user);
-        req.session.user = user;
+        await insertUser({...req.body});
+        req.session.user = { ...req.body };
         return res.send({
             status: 1,
         });
@@ -210,7 +203,7 @@ const passwordStep = async (req, res, next) => {
 
 router.post('/register', async function (req, res, next) {
 
-    console.log(req.body);
+    // console.log(req.body);
 
     switch (req.body.step) {
         case STEPS.EMAIL:
