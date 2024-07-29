@@ -8,7 +8,7 @@ import Alert from 'react-bootstrap/Alert';
 import PropTypes from 'prop-types';
 
 
-import { UserContext } from "./store/user-context";
+import { UserContext } from "../store/user-context";
 
 /**
  * Renders the login form component.

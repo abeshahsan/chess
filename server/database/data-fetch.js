@@ -16,9 +16,9 @@ async function getCredentials() {
     }
 }
 
-async function findUser(email, password) {
+async function findUser(email) {
     try {
-        const data = await CredentialsModel.find({ email, password });
+        const data = await CredentialsModel.find({ email });
 
         return { data }
     } catch (error) {

@@ -2,21 +2,21 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
 import "./global.css"
 
-import Login from "./login.jsx";
 import { Header } from "./header-components/header.jsx";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import { useContext, useEffect, useState } from "react";
 
+import Login from "./auth/login.jsx";
 import { Sidebar } from "./sidebar.jsx";
 import NotFoundPage from "./NotFound.jsx";
-import Register from "./register.jsx";
+import Register from "./auth/register.jsx";
 import Users from "./users.jsx";
 import Profile from "./profile.jsx";
 import { UserContext } from "./store/user-context.jsx";
 import ChessboardComponent from "./chessboard-component.jsx";
-import LoginFullScreenOverlay from "./login-full-screen-modal.jsx";
+import LoginFullScreenOverlay from "./auth/login-full-screen-modal.jsx";
 
 
 const App = () => {
@@ -169,5 +169,3 @@ export default App;
 // };
 
 // export default ComponentWithCoordinates;
-
-

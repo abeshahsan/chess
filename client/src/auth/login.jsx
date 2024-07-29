@@ -1,5 +1,5 @@
 import { useState } from "react";
-import GoogleSiginIn from "./APIs/google-login";
+import GoogleSiginIn from "../APIs/google-login";
 import { Link } from "react-router-dom";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";

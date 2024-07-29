@@ -1,23 +1,45 @@
+/**
+ * Express router for handling API requests related to user authentication and registration.
+ * @module requests
+ */
 const express = require('express');
 const { senEmail: sendEmail } = require('./mailer');
 const { findUser, insertUser, getAllUsers, checkIfEmailExists } = require('../database/data-fetch');
+const argon2 = require('argon2');
 
-var router = express.Router();
 
-/* GET home page. */
+const router = express.Router();
+
+
+
 router.post('/login', async (req, res, next) => {
-    let { data } = await findUser(req.body.email, req.body.password);
+    try {
+        let { data: queryResult } = await findUser(req.body.email);
 
-    let user = data[0];
+        let user;
 
-    // console.log(user);
+        if (queryResult?.length) {
+            user = queryResult[0]
+            const valid = await argon2.verify(user.password, req.body.password);
 
-    req.session.user = user
+            if (valid) {
+                req.session.user = user;
+                return res.send({
+                    status: 1,
+                });
+            }
+        }
 
-    return res.send({
-        status: user ? 1 : 0,
-        user: user
-    });
+        return res.send({
+            status: 0,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.send({
+            error: error.message,
+            status: 0,
+        });
+    }
 });
 
 router.post('/register__', async (req, res, next) => {
@@ -163,11 +185,13 @@ const otpStep = async (req, res, next) => {
     });
 }
 
+
 const passwordStep = async (req, res, next) => {
     try {
+        const hashedPassword = await argon2.hash(req.body.password);
         let user = {
             email: req.body.email,
-            password: req.body.password,
+            password: hashedPassword,
             username: req.body.username,
         };
         let { response } = await insertUser(user);

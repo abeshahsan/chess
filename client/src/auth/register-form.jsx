@@ -3,8 +3,12 @@ import { useForm } from 'react-hook-form';
 import { Form, Button, InputGroup, Alert, Spinner } from 'react-bootstrap';
 
 import PropTypes from 'prop-types';
-import { UserContext } from './store/user-context';
+import { UserContext } from '../store/user-context';
 
+/**
+ * Enum representing the steps in the registration process.
+ * @enum {string}
+ */
 const STEPS = {
     EMAIL: "email",
     OTP: "otp",
@@ -12,6 +16,29 @@ const STEPS = {
     PASSWORD: "password",
 };
 
+/**
+ * RegisterForm component. It handles the registration process.
+ *
+ * The registration process consists of three steps:
+ * 1. Enter email address and send OTP
+ * 2. Enter OTP
+ * 3. Enter username and password
+ *
+ * In the first step, the user enters their email address.
+ * An OTP is sent to the email address.
+ * If the email address is not already registered, the user proceeds to the next step.
+ *
+ * In the second step, the user enters the OTP sent to their email address.
+ * If the OTP is correct, the user proceeds to the next step.
+ *
+ * In the third step, the user enters their username and password.
+ * Finally, the user is registered. And the modal is closed.
+ *
+ *
+ * @param {Object} props - The component props.
+ * @param {Function} props.setLoginModalOpen - Function to set the login modal open state.
+ * @returns {JSX.Element} The rendered RegisterForm component.
+ */
 const RegisterForm = ({ setLoginModalOpen }) => {
     RegisterForm.propTypes = {
         setLoginModalOpen: PropTypes.func.isRequired
@@ -31,6 +58,16 @@ const RegisterForm = ({ setLoginModalOpen }) => {
     );
 };
 
+
+/**
+ * Represents a form component for entering an email address and sending an OTP.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.setStep - A function to set the current step in the registration process.
+ * @param {Function} props.setEmail - A function to set the email address entered by the user.
+ * @returns {JSX.Element} The rendered EmailForm component.
+ */
 const EmailForm = ({ setStep, setEmail }) => {
     EmailForm.propTypes = {
         setStep: PropTypes.func.isRequired,
@@ -119,6 +156,15 @@ const EmailForm = ({ setStep, setEmail }) => {
     );
 }
 
+/**
+ * OTPForm component for handling OTP verification and resend functionality.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.setStep - The function to set the current step.
+ * @param {string} props.email - The email address for OTP verification.
+ * @returns {JSX.Element} OTPForm component.
+ */
 const OTPForm = ({ setStep, email }) => {
     OTPForm.propTypes = {
         setStep: PropTypes.func.isRequired,
@@ -231,6 +277,15 @@ const OTPForm = ({ setStep, email }) => {
     );
 }
 
+/**
+ * PasswordForm component for registering a user.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.setLoginModalOpen - Function to set the login modal open state.
+ * @param {string} props.email - The user's email.
+ * @returns {JSX.Element} The PasswordForm component.
+ */
 const PasswordForm = ({ setLoginModalOpen, email }) => {
     PasswordForm.propTypes = {
         setLoginModalOpen: PropTypes.func.isRequired,

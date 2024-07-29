@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
-import GoogleSiginIn from "./APIs/google-login";
-import { UserContext } from "./store/user-context";
+import { useState } from "react";
+import GoogleSiginIn from "../APIs/google-login";
 import { Link } from "react-router-dom";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -13,11 +12,11 @@ export default function Register() {
         <>
             <GoogleOAuthProvider clientId="929768303544-st9fu3ts2jsgeavkta8c1lp4g3qe891k.apps.googleusercontent.com">
 
-                <div className="container-fluid d-flex align-items-center 
+                <div className="container-fluid d-flex align-items-center
                             justify-content-center"
                     style={{ "height": "100%", width: "100%" }}
                 >
-                    <div className="container-fluid d-flex  flex-column align-items-center 
+                    <div className="container-fluid d-flex  flex-column align-items-center
                             justify-content-center border rounded-4 shadow-sm bg-light"
                         style={{ "height": "50%", width: "30%" }}>
                         <GoogleSiginIn register={true} setError={setRegisterError} />
@@ -32,4 +31,4 @@ export default function Register() {
             </GoogleOAuthProvider>
         </>
     );
-};
+}
