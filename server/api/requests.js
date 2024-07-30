@@ -186,6 +186,7 @@ const emailStep = async (req, res, next) => {
         }
 
         let { otp } = await sendEmailWithOTP(req.body.email);
+        console.log(otp);
         req.session.otp = otp;
         req.session.email = req.body.email;
 
@@ -214,7 +215,7 @@ const emailStep = async (req, res, next) => {
  */
 const resendOtpStep = async (req, res, next) => {
     try {
-        let { otp } = await sendEmail(req.body.email);
+        let { otp } = await sendEmailWithOTP(req.body.email);
         req.session.otp = otp;
 
         return res.send({

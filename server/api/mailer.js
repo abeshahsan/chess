@@ -11,8 +11,8 @@ const path = require('path');
 const sendEmailWithOTP = async (receiverAddress) => {
     try {
         let transporter = nodeMailer.createTransport(TRANSPORTER_CONFIG);
-        let mailOptions = getMailOptions(receiverAddress, 'OTP for registration', emailBody);
         let { emailBody, otp } = generateEmailBody();
+        let mailOptions = generateMailOptions(receiverAddress, 'OTP for registration', emailBody);
 
         let info = await sendEmail(transporter, mailOptions);
         return { info, otp, mailOptions };
@@ -48,7 +48,7 @@ const TRANSPORTER_CONFIG = {
  * @param {string} body - The body of the email.
  * @returns {object} The mail options object.
  */
-const getMailOptions = (receiverAddress, subject, body) => {
+const generateMailOptions = (receiverAddress, subject, body) => {
     return {
         from: 'phoenixmailer3@gmail.com',
         to: receiverAddress,
@@ -66,10 +66,10 @@ const getMailOptions = (receiverAddress, subject, body) => {
  * @returns {Object} An object containing the generated email body and OTP.
  */
 const generateEmailBody = () => {
-    let OTP = gererateOTP();
+    let otp = gererateOTP();
     let emailBody = fs.readFileSync(path.join(__dirname, 'register-email-body.html'), 'utf8');
-    emailBody = emailBody.replace('REPLACE_OTP', OTP);
-    return { emailBody, OTP };
+    emailBody = emailBody.replace('REPLACE_OTP', otp);
+    return { emailBody, otp };
 }
 
 
