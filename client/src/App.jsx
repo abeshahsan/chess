@@ -8,15 +8,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import { useContext, useEffect, useState } from "react";
 
-import Login from "./auth/login.jsx";
 import { Sidebar } from "./sidebar.jsx";
-import NotFoundPage from "./NotFound.jsx";
-import Register from "./auth/register.jsx";
+import NotFoundPage from "./errors-and-placeholders/NotFound.jsx";
 import Users from "./users.jsx";
 import Profile from "./profile.jsx";
 import { UserContext } from "./store/user-context.jsx";
 import ChessboardComponent from "./chessboard-component.jsx";
-import LoginFullScreenOverlay from "./auth/login-full-screen-modal.jsx";
+import LoginFullScreenModal from "./auth/login-full-screen-modal.jsx";
 
 
 const App = () => {
@@ -35,7 +33,7 @@ const App = () => {
             })
     }, []);
 
-    let [user, setUser, userLoggedIn, ] = useContext(UserContext);
+    let [user, setUser, userLoggedIn,] = useContext(UserContext);
 
     let [fetchingUser, setFetchingUser] = useState(true);
 
@@ -58,7 +56,7 @@ const App = () => {
 
     return (
         <>
-            <LoginFullScreenOverlay loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen}></LoginFullScreenOverlay>
+            <LoginFullScreenModal loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen}></LoginFullScreenModal>
             <BrowserRouter>
 
                 <Routes>
@@ -66,29 +64,15 @@ const App = () => {
                         path="/"
                         element={
                             <>
-                                <Header fetchingUser={fetchingUser} setLoginModalOpen={setLoginModalOpen}/>
+                                <Header fetchingUser={fetchingUser} setLoginModalOpen={setLoginModalOpen} />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
-                                    <ChessboardComponent/>
+                                    <ChessboardComponent />
                                 </div>
                             </>
                         }
                     >
 
-                    </Route>
-                    <Route
-                        path="/login"
-                        element={
-                            <Login></Login>
-                        }
-                    >
-                    </Route>
-                    <Route
-                        path="/register"
-                        element={
-                            <Register register={true}></Register>
-                        }
-                    >
                     </Route>
                     <Route
                         path="/users"
@@ -107,7 +91,7 @@ const App = () => {
                         path={user && `${user._id}/profile`}
                         element={
                             <>
-                                <Header fetchingUser={fetchingUser} setLoginModalOpen={setLoginModalOpen}/>
+                                <Header fetchingUser={fetchingUser} setLoginModalOpen={setLoginModalOpen} />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <div className="container game-container">
