@@ -104,7 +104,7 @@ async function getAllUsers() {
 
 module.exports = {
     getCredentials,
-    findUser: findUserByEmail,
+    findUserByEmail,
     insertUser,
     getAllUsers,
     checkIfEmailExists,

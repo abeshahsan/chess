@@ -1,7 +1,7 @@
 
 const express = require('express');
 const { sendEmailWithOTP } = require('./mailer');
-const { findUser, insertUser, getAllUsers, checkIfEmailExists } = require('../database/data-fetch');
+const { findUserByEmail, insertUser, getAllUsers, checkIfEmailExists } = require('../database/data-fetch');
 const argon2 = require('argon2');
 
 const router = express.Router();
@@ -17,7 +17,7 @@ const router = express.Router();
  */
 router.post('/login', async (req, res, next) => {
     try {
-        let { data: queryResult } = await findUser(req.body.email);
+        let { data: queryResult } = await findUserByEmail(req.body.email);
 
         let user;
 
@@ -57,7 +57,7 @@ router.post('/login', async (req, res, next) => {
  */
 router.post('/register__', async (req, res, next) => {
     try {
-        let { data: queryResult } = await findUser(req.body.email);
+        let { data: queryResult } = await findUserByEmail(req.body.email);
 
         let user;
 
@@ -312,7 +312,7 @@ router.post('/register', async function (req, res, next) {
  * @param {Function} next - The next middleware function.
  */
 router.post('*', async (req, res, next) => {
-    let { data: queryResult } = await findUser(req.body.email);
+    let { data: queryResult } = await findUserByEmail(req.body.email);
 
     let user = queryResult[0];
 
