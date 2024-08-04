@@ -8,14 +8,14 @@ import { Link } from "react-router-dom";
 
 import PropTypes from 'prop-types';
 
-export function Header({fetchingUser, setLoginModalOpen}) {
+export function Header({ fetchingUser, setLoginModalOpen }) {
     Header.propTypes = {
         fetchingUser: PropTypes.bool.isRequired,
         setLoginModalOpen: PropTypes.func.isRequired
     }
 
 
-    let [user] = useContext(UserContext);
+    let { user } = useContext(UserContext);
 
     return <>
         <div className="container-fluid py-2 sticky-top bg-body border-bottom shadow-sm" style={{ zIndex: "5" }}>

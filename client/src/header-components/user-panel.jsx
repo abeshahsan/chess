@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function UserPanel() {
 
-    let [user, setUser] = useContext(UserContext);
+    let {user, setUser} = useContext(UserContext);
 
     let [dropdownShow, setDropdownToggle] = useState(false)
 

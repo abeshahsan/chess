@@ -1,15 +1,21 @@
 
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { UserContext } from "../store/user-context";
 import { useNavigate, useLocation } from "react-router-dom";
+
+import PropTypes from "prop-types";
 
 
 let navigate, location;
 
 export default function GoogleSiginIn({ setError }) {
-    let [, setUser, , setUserLoggedIn] = useContext(UserContext);
+    GoogleSiginIn.propTypes = {
+        setError: PropTypes.func.isRequired
+    }
+
+    let { setUser } = useContext(UserContext);
 
     navigate = useNavigate();
     location = useLocation();
@@ -24,7 +30,11 @@ export default function GoogleSiginIn({ setError }) {
                 buttonText={`${register ? "Sign up" : "Sign in"} with Google`}
                 onSuccess={credentialResponse => {
                     handleSuccess(credentialResponse, register, setUser);
-                    setUserLoggedIn(true);
+                    setUser(() => {
+                        return {
+                            loggedIn: true
+                        }
+                    })
                 }
                 }
                 onError={() => {
@@ -33,7 +43,7 @@ export default function GoogleSiginIn({ setError }) {
             />
         </>
     );
-};
+}
 
 function handleSuccess(credentialResponse, register, setUser) {
     if (register) {

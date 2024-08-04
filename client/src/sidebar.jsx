@@ -1,10 +1,8 @@
-import { useContext, useState } from "react";
 import "./sidebar.css"
-import { UserContext } from "./store/user-context";
 import { Link, useLocation } from "react-router-dom";
 
 export function Sidebar() {
-    
+
     const pathName = useLocation()["pathname"];
 
     return (

@@ -30,7 +30,7 @@ import { UserContext } from "../store/user-context";
 const LoginForm = ({ setLoginModalOpen }) => {
     const { register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm();
 
-    const [, setUser] = useContext(UserContext);
+    const {setUser} = useContext(UserContext);
     const [loginError, setLoginError] = useState("");
 
 
@@ -64,7 +64,12 @@ const LoginForm = ({ setLoginModalOpen }) => {
         let checkSuccessfulLogin = (data) => {
             if (data.status) {
                 setLoginError("");
-                setUser(data.user);
+                setUser(() => {
+                    return {
+                        ...data.user,
+                        loggedIn: true
+                    }
+                });
                 setLoginModalOpen(false);
             }
             else {
