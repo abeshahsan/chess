@@ -1,23 +1,20 @@
-import "bootstrap/dist/css/bootstrap.min.css"
-import "./App.css"
-import "./global.css"
-
-import { Header } from "./header-components/header.jsx";
-
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import "./global.css";
 
 import { useContext, useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { Sidebar } from "./sidebar.jsx";
-import NotFoundPage from "./errors-and-placeholders/NotFound.jsx";
-import Users from "./users.jsx";
-import Profile from "./profile.jsx";
-import { UserContext } from "./store/user-context.jsx";
-import ChessboardComponent from "./chessboard-component.jsx";
-import LoginFullScreenModal from "./auth/login-full-screen-modal.jsx";
-import HomePage from "./HomePage/HomePage.jsx";
-import { Button } from "react-bootstrap";
+import { Header } from "./Components/Header/Header";
+import { Sidebar } from "./Components/sidebar.jsx";
+import LoginFullScreenModal from "./Components/Auth/LoginModal.jsx";
 
+import HomePage from "./Pages/HomePage/HomePage.jsx";
+import Users from "./Pages/Users.jsx";
+import Profile from "./Pages/Profile.jsx";
+import NotFoundPage from "./Pages/NotFound.jsx";
+
+import { UserContext } from "./Contexts/UserContext.jsx";
 
 const App = () => {
     let [allUsers, setAllUsers] = useState(undefined);
