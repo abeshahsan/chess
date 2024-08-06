@@ -1,19 +1,19 @@
 
 import { useContext, useState } from "react";
 import { UserContext } from "../store/user-context";
+import { EMPTY_USER } from "../store/constants";
 import { useNavigate } from "react-router-dom";
 
 
 export default function UserPanel() {
 
-    let {user, setUser} = useContext(UserContext);
+    let { user, setUser } = useContext(UserContext);
 
     let [dropdownShow, setDropdownToggle] = useState(false)
 
     let navigate = useNavigate();
 
     function handleOnLogout() {
-        setUser(null);
         fetch("/api/logout", {
             method: "POST",
             headers: {
@@ -26,7 +26,7 @@ export default function UserPanel() {
             })
             .then((data) => {
                 console.log(data);
-                setUser(null)
+                setUser(() => {return {...EMPTY_USER}});
                 navigate("/")
             })
             .catch((err) => {

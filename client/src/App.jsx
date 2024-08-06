@@ -13,9 +13,10 @@ import NotFoundPage from "./errors-and-placeholders/NotFound.jsx";
 import Users from "./users.jsx";
 import Profile from "./profile.jsx";
 import { UserContext } from "./store/user-context.jsx";
-// import ChessboardComponent from "./chessboard-component.jsx";
+import ChessboardComponent from "./chessboard-component.jsx";
 import LoginFullScreenModal from "./auth/login-full-screen-modal.jsx";
 import HomePage from "./HomePage/HomePage.jsx";
+import { Button } from "react-bootstrap";
 
 
 const App = () => {
@@ -34,8 +35,7 @@ const App = () => {
             })
     }, []);
 
-    let {user, setUser} = useContext(UserContext);
-
+    let { user, setUser } = useContext(UserContext);
 
     let [fetchingUser, setFetchingUser] = useState(true);
 
@@ -50,23 +50,28 @@ const App = () => {
                 if (data.user) {
                     setUser(() => {
                         return {
+                            ...user,
                             ...data.user,
                             loggedIn: true
                         }
                     });
                 }
                 else {
-                    setUser(null);
+                    setUser(() => {
+                        return {
+                            ...user
+                        }
+                    });
                 }
                 setFetchingUser(false);
             });
-    }, [setUser, user?.loggedIn]);
+    }, []);
+
 
     return (
         <>
             <LoginFullScreenModal loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen}></LoginFullScreenModal>
             <BrowserRouter>
-
                 <Routes>
                     <Route
                         path="/"
@@ -76,6 +81,7 @@ const App = () => {
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <HomePage />
+                                    {/* <ChessboardComponent /> */}
                                 </div>
                             </>
                         }

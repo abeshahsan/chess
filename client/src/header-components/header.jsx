@@ -31,7 +31,7 @@ export function Header({ fetchingUser, setLoginModalOpen }) {
 
                 {
                     !fetchingUser &&
-                    (user ?
+                    (user?.loggedIn ?
                         <UserPanel></UserPanel>
 
                         :
