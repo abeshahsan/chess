@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./grid.css"
 import { useRef, useState } from "react";
-import { checkForCheck, checkForCheckMate, findValidMoves } from "../pieces/pieces-logics";
+import { checkForCheck, checkForCheckMate, findValidMoves } from "../../pieces/pieces-logics";
 
 
 import PropTypes from 'prop-types';
