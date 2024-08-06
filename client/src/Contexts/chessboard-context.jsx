@@ -1,64 +1,71 @@
-import React, { useRef, useState } from 'react';
-import { BlackBishop, BlackKing, BlackKnight, BlackPawn, BlackQueen, BlackRook, WhiteBishop, WhiteKing, WhiteKnight, WhitePawn, WhiteQueen, WhiteRook } from '../pieces/pieces';
-import Grid from '../GridComponents/grid';
+import React, { useRef, useState } from "react";
+import {
+    BlackBishop,
+    BlackKing,
+    BlackKnight,
+    BlackPawn,
+    BlackQueen,
+    BlackRook,
+    WhiteBishop,
+    WhiteKing,
+    WhiteKnight,
+    WhitePawn,
+    WhiteQueen,
+    WhiteRook,
+} from "../pieces/pieces";
+import Grid from "../GridComponents/grid";
 
 export const GridMatrixContext = React.createContext([]);
 
 export const PiecesInfoContext = React.createContext({
     blackPieces: [],
-    whitePieces: []
+    whitePieces: [],
 });
 
 export let blackPieces = [
     {
         alive: true,
-        pieceComponent: <BlackKnight/>,
+        pieceComponent: <BlackKnight />,
         pieceType: "black",
         pieceLogic: "knight",
         row: 4,
         col: 1,
-
     },
     {
         alive: true,
-        pieceComponent: <BlackKing/>,
+        pieceComponent: <BlackKing />,
         pieceType: "black",
         pieceLogic: "king",
         row: 1,
         col: 0,
-
     },
 ];
 
 export let whitePieces = [
     {
         alive: true,
-        pieceComponent: <WhiteQueen/>,
+        pieceComponent: <WhiteQueen />,
         pieceType: "white",
         pieceLogic: "queen",
         row: 3,
         col: 2,
-
     },
     {
         alive: true,
-        pieceComponent: <WhiteBishop/>,
+        pieceComponent: <WhiteBishop />,
         pieceType: "white",
         pieceLogic: "bishop",
         row: 3,
         col: 5,
-
     },
     {
         alive: true,
-        pieceComponent: <WhiteKing/>,
+        pieceComponent: <WhiteKing />,
         pieceType: "white",
         pieceLogic: "king",
         row: 1,
         col: 3,
-
     },
-    
 
     // {
     //     alive: true,
@@ -322,49 +329,55 @@ export let whitePieces = [
 export let blackKing, whiteKing;
 (() => {
     blackPieces.forEach((piece) => {
-        if(piece.pieceLogic == "king") {
+        if (piece.pieceLogic == "king") {
             blackKing = piece;
             return;
         }
     });
     whitePieces.forEach((piece) => {
-        if(piece.pieceLogic == "king") {
+        if (piece.pieceLogic == "king") {
             whiteKing = piece;
             return;
         }
     });
 })();
 
-
-export function PiecesInfoContextProvider({children}) {
+export function PiecesInfoContextProvider({ children }) {
     return (
-        <PiecesInfoContext.Provider value={{
-            blackPieces,
-            whitePieces,
-        }}>
+        <PiecesInfoContext.Provider
+            value={{
+                blackPieces,
+                whitePieces,
+            }}
+        >
             {children}
         </PiecesInfoContext.Provider>
     );
 }
 
 export function GridMatrixContextProvider() {
-    let [gridMatrix, setGridMatrix] = useState(new Array(8).fill().map(() => new Array(8).fill().map( () => null )));
+    let [gridMatrix, setGridMatrix] = useState(new Array(8).fill().map(() => new Array(8).fill().map(() => null)));
 
-    for(let index in whitePieces) {
+    for (let index in whitePieces) {
         let piece = whitePieces[index];
         gridMatrix[piece.row][piece.col] = piece;
     }
-    for(let index in blackPieces) {
+    for (let index in blackPieces) {
         let piece = blackPieces[index];
         gridMatrix[piece.row][piece.col] = piece;
     }
 
     return (
-        <GridMatrixContext.Provider value={{
-            gridMatrix,
-        }}>
+        <GridMatrixContext.Provider
+            value={{
+                gridMatrix,
+            }}
+        >
             <div className="ch-chessboard">
-                <Grid gridMatrix={gridMatrix} setGridMatrix={setGridMatrix}/>
+                <Grid
+                    gridMatrix={gridMatrix}
+                    setGridMatrix={setGridMatrix}
+                />
             </div>
         </GridMatrixContext.Provider>
     );

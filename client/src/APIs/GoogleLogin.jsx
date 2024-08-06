@@ -2,7 +2,7 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useContext } from "react";
-import { UserContext } from "../store/user-context";
+import { UserContext } from "../Contexts/UserContexts";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import PropTypes from "prop-types";

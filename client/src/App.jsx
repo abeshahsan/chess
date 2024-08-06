@@ -1,23 +1,20 @@
-import "bootstrap/dist/css/bootstrap.min.css"
-import "./App.css"
-import "./global.css"
-
-import { Header } from "./header-components/header.jsx";
-
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import "./global.css";
 
 import { useContext, useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { Sidebar } from "./sidebar.jsx";
-import NotFoundPage from "./errors-and-placeholders/NotFound.jsx";
-import Users from "./users.jsx";
-import Profile from "./profile.jsx";
-import { UserContext } from "./store/user-context.jsx";
-import ChessboardComponent from "./chessboard-component.jsx";
-import LoginFullScreenModal from "./auth/login-full-screen-modal.jsx";
-import HomePage from "./HomePage/HomePage.jsx";
-import { Button } from "react-bootstrap";
+import { Header } from "./Components/Header/Header";
+import { Sidebar } from "./Components/sidebar.jsx";
+import LoginFullScreenModal from "./Components/Auth/LoginModal.jsx";
 
+import HomePage from "./Pages/HomePage/HomePage.jsx";
+import Users from "./Pages/Users.jsx";
+import Profile from "./Pages/Profile.jsx";
+import NotFoundPage from "./Pages/NotFound.jsx";
+
+import { UserContext } from "./Contexts/UserContext.jsx";
 
 const App = () => {
     let [allUsers, setAllUsers] = useState(undefined);
@@ -29,10 +26,11 @@ const App = () => {
         fetch("/api/get-all-users")
             .then((response) => {
                 return response.json();
-            }).then((response) => {
-                setAllUsers(response.users.data)
-                // console.log(response.users.data);
             })
+            .then((response) => {
+                setAllUsers(response.users.data);
+                // console.log(response.users.data);
+            });
     }, []);
 
     let { user, setUser } = useContext(UserContext);
@@ -52,32 +50,36 @@ const App = () => {
                         return {
                             ...user,
                             ...data.user,
-                            loggedIn: true
-                        }
+                            loggedIn: true,
+                        };
                     });
-                }
-                else {
+                } else {
                     setUser(() => {
                         return {
-                            ...user
-                        }
+                            ...user,
+                        };
                     });
                 }
                 setFetchingUser(false);
             });
     }, []);
 
-
     return (
         <>
-            <LoginFullScreenModal loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen}></LoginFullScreenModal>
+            <LoginFullScreenModal
+                loginModalOpen={loginModalOpen}
+                setLoginModalOpen={setLoginModalOpen}
+            ></LoginFullScreenModal>
             <BrowserRouter>
                 <Routes>
                     <Route
                         path="/"
                         element={
                             <>
-                                <Header fetchingUser={fetchingUser} setLoginModalOpen={setLoginModalOpen} />
+                                <Header
+                                    fetchingUser={fetchingUser}
+                                    setLoginModalOpen={setLoginModalOpen}
+                                />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <HomePage />
@@ -85,27 +87,30 @@ const App = () => {
                                 </div>
                             </>
                         }
-                    >
-
-                    </Route>
+                    ></Route>
                     <Route
                         path="/users"
                         element={
                             <>
-                                <Header fetchingUser={fetchingUser} setLoginModalOpen={setLoginModalOpen} />
+                                <Header
+                                    fetchingUser={fetchingUser}
+                                    setLoginModalOpen={setLoginModalOpen}
+                                />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <Users users={allUsers}></Users>
                                 </div>
                             </>
                         }
-                    >
-                    </Route>
+                    ></Route>
                     <Route
                         path={user && `${user._id}/profile`}
                         element={
                             <>
-                                <Header fetchingUser={fetchingUser} setLoginModalOpen={setLoginModalOpen} />
+                                <Header
+                                    fetchingUser={fetchingUser}
+                                    setLoginModalOpen={setLoginModalOpen}
+                                />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <div className="container game-container">
@@ -122,17 +127,14 @@ const App = () => {
                                 <NotFoundPage></NotFoundPage>
                             </>
                         }
-                    >
-                    </Route>
+                    ></Route>
                 </Routes>
             </BrowserRouter>
         </>
     );
-}
-
+};
 
 export default App;
-
 
 // import React, { useRef, useState } from 'react';
 
@@ -167,7 +169,6 @@ export default App;
 // };
 
 // export default ComponentWithCoordinates;
-
 
 // import { useState } from 'react';
 // import useWebSocket, { ReadyState } from 'react-use-websocket';
@@ -212,4 +213,3 @@ export default App;
 // }
 
 // export default App;
-

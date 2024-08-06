@@ -1,14 +1,15 @@
+/*Node module imports */
+import PropTypes from "prop-types";
+import Tabs from "react-bootstrap/esm/Tabs";
+import Tab from "react-bootstrap/esm/Tab";
+import Modal from "react-bootstrap/Modal";
 
-import Modal from 'react-bootstrap/Modal';
-import LoginForm from "./login-form";
-import RegisterForm from "./register-form";
+/*Component imports */
+import LoginForm from "./LoginForm";
+import RegisterForm from "./RegisterForm";
 
-import PropTypes from "prop-types"
-import Tabs from 'react-bootstrap/esm/Tabs';
-import Tab from 'react-bootstrap/esm/Tab';
-
-
-import "./login-full-screen-modal.css";
+/*CSS imports*/
+import "./LoginModal.css";
 
 /**
  * Renders the login full screen modal component.
@@ -38,8 +39,8 @@ import "./login-full-screen-modal.css";
 const LoginFullScreenModal = ({ loginModalOpen, setLoginModalOpen }) => {
     LoginFullScreenModal.propTypes = {
         loginModalOpen: PropTypes.bool.isRequired,
-        setLoginModalOpen: PropTypes.func.isRequired
-    }
+        setLoginModalOpen: PropTypes.func.isRequired,
+    };
 
     return (
         <Modal
@@ -50,8 +51,11 @@ const LoginFullScreenModal = ({ loginModalOpen, setLoginModalOpen }) => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
-            <Modal.Header closeButton className='d-flex align-items-center justify-content-center no-select'>
-                <Modal.Title className='w-100 text-center'>
+            <Modal.Header
+                closeButton
+                className="d-flex align-items-center justify-content-center no-select"
+            >
+                <Modal.Title className="w-100 text-center">
                     <div>Please Login or Register</div>
                 </Modal.Title>
             </Modal.Header>
@@ -62,12 +66,10 @@ const LoginFullScreenModal = ({ loginModalOpen, setLoginModalOpen }) => {
                     </div>
                 </div>
             </Modal.Body>
-            <Modal.Footer className='d-flex align-items-center justify-content-center'>
-
-            </Modal.Footer>
+            <Modal.Footer className="d-flex align-items-center justify-content-center"></Modal.Footer>
         </Modal>
     );
-}
+};
 
 /**
  * Renders the login modal tabs component.
@@ -83,8 +85,8 @@ const LoginFullScreenModal = ({ loginModalOpen, setLoginModalOpen }) => {
  */
 function LoginModalTabs({ setLoginModalOpen }) {
     LoginModalTabs.propTypes = {
-        setLoginModalOpen: PropTypes.func.isRequired
-    }
+        setLoginModalOpen: PropTypes.func.isRequired,
+    };
     return (
         <Tabs
             defaultActiveKey="login"
@@ -95,15 +97,14 @@ function LoginModalTabs({ setLoginModalOpen }) {
             <Tab
                 eventKey="login"
                 title="Login"
-                className='p-2 custom-border custom-border-login border-top-0'
-
+                className="p-2 custom-border custom-border-login border-top-0"
             >
                 <LoginForm setLoginModalOpen={setLoginModalOpen} />
             </Tab>
             <Tab
                 eventKey="register"
                 title="Register"
-                className='p-2 custom-border custom-border-register border-top-0'
+                className="p-2 custom-border custom-border-register border-top-0"
             >
                 <RegisterForm setLoginModalOpen={setLoginModalOpen} />
             </Tab>

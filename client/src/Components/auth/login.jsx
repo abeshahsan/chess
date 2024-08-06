@@ -1,12 +1,12 @@
 import { useState } from "react";
-import GoogleSiginIn from "../APIs/google-login";
+import GoogleSiginIn from "../../APIs/GoogleLogin";
 import { Link } from "react-router-dom";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-export default function Register() {
+export default function Login() {
 
-    let [registerError, setRegisterError] = useState(false);
+    let [loginError, setloginError] = useState(false);
 
     return (
         <>
@@ -19,12 +19,14 @@ export default function Register() {
                     <div className="container-fluid d-flex  flex-column align-items-center
                             justify-content-center border rounded-4 shadow-sm bg-light"
                         style={{ "height": "50%", width: "30%" }}>
-                        <GoogleSiginIn register={true} setError={setRegisterError} />
+
+                        <GoogleSiginIn setError={setloginError} />
+
                         <div className={` mt-3`} style={{ fontSize: "12px" }}>
-                            Already have an account? <Link to={"/login"}> Login </Link>
+                            Don&apos;t have an account? <Link to={"/register"}> Register </Link>
                         </div>
-                        <div className={`mt-2 text-danger ${!registerError && "invisible"}`} style={{ fontSize: "10px" }}>
-                            Invalid Email
+                        <div className={`mt-2 text-danger ${!loginError && "invisible"}`} style={{ fontSize: "10px" }}>
+                            No account associated with this email was found
                         </div>
                     </div>
                 </div>
