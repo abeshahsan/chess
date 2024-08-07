@@ -1,6 +1,6 @@
-import { GridMatrixContextProvider, PiecesInfoContextProvider } from "./store/chessboard-context";
+import { GridMatrixContextProvider, PiecesInfoContextProvider } from '../Contexts/ChessboardContext';
 
-export default function ChessboardComponent() {
+export default function Chessboard() {
     return (
         <>
             <div className="container game-container">

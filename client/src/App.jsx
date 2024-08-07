@@ -10,28 +10,19 @@ import { Sidebar } from "./Components/sidebar.jsx";
 import LoginFullScreenModal from "./Components/Auth/LoginModal.jsx";
 
 import HomePage from "./Pages/HomePage/HomePage.jsx";
-import Users from "./Pages/Users.jsx";
+import UsersContainer from "./Pages/Users.jsx";
 import Profile from "./Pages/Profile.jsx";
 import NotFoundPage from "./Pages/NotFound.jsx";
 
+import Chessboard from "./Components/Chessboard";
+
 import { UserContext } from "./Contexts/UserContext.jsx";
+import Users from "./Pages/Users.jsx";
 
 const App = () => {
     let [allUsers, setAllUsers] = useState(undefined);
 
     let [loginModalOpen, setLoginModalOpen] = useState(false);
-
-    useEffect(() => {
-        document.title = "Chess";
-        fetch("/api/get-all-users")
-            .then((response) => {
-                return response.json();
-            })
-            .then((response) => {
-                setAllUsers(response.users.data);
-                // console.log(response.users.data);
-            });
-    }, []);
 
     let { user, setUser } = useContext(UserContext);
 
@@ -83,13 +74,12 @@ const App = () => {
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <HomePage />
-                                    {/* <ChessboardComponent /> */}
                                 </div>
                             </>
                         }
                     ></Route>
                     <Route
-                        path="/users"
+                        path="/game"
                         element={
                             <>
                                 <Header
@@ -98,10 +88,16 @@ const App = () => {
                                 />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
-                                    <Users users={allUsers}></Users>
+                                    <Chessboard />
                                 </div>
                             </>
                         }
+                    ></Route>
+                    <Route
+                        path="/users"
+                        element={
+                        <Users setLoginModalOpen={setLoginModalOpen}></Users>
+                    }
                     ></Route>
                     <Route
                         path={user && `${user._id}/profile`}

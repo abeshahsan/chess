@@ -3,21 +3,34 @@ import PropTypes from "prop-types";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
+import { Header } from "../Components/Header/Header";
+import { Sidebar } from "../Components/sidebar";
 
-export default function Users({ users }) {
-    Users.propTypes = {
-        users: PropTypes.arrayOf(
-            PropTypes.shape({
-                _id: PropTypes.string,
-                username: PropTypes.string,
-                password: PropTypes.string,
-                email: PropTypes.string,
-                pfp: PropTypes.object,
-            })
-        ).isRequired,
-    };
+import { useFetchAllUsers } from "../Hooks/useFetchAllUsers";
 
-    const [currentUser] = useContext(UserContext);
+export default function Users({ setLoginModalOpen }) {
+    let { users, loading, error } = useFetchAllUsers();
+
+    console.log(users);
+
+
+    return (
+        <>
+            <Header
+                fetchingUser={loading}
+                setLoginModalOpen={setLoginModalOpen}
+            />
+            <div className="main-container d-flex align-items-center justify-content-center">
+                <Sidebar />
+                <UsersContainer users={users} />
+            </div>
+        </>
+    );
+}
+
+function UsersContainer({ users }) {
+
+    const {user: currentUser} = useContext(UserContext);
 
     return (
         <ul className="container h-100 p-5 mt-1 list-group">

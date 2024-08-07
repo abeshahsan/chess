@@ -118,9 +118,7 @@ router.get('/current-user', function (req, res, next) {
  */
 router.get('/get-all-users', async (req, res, next) => {
     try {
-        let users = await getAllUsers();
-
-        // console.log(users);
+        let {data:users} = await getAllUsers();
 
         return res.send({
             users: users

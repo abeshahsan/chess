@@ -12,8 +12,8 @@ import {
     WhitePawn,
     WhiteQueen,
     WhiteRook,
-} from "../pieces/pieces";
-import Grid from "../GridComponents/grid";
+} from "../GameLogics/Pieces/Pieces";
+import Grid from "../Components/GridComponents/Grid";
 
 export const GridMatrixContext = React.createContext([]);
 
