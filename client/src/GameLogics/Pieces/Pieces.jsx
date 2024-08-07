@@ -1,20 +1,18 @@
 import PropTypes from "prop-types";
 
-import blackPawnIcon from "../Images/black-pawn.png";
-import blackKnightIcon from "../Images/black-knight.png";
-import blackRookIcon from "../Images/black-rook.png";
-import blackBishopIcon from "../Images/black-bishop.png";
-import blackKingIcon from "../Images/black-king.png";
-import blackQueenIcon from "../Images/black-queen.png";
+import blackPawnIcon from "../../Assets/Images/black-pawn.png";
+import blackKnightIcon from "../../Assets/Images/black-knight.png";
+import blackRookIcon from "../../Assets/Images/black-rook.png";
+import blackBishopIcon from "../../Assets/Images/black-bishop.png";
+import blackKingIcon from "../../Assets/Images/black-king.png";
+import blackQueenIcon from "../../Assets/Images/black-queen.png";
 
-import whitePawnIcon from "../Images/white-pawn.png";
-import whiteKnightIcon from "../Images/white-knight.png";
-import whiteRookIcon from "../Images/white-rook.png";
-import whiteBishopIcon from "../Images/white-bishop.png";
-import whiteKingIcon from "../Images/white-king.png";
-import whiteQueenIcon from "../Images/white-queen.png";
-
-import "../App.css";
+import whitePawnIcon from "../../Assets/Images/white-pawn.png";
+import whiteKnightIcon from "../../Assets/Images/white-knight.png";
+import whiteRookIcon from "../../Assets/Images/white-rook.png";
+import whiteBishopIcon from "../../Assets/Images/white-bishop.png";
+import whiteKingIcon from "../../Assets/Images/white-king.png";
+import whiteQueenIcon from "../../Assets/Images/white-queen.png";
 
 export const BlackPawn = ({ visibility }) => {
     BlackPawn.propTypes = {

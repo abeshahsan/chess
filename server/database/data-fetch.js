@@ -1,7 +1,7 @@
-const argon2 = require('argon2');
+const argon2 = require("argon2");
 
-const connectDB = require('./connection')
-const CredentialsModel = require('./models/CredentialsModel');
+const connectDB = require("./connection");
+const CredentialsModel = require("./models/CredentialsModel");
 
 /**
  * Connects to the database.
@@ -20,9 +20,9 @@ async function getCredentials() {
     try {
         const data = await CredentialsModel.find();
 
-        return { data }
+        return { data };
     } catch (error) {
-        return { errMsg: error.message }
+        return { errMsg: error.message };
     }
 }
 
@@ -36,7 +36,7 @@ async function findUserByEmail(email) {
     try {
         const data = await CredentialsModel.find({ email });
 
-        return { data }
+        return { data };
     } catch (error) {
         throw new Error(error.message);
     }
@@ -52,9 +52,8 @@ async function checkIfEmailExists(email) {
     try {
         const data = await CredentialsModel.findOne({ email });
 
-        return { exists: !!data }
-    }
-    catch (error) {
+        return { exists: !!data };
+    } catch (error) {
         throw new Error(error.message);
     }
 }
@@ -72,7 +71,7 @@ async function insertUser(user) {
         const errors = await cred.validate();
 
         if (errors) {
-            const errorMessages = Object.keys(errors.errors).map(key => `${errors.errors[key].message}eafeafea`);
+            const errorMessages = Object.keys(errors.errors).map((key) => `${errors.errors[key].message}eafeafea`);
             throw new Error(errorMessages);
         }
 
@@ -80,7 +79,7 @@ async function insertUser(user) {
 
         const data = await cred.save();
 
-        return { data: data[0] }
+        return { data: data[0] };
     } catch (error) {
         throw new Error(error.message);
     }
@@ -95,7 +94,7 @@ async function getAllUsers() {
     try {
         const data = await CredentialsModel.find();
 
-        return { data }
+        return { data };
     } catch (error) {
         console.log(`${error.message}`);
         throw new Error(error.message);

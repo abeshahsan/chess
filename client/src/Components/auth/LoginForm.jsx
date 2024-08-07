@@ -71,7 +71,7 @@ const LoginForm = ({ setLoginModalOpen }) => {
                 setLoginError("");
                 setUser(() => {
                     return {
-                        // ...data.user,
+                        ...data.user,
                         loggedIn: true,
                     };
                 });

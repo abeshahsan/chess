@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import "./grid.css"
+import "./Grid.css"
 import { useRef, useState } from "react";
 import { checkForCheck, checkForCheckMate, findValidMoves } from "../../GameLogics/Pieces/PieceLogics";
 

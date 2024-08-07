@@ -1,21 +1,20 @@
 import PropTypes from "prop-types";
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { UserContext } from "../../Contexts/UserContext.jsx";
+import { useFetchUser } from "../../Hooks/useFetchUser";
+
 import LoginPanel from "./LoginPanel.jsx";
 import UserPanel from "./UserPanel";
 
 /**CSS imports */
 import "./Header.css";
 
-export function Header({ fetchingUser, setLoginModalOpen }) {
+export function Header({ setLoginModalOpen }) {
     Header.propTypes = {
-        fetchingUser: PropTypes.bool.isRequired,
         setLoginModalOpen: PropTypes.func.isRequired,
     };
 
-    let { user } = useContext(UserContext);
+    let { user, loading } = useFetchUser();
 
     return (
         <>
@@ -43,7 +42,7 @@ export function Header({ fetchingUser, setLoginModalOpen }) {
 
                     <ul className="nav col-10 col-md-auto justify-content-center mb-md-0"></ul>
 
-                    {!fetchingUser &&
+                    {!loading &&
                         (user?.loggedIn ? (
                             <UserPanel></UserPanel>
                         ) : (

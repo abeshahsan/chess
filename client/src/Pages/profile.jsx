@@ -1,8 +1,9 @@
-import { useContext } from "react";
-import { UserContext } from "../Contexts/UserContext";
+import PropTypes from "prop-types";
 
-export default function Profile() {
-    const [user] = useContext(UserContext);
+export default function Profile({ user }) {
+    Profile.propTypes = {
+        user: PropTypes.object.isRequired,
+    };
 
     return (
         <>
@@ -11,8 +12,8 @@ export default function Profile() {
                 style={{ width: "18rem" }}
             >
                 <img
-                    src={`${user && user.picture}`}
-                    className="card-img-top"
+                    src={"/user-default-pfp.png"}
+                    className="card-img-top p-5"
                     alt="..."
                 />
                 <div className="card-body">

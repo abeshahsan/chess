@@ -27,9 +27,9 @@ router.post('/login', async (req, res, next) => {
 
             if (valid) {
                 req.session.user = user;
-                console.log(user);
                 return res.send({
                     status: 1,
+                    user: user,
                 });
             }
         }
@@ -118,9 +118,7 @@ router.get('/current-user', function (req, res, next) {
  */
 router.get('/get-all-users', async (req, res, next) => {
     try {
-        let users = await getAllUsers();
-
-        // console.log(users);
+        let {data:users} = await getAllUsers();
 
         return res.send({
             users: users

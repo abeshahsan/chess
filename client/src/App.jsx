@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./global.css";
 
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Header } from "./Components/Header/Header";
@@ -10,59 +10,19 @@ import { Sidebar } from "./Components/sidebar.jsx";
 import LoginFullScreenModal from "./Components/Auth/LoginModal.jsx";
 
 import HomePage from "./Pages/HomePage/HomePage.jsx";
-import Users from "./Pages/Users.jsx";
-import Profile from "./Pages/Profile.jsx";
-import NotFoundPage from "./Pages/NotFound.jsx";
 
-import { UserContext } from "./Contexts/UserContext.jsx";
+import Profile from "./Pages/Profile.jsx";
+import NotFound from "./Pages/NotFound.jsx";
+
+import Chessboard from "./Components/Chessboard";
+
+import Users from "./Pages/Users.jsx";
+import { useFetchUser } from "./Hooks/useFetchUser.jsx";
 
 const App = () => {
-    let [allUsers, setAllUsers] = useState(undefined);
-
     let [loginModalOpen, setLoginModalOpen] = useState(false);
 
-    useEffect(() => {
-        document.title = "Chess";
-        fetch("/api/get-all-users")
-            .then((response) => {
-                return response.json();
-            })
-            .then((response) => {
-                setAllUsers(response.users.data);
-                // console.log(response.users.data);
-            });
-    }, []);
-
-    let { user, setUser } = useContext(UserContext);
-
-    let [fetchingUser, setFetchingUser] = useState(true);
-
-    useEffect(() => {
-        setFetchingUser(true);
-
-        fetch("/api/current-user")
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                if (data.user) {
-                    setUser(() => {
-                        return {
-                            ...user,
-                            ...data.user,
-                            loggedIn: true,
-                        };
-                    });
-                } else {
-                    setUser(() => {
-                        return {
-                            ...user,
-                        };
-                    });
-                }
-                setFetchingUser(false);
-            });
-    }, []);
+    let { user } = useFetchUser();
 
     return (
         <>
@@ -76,45 +36,39 @@ const App = () => {
                         path="/"
                         element={
                             <>
-                                <Header
-                                    fetchingUser={fetchingUser}
-                                    setLoginModalOpen={setLoginModalOpen}
-                                />
+                                <Header setLoginModalOpen={setLoginModalOpen} />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <HomePage />
-                                    {/* <ChessboardComponent /> */}
+                                </div>
+                            </>
+                        }
+                    ></Route>
+                    <Route
+                        path="/game"
+                        element={
+                            <>
+                                <Header setLoginModalOpen={setLoginModalOpen} />
+                                <div className="main-container d-flex align-items-center justify-content-center">
+                                    <Sidebar />
+                                    <Chessboard />
                                 </div>
                             </>
                         }
                     ></Route>
                     <Route
                         path="/users"
-                        element={
-                            <>
-                                <Header
-                                    fetchingUser={fetchingUser}
-                                    setLoginModalOpen={setLoginModalOpen}
-                                />
-                                <div className="main-container d-flex align-items-center justify-content-center">
-                                    <Sidebar />
-                                    <Users users={allUsers}></Users>
-                                </div>
-                            </>
-                        }
+                        element={<Users setLoginModalOpen={setLoginModalOpen}></Users>}
                     ></Route>
                     <Route
                         path={user && `${user._id}/profile`}
                         element={
                             <>
-                                <Header
-                                    fetchingUser={fetchingUser}
-                                    setLoginModalOpen={setLoginModalOpen}
-                                />
+                                <Header setLoginModalOpen={setLoginModalOpen} />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <div className="container game-container">
-                                        <Profile></Profile>
+                                        <Profile user={user}></Profile>
                                     </div>
                                 </div>
                             </>
@@ -124,7 +78,7 @@ const App = () => {
                         path="*"
                         element={
                             <>
-                                <NotFoundPage></NotFoundPage>
+                                <NotFound></NotFound>
                             </>
                         }
                     ></Route>
