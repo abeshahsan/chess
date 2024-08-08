@@ -1,21 +1,15 @@
 import PropTypes from "prop-types";
 import { Header } from "../Components/Header/Header";
 import { Sidebar } from "../Components/sidebar";
+import { useContext } from "react";
+import { UserContext } from "../Contexts/UserContext";
 
-export default function Profile({ currentUser, fetchingCurrentUser, setLoginModalOpen }) {
-    Profile.propTypes = {
-        currentUser: PropTypes.object.isRequired,
-        fetchingCurrentUser: PropTypes.bool.isRequired,
-        setLoginModalOpen: PropTypes.func,
-    };
+export default function Profile() {
+    const { currentUser } = useContext(UserContext);
 
     return (
         <>
-            <Header
-                user={currentUser}
-                loading={fetchingCurrentUser}
-                setLoginModalOpen={setLoginModalOpen}
-            />
+            <Header />
             <div className="main-container d-flex align-items-center justify-content-center">
                 <Sidebar />
                 <div className="container game-container">

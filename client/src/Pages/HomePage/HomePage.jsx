@@ -8,7 +8,7 @@ import LoginFullScreenModal from "../../Components/Auth/LoginModal.jsx";
 
 import { UserContext } from "../../Contexts/UserContext.jsx";
 
-export default function HomePage() {
+export default function HomePageMainContainer() {
     let { user } = useContext(UserContext);
 
     const [currentOption, setCurrentOption] = useState(0);

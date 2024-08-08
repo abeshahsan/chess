@@ -2,14 +2,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./global.css";
 
-import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Header } from "./Components/Header/Header";
 import { Sidebar } from "./Components/sidebar.jsx";
 import LoginFullScreenModal from "./Components/Auth/LoginModal.jsx";
 
-import HomePage from "./Pages/HomePage/HomePage.jsx";
+import HomePageMainContainer from "./Pages/HomePage/HomePage.jsx";
 
 import Profile from "./Pages/Profile.jsx";
 import NotFound from "./Pages/NotFound.jsx";
@@ -21,16 +20,11 @@ import { useFetchUser } from "./Hooks/useFetchUser.jsx";
 import PageLoading from "./Components/ErrorsAndPlaceHolders/PageLoading.jsx";
 
 const App = () => {
-    let [loginModalOpen, setLoginModalOpen] = useState(false);
-
     let { user, loading } = useFetchUser();
 
     return (
         <>
-            <LoginFullScreenModal
-                loginModalOpen={loginModalOpen}
-                setLoginModalOpen={setLoginModalOpen}
-            ></LoginFullScreenModal>
+            <LoginFullScreenModal />
             {loading && <PageLoading />}
             <BrowserRouter>
                 <Routes>
@@ -38,14 +32,10 @@ const App = () => {
                         path="/"
                         element={
                             <>
-                                <Header
-                                    user={user}
-                                    loading={loading}
-                                    setLoginModalOpen={setLoginModalOpen}
-                                />
+                                <Header />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
-                                    <HomePage />
+                                    <HomePageMainContainer />
                                 </div>
                             </>
                         }
@@ -54,11 +44,7 @@ const App = () => {
                         path="/game"
                         element={
                             <>
-                                <Header
-                                    user={user}
-                                    loading={loading}
-                                    setLoginModalOpen={setLoginModalOpen}
-                                />
+                                <Header />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <Chessboard />
@@ -68,23 +54,13 @@ const App = () => {
                     ></Route>
                     <Route
                         path="/users"
-                        element={
-                            <Users
-                                currentUser={user}
-                                fetchingCurrentUser={loading}
-                                setLoginModalOpen={setLoginModalOpen}
-                            ></Users>
-                        }
+                        element={<Users></Users>}
                     ></Route>
                     <Route
                         path={user && `${user._id}/profile`}
                         element={
                             <>
-                                <Profile
-                                    currentUser={user}
-                                    fetchingCurrentUser={loading}
-                                    setLoginModalOpen={setLoginModalOpen}
-                                />
+                                <Profile />
                             </>
                         }
                     ></Route>

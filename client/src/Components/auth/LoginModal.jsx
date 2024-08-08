@@ -10,6 +10,8 @@ import RegisterForm from "./RegisterForm";
 
 /*CSS imports*/
 import "./LoginModal.css";
+import { useContext } from "react";
+import { FlagsContext } from "../../Contexts/FlagsContext";
 
 /**
  * Renders the login full screen modal component.
@@ -26,21 +28,15 @@ import "./LoginModal.css";
  *
  *
  * @param {Object} props - The component props.
- * @param {boolean} props.loginModalOpen - The state to determine if the login modal is open.
- * @param {Function} props.setLoginModalOpen - The function to set the login modal open state.
  * @returns {JSX.Element} The rendered component.
  * @example
  * <LoginFullScreenModal loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen} />
  * @example
- * const [loginModalOpen, setLoginModalOpen] = useState(false);
- * <LoginFullScreenModal loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen} />
+ * <LoginFullScreenModal />
  *
  */
-const LoginFullScreenModal = ({ loginModalOpen, setLoginModalOpen }) => {
-    LoginFullScreenModal.propTypes = {
-        loginModalOpen: PropTypes.bool.isRequired,
-        setLoginModalOpen: PropTypes.func.isRequired,
-    };
+const LoginFullScreenModal = () => {
+    const { loginModalOpen, setLoginModalOpen } = useContext(FlagsContext);
 
     return (
         <Modal

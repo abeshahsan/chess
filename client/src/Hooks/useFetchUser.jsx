@@ -2,8 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../Contexts/UserContext";
 
 export function useFetchUser(dependencies = []) {
-    const { user, setUser } = useContext(UserContext);
-    const [loading, setLoading] = useState(true);
+    const { user, setUser, fetchingUser: loading, setFetchingUser: setLoading } = useContext(UserContext);
+
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -31,13 +31,12 @@ export function useFetchUser(dependencies = []) {
 
                 let data = await response.json();
 
-                if(data.user) {
+                if (data.user) {
                     data.user = {
                         ...data.user,
                         loggedIn: true,
                     };
                 }
-
 
                 if (isMounted) {
                     setUser({
