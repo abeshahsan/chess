@@ -1,20 +1,18 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-import { useFetchUser } from "../../Hooks/useFetchUser";
-
 import LoginPanel from "./LoginPanel.jsx";
 import UserPanel from "./UserPanel";
 
 /**CSS imports */
 import "./Header.css";
 
-export function Header({ setLoginModalOpen }) {
+export function Header({ user, loading, setLoginModalOpen }) {
     Header.propTypes = {
+        user: PropTypes.object.isRequired,
+        loading: PropTypes.bool.isRequired,
         setLoginModalOpen: PropTypes.func.isRequired,
     };
-
-    let { user, loading } = useFetchUser();
 
     return (
         <>

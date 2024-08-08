@@ -25,8 +25,6 @@ const App = () => {
 
     let { user, loading } = useFetchUser();
 
-    console.log(loading);
-
     return (
         <>
             <LoginFullScreenModal
@@ -40,7 +38,11 @@ const App = () => {
                         path="/"
                         element={
                             <>
-                                <Header setLoginModalOpen={setLoginModalOpen} />
+                                <Header
+                                    user={user}
+                                    loading={loading}
+                                    setLoginModalOpen={setLoginModalOpen}
+                                />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <HomePage />
@@ -52,7 +54,11 @@ const App = () => {
                         path="/game"
                         element={
                             <>
-                                <Header setLoginModalOpen={setLoginModalOpen} />
+                                <Header
+                                    user={user}
+                                    loading={loading}
+                                    setLoginModalOpen={setLoginModalOpen}
+                                />
                                 <div className="main-container d-flex align-items-center justify-content-center">
                                     <Sidebar />
                                     <Chessboard />
@@ -62,15 +68,21 @@ const App = () => {
                     ></Route>
                     <Route
                         path="/users"
-                        element={<Users setLoginModalOpen={setLoginModalOpen}></Users>}
+                        element={
+                            <Users
+                                currentUser={user}
+                                fetchingCurrentUser={loading}
+                                setLoginModalOpen={setLoginModalOpen}
+                            ></Users>
+                        }
                     ></Route>
                     <Route
                         path={user && `${user._id}/profile`}
                         element={
                             <>
                                 <Profile
-                                    user={user}
-                                    featchigUser={loading}
+                                    currentUser={user}
+                                    fetchingCurrentUser={loading}
                                     setLoginModalOpen={setLoginModalOpen}
                                 />
                             </>

@@ -8,17 +8,20 @@ import { Sidebar } from "../Components/sidebar";
 
 import { useFetchAllUsers } from "../Hooks/useFetchAllUsers";
 
-export default function Users({ setLoginModalOpen }) {
+export default function Users({ currentUser, fetchingCurrentUser, setLoginModalOpen }) {
     Users.propTypes = {
-        setLoginModalOpen: PropTypes.func.isRequired,
+        currentUser: PropTypes.object.isRequired,
+        fetchingCurrentUser: PropTypes.bool.isRequired,
+        setLoginModalOpen: PropTypes.func,
     };
 
-    let { users, loading } = useFetchAllUsers();
+    let { users } = useFetchAllUsers();
 
     return (
         <>
             <Header
-                fetchingUser={loading}
+                user={currentUser}
+                loading={fetchingCurrentUser}
                 setLoginModalOpen={setLoginModalOpen}
             />
             <div className="main-container d-flex align-items-center justify-content-center">
