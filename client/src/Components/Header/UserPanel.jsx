@@ -10,29 +10,8 @@ export default function UserPanel() {
 
     let navigate = useNavigate();
 
-    function handleOnLogout(event) {
-        event.preventDefault();
-
-        fetch("/api/logout", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                console.log(data);
-                setUser(() => {
-                    return { ...EMPTY_USER };
-                });
-                navigate("/");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    function handleOnLogout() {
+        logout(navigate, setUser);
     }
 
     return (
@@ -59,10 +38,9 @@ export default function UserPanel() {
                     <span style={{ fontSize: 11 }}>{user.email}</span>
                 </div>
 
-                <Dropdown.Item href={`/${user._id}/profile`}>Profile</Dropdown.Item>
-                <Dropdown.Item href="#">Settigs</Dropdown.Item>
+                <Dropdown.Item onClick={() => navigate(`/${user._id}/profile`)}>Profile</Dropdown.Item>
+                <Dropdown.Item>Settigs</Dropdown.Item>
                 <Dropdown.Item
-                    href="/logout"
                     onClick={handleOnLogout}
                 >
                     Logout
@@ -70,6 +48,29 @@ export default function UserPanel() {
             </Dropdown.Menu>
         </Dropdown>
     );
+}
+
+function logout(navigate, setUser) {
+    fetch("/api/logout", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            setUser(() => {
+                return { ...EMPTY_USER };
+            });
+            navigate("/");
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 
 {

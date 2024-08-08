@@ -1,7 +1,29 @@
 import PropTypes from "prop-types";
+import { Header } from "../Components/Header/Header";
+import { Sidebar } from "../Components/sidebar";
 
-export default function Profile({ user }) {
+export default function Profile({ user, setLoginModalOpen }) {
     Profile.propTypes = {
+        user: PropTypes.object.isRequired,
+        setLoginModalOpen: PropTypes.func.isRequired,
+        featchigUser: PropTypes.bool.isRequired,
+    };
+
+    return (
+        <>
+            <Header setLoginModalOpen={setLoginModalOpen} />
+            <div className="main-container d-flex align-items-center justify-content-center">
+                <Sidebar />
+                <div className="container game-container">
+                    <ProfileCard user={user}></ProfileCard>
+                </div>
+            </div>
+        </>
+    );
+}
+
+function ProfileCard({ user }) {
+    ProfileCard.propTypes = {
         user: PropTypes.object.isRequired,
     };
 

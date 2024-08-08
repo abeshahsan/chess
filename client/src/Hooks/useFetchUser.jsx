@@ -31,10 +31,17 @@ export function useFetchUser(dependencies = []) {
 
                 let data = await response.json();
 
+                if(data.user) {
+                    data.user = {
+                        ...data.user,
+                        loggedIn: true,
+                    };
+                }
+
+
                 if (isMounted) {
                     setUser({
                         ...data.user,
-                        loggedIn: true
                     });
                     setLoading(false);
                 }

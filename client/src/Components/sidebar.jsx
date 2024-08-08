@@ -6,7 +6,7 @@ export function Sidebar() {
     const pathName = useLocation()["pathname"];
 
     return (
-        <div className="ch-sidebar d-flex flex-column flex-shrink-0 sticky-top p-4 bg-body-tertiary">
+        <div className="ch-sidebar d-flex flex-column flex-shrink-0 p-4 bg-body-tertiary">
             <hr style={{ visibility: "hidden" }} />
             <hr style={{ visibility: "hidden" }} />
             <ul className="nav nav-pills flex-column mb-auto">

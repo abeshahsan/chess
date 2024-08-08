@@ -18,11 +18,14 @@ import Chessboard from "./Components/Chessboard";
 
 import Users from "./Pages/Users.jsx";
 import { useFetchUser } from "./Hooks/useFetchUser.jsx";
+import PageLoading from "./Components/ErrorsAndPlaceHolders/PageLoading.jsx";
 
 const App = () => {
     let [loginModalOpen, setLoginModalOpen] = useState(false);
 
-    let { user } = useFetchUser();
+    let { user, loading } = useFetchUser();
+
+    console.log(loading);
 
     return (
         <>
@@ -30,6 +33,7 @@ const App = () => {
                 loginModalOpen={loginModalOpen}
                 setLoginModalOpen={setLoginModalOpen}
             ></LoginFullScreenModal>
+            {loading && <PageLoading />}
             <BrowserRouter>
                 <Routes>
                     <Route
@@ -64,13 +68,11 @@ const App = () => {
                         path={user && `${user._id}/profile`}
                         element={
                             <>
-                                <Header setLoginModalOpen={setLoginModalOpen} />
-                                <div className="main-container d-flex align-items-center justify-content-center">
-                                    <Sidebar />
-                                    <div className="container game-container">
-                                        <Profile user={user}></Profile>
-                                    </div>
-                                </div>
+                                <Profile
+                                    user={user}
+                                    featchigUser={loading}
+                                    setLoginModalOpen={setLoginModalOpen}
+                                />
                             </>
                         }
                     ></Route>
@@ -78,7 +80,7 @@ const App = () => {
                         path="*"
                         element={
                             <>
-                                <NotFound></NotFound>
+                                <NotFound />
                             </>
                         }
                     ></Route>
