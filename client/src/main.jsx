@@ -7,12 +7,12 @@ import { WebSocketContextProvider } from "./Contexts/WebSocketContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <WebSocketContextProvider>
-            <UserContextProvider>
+        <UserContextProvider>
+            <WebSocketContextProvider>
                 <FlagsContextProvider>
                     <App />
                 </FlagsContextProvider>
-            </UserContextProvider>
-        </WebSocketContextProvider>
+            </WebSocketContextProvider>
+        </UserContextProvider>
     </React.StrictMode>
 );

@@ -31,11 +31,18 @@ const NewGameModal = ({ open, setOpen }) => {
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
 
-            console.log("Received message:", message.data);
-
-            setGameCode(message.data.gameCode);
+            switch (message.type) {
+                case "generate-game-code":
+                    setGameCode(message.data.gameCode);
+                    break;
+                case "match-game-code":
+                    setOpen(false);
+                    break;
+                default:
+                    break;
+            }
         };
-    }, [ws, user._id]);
+    }, [ws?.readyState, user._id]);
 
     return (
         <Modal

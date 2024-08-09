@@ -6,6 +6,10 @@ const createServerWebSocket = (server) => {
     const wss = new WebSocket.Server({ server });
 
     wss.on("connection", (ws) => {
+        wss.clients.forEach(() => {
+            console.log(wss.clients.size);
+        });
+
         ws.on("message", (event) => {
             const receivedData = event;
 
@@ -15,11 +19,13 @@ const createServerWebSocket = (server) => {
             parsedMessage = JSON.parse(message);
 
             switch (parsedMessage.type) {
+                case "register":
+                    ws.user = parsedMessage.data.user;
+                    break;
                 case "generate-game-code":
                     let gameCode = Math.random().toString(36).substring(2, 10);
-                    allGameCodes.set(gameCode, parsedMessage.data.userID);
+                    allGameCodes.set(gameCode, ws);
 
-                    ws.userID = parsedMessage.data.userID;
                     ws.gameCode = gameCode;
 
                     ws.send(
@@ -33,12 +39,18 @@ const createServerWebSocket = (server) => {
 
                     break;
                 case "match-game-code":
-                    let c = allGameCodes.get(parsedMessage.data.gameCode);
-                    if ( c &&
-                        c !==
-                        parsedMessage.data.userID
-                    ) {
+                    let client = allGameCodes.get(parsedMessage.data.gameCode);
+
+                    if (client && client !== parsedMessage.data.userID) {
                         ws.send(
+                            JSON.stringify({
+                                type: "match-game-code",
+                                data: {
+                                    status: 1,
+                                },
+                            })
+                        );
+                        client.send(
                             JSON.stringify({
                                 type: "match-game-code",
                                 data: {
@@ -55,11 +67,18 @@ const createServerWebSocket = (server) => {
                                 },
                             })
                         );
+                        client.send(
+                            JSON.stringify({
+                                type: "match-game-code",
+                                data: {
+                                    status: 0,
+                                },
+                            })
+                        );
                     }
 
                     break;
             }
-
         });
 
         ws.on("close", () => {
