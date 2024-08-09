@@ -1,4 +1,4 @@
-const { mongoose } = require('../mongoose');
+import { mongoose } from '../mongoose';
 
 const MatchScheme = new mongoose.Schema({
     _id: {
@@ -33,4 +33,4 @@ const MatchScheme = new mongoose.Schema({
 
 const schema = mongoose.models.match || mongoose.model('match', MatchScheme);
 
-module.exports = schema
+export default schema

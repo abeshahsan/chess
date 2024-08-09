@@ -1,9 +1,9 @@
-const WebSocket = require("ws");
+import WebSocket, { WebSocketServer } from 'ws';
 
 const allGameCodes = new Map();
 
 const createServerWebSocket = (server) => {
-    const wss = new WebSocket.Server({ server });
+    const wss = new WebSocketServer({ server });
 
     wss.on("connection", (ws) => {
         wss.clients.forEach(() => {
@@ -16,7 +16,7 @@ const createServerWebSocket = (server) => {
             // Handle ArrayBuffer
             const message = new TextDecoder().decode(new Uint8Array(receivedData));
 
-            parsedMessage = JSON.parse(message);
+            let parsedMessage = JSON.parse(message);
 
             switch (parsedMessage.type) {
                 case "register":
@@ -87,4 +87,4 @@ const createServerWebSocket = (server) => {
     });
 };
 
-module.exports = createServerWebSocket;
+export default createServerWebSocket;

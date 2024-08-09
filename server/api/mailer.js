@@ -1,6 +1,6 @@
-const nodeMailer = require('nodemailer');
-const fs = require('fs');
-const path = require('path');
+import { createTransport } from 'nodemailer';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 /**
  * Sends an email with OTP (One-Time Password) to the specified receiver address.
@@ -10,7 +10,7 @@ const path = require('path');
  */
 const sendEmailWithOTP = async (receiverAddress) => {
     try {
-        let transporter = nodeMailer.createTransport(TRANSPORTER_CONFIG);
+        let transporter = createTransport(TRANSPORTER_CONFIG);
         let { emailBody, otp } = generateEmailBody();
         let mailOptions = generateMailOptions(receiverAddress, 'OTP for registration', emailBody);
 
@@ -67,7 +67,7 @@ const generateMailOptions = (receiverAddress, subject, body) => {
  */
 const generateEmailBody = () => {
     let otp = gererateOTP();
-    let emailBody = fs.readFileSync(path.join(__dirname, 'register-email-body.html'), 'utf8');
+    let emailBody = readFileSync(join(__dirname, 'register-email-body.html'), 'utf8');
     emailBody = emailBody.replace('REPLACE_OTP', otp);
     return { emailBody, otp };
 }
@@ -107,4 +107,4 @@ const gererateOTP = () => {
     return result;
 }
 
-module.exports = { sendEmailWithOTP };
+export { sendEmailWithOTP };

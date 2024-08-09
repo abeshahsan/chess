@@ -1,9 +1,9 @@
-const express = require("express");
-const { sendEmailWithOTP } = require("./mailer");
-const { findUserByEmail, insertUser, getAllUsers, checkIfEmailExists } = require("../database/data-fetch");
-const argon2 = require("argon2");
+import { Router } from "express";
+import { sendEmailWithOTP } from "./mailer.js";
+import { findUserByEmail, insertUser, getAllUsers, checkIfEmailExists } from "../database/data-fetch.js";
+import { verify } from "argon2";
 
-const router = express.Router();
+const router = Router();
 
 /**
  * Route for user login.
@@ -22,7 +22,7 @@ router.post("/login", async (req, res, next) => {
 
         if (queryResult?.length) {
             user = queryResult[0];
-            const valid = await argon2.verify(user.password, req.body.password);
+            const valid = await verify(user.password, req.body.password);
 
             if (valid) {
                 req.session.user = user;
@@ -360,4 +360,4 @@ router.post("*", async (req, res, next) => {
     });
 });
 
-module.exports = router;
+export default router;

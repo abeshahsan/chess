@@ -1,7 +1,7 @@
-const argon2 = require("argon2");
+import { hash } from "argon2";
 
-const connectDB = require("./connection");
-const CredentialsModel = require("./models/CredentialsModel");
+import connectDB from "./connection.js";
+import CredentialsModel from "./models/CredentialsModel.js";
 
 /**
  * Connects to the database.
@@ -75,7 +75,7 @@ async function insertUser(user) {
             throw new Error(errorMessages);
         }
 
-        cred.password = await argon2.hash(cred.password);
+        cred.password = await hash(cred.password);
 
         const data = await cred.save();
 
@@ -101,10 +101,4 @@ async function getAllUsers() {
     }
 }
 
-module.exports = {
-    getCredentials,
-    findUserByEmail,
-    insertUser,
-    getAllUsers,
-    checkIfEmailExists,
-};
+export { getCredentials, findUserByEmail, insertUser, getAllUsers, checkIfEmailExists };
