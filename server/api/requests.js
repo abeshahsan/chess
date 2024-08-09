@@ -1,8 +1,7 @@
-
-const express = require('express');
-const { sendEmailWithOTP } = require('./mailer');
-const { findUserByEmail, insertUser, getAllUsers, checkIfEmailExists } = require('../database/data-fetch');
-const argon2 = require('argon2');
+const express = require("express");
+const { sendEmailWithOTP } = require("./mailer");
+const { findUserByEmail, insertUser, getAllUsers, checkIfEmailExists } = require("../database/data-fetch");
+const argon2 = require("argon2");
 
 const router = express.Router();
 
@@ -15,14 +14,14 @@ const router = express.Router();
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-router.post('/login', async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
     try {
         let { data: queryResult } = await findUserByEmail(req.body.email);
 
         let user;
 
         if (queryResult?.length) {
-            user = queryResult[0]
+            user = queryResult[0];
             const valid = await argon2.verify(user.password, req.body.password);
 
             if (valid) {
@@ -55,13 +54,14 @@ router.post('/login', async (req, res, next) => {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-router.post('/register__', async (req, res, next) => {
+router.post("/register__", async (req, res, next) => {
     try {
         let { data: queryResult } = await findUserByEmail(req.body.email);
 
         let user;
 
-        if (queryResult && queryResult.length) { //user already registered
+        if (queryResult && queryResult.length) {
+            //user already registered
             user = queryResult[0];
             req.session.user = user;
             return res.send({
@@ -76,7 +76,6 @@ router.post('/register__', async (req, res, next) => {
                 picture: req.body.picture,
             });
             req.session.user = user;
-
         } catch (error) {
             throw new Error(error);
         }
@@ -101,9 +100,9 @@ router.post('/register__', async (req, res, next) => {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-router.get('/current-user', function (req, res, next) {
+router.get("/current-user", function (req, res, next) {
     return res.send({
-        user: req.session.user
+        user: req.session.user,
     });
 });
 
@@ -116,12 +115,12 @@ router.get('/current-user', function (req, res, next) {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-router.get('/get-all-users', async (req, res, next) => {
+router.get("/get-all-users", async (req, res, next) => {
     try {
-        let {data:users} = await getAllUsers();
+        let { data: users } = await getAllUsers();
 
         return res.send({
-            users: users
+            users: users,
         });
     } catch (error) {
         console.log(error);
@@ -140,10 +139,10 @@ router.get('/get-all-users', async (req, res, next) => {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-router.post('/logout', function (req, res, next) {
+router.post("/logout", function (req, res, next) {
     req.session.user = undefined;
     return res.send({
-        message: "logged out"
+        message: "logged out",
     });
 });
 
@@ -160,7 +159,7 @@ const STEPS = {
     OTP: "otp",
     RESEND_OTP: "resend_otp",
     PASSWORD: "password",
-}
+};
 
 /**
  * Middleware function for the email step of user registration.
@@ -197,10 +196,10 @@ const emailStep = async (req, res, next) => {
         console.log(error);
         return res.send({
             status: 0,
-            error: error.message
+            error: error.message,
         });
     }
-}
+};
 
 /**
  * Middleware function for the resend OTP step of user registration.
@@ -219,15 +218,14 @@ const resendOtpStep = async (req, res, next) => {
         return res.send({
             status: 1,
         });
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
         return res.send({
             status: 0,
-            error: error.message
+            error: error.message,
         });
     }
-}
+};
 
 /**
  * Middleware function for the OTP step of user registration.
@@ -248,7 +246,7 @@ const otpStep = async (req, res, next) => {
     return res.send({
         status: 0,
     });
-}
+};
 
 /**
  * Middleware function for the password step of user registration.
@@ -270,10 +268,10 @@ const passwordStep = async (req, res, next) => {
         console.log(error);
         return res.send({
             status: 0,
-            error: error.message
+            error: error.message,
         });
     }
-}
+};
 
 /**
  * Route for user registration.
@@ -283,7 +281,7 @@ const passwordStep = async (req, res, next) => {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-router.post('/register', async function (req, res, next) {
+router.post("/register", async function (req, res, next) {
     switch (req.body.step) {
         case STEPS.EMAIL:
             return emailStep(req, res, next);
@@ -300,6 +298,47 @@ router.post('/register', async function (req, res, next) {
     }
 });
 
+// router.post("/match-game-code", async (req, res, next) => {
+//     try {
+//         let { userID } = req.body;
+
+//         if (userID !== req.session.user._id && req.session.gameCode === req.body.gameCode) {
+//             return res.send({
+//                 status: 1,
+//             });
+//         }
+
+//         return res.send({
+//             status: 0,
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         return res.send({
+//             error: error.message,
+//             status: 0,
+//         });
+//     }
+// });
+
+// router.post("/generate-game-code", async (req, res, next) => {
+//     try {
+//         let { userID } = req.body;
+
+//         let gameCode = Math.random().toString(36).substring(2, 10);
+//         req.session.gameCode = gameCode;
+
+//         return res.send({
+//             gameCode: gameCode,
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         return res.send({
+//             error: error.message,
+//             status: 0,
+//         });
+//     }
+// });
+
 /**
  * Route for handling all other POST requests.
  * @name POST /*
@@ -309,7 +348,7 @@ router.post('/register', async function (req, res, next) {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-router.post('*', async (req, res, next) => {
+router.post("*", async (req, res, next) => {
     let { data: queryResult } = await findUserByEmail(req.body.email);
 
     let user = queryResult[0];

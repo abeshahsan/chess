@@ -143,7 +143,7 @@ const EmailForm = ({ setStep, setEmail }) => {
             {emailStepError && <Alert variant="danger">{emailStepError}</Alert>}
             <Form.Group
                 className="mb-3"
-                controlId="registerFormBasicEmail"
+                controlId="registerFormEmail"
             >
                 <Form.Label
                     className="text-center w-100"
@@ -279,7 +279,7 @@ const OTPForm = ({ setStep, email }) => {
             {otpStepError && <Alert variant="danger">{otpStepError}</Alert>}
             <Form.Group
                 className="mb-3"
-                controlId="registerFormBasicOTP"
+                controlId="registerFormOTP"
             >
                 <Form.Label
                     className="text-center w-100"
@@ -430,7 +430,7 @@ const PasswordForm = ({ setLoginModalOpen, email }) => {
 
             <Form.Group
                 className="mb-3"
-                controlId="registerFormBasicUsername"
+                controlId="registerFormUsername"
             >
                 <Form.Control
                     type="input"
@@ -450,7 +450,7 @@ const PasswordForm = ({ setLoginModalOpen, email }) => {
 
             <Form.Group
                 className="mb-3"
-                controlId="registerFormBasicPassword"
+                controlId="registerFormPassword"
             >
                 <InputGroup>
                     <Form.Control
@@ -478,7 +478,7 @@ const PasswordForm = ({ setLoginModalOpen, email }) => {
 
             <Form.Group
                 className="mb-3"
-                controlId="registerFormBasicConfirmPassword"
+                controlId="registerFormConfirmPassword"
             >
                 <InputGroup>
                     <Form.Control

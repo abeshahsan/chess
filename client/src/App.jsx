@@ -8,8 +8,6 @@ import { Header } from "./Components/Header/Header";
 import { Sidebar } from "./Components/sidebar.jsx";
 import LoginFullScreenModal from "./Components/Auth/LoginModal.jsx";
 
-import HomePageMainContainer from "./Pages/HomePage/HomePage.jsx";
-
 import Profile from "./Pages/Profile.jsx";
 import NotFound from "./Pages/NotFound.jsx";
 
@@ -18,6 +16,7 @@ import Chessboard from "./Components/Chessboard";
 import Users from "./Pages/Users.jsx";
 import { useFetchUser } from "./Hooks/useFetchUser.jsx";
 import PageLoading from "./Components/ErrorsAndPlaceHolders/PageLoading.jsx";
+import HomePage from "./Pages/HomePage/HomePage.jsx";
 
 const App = () => {
     let { user, loading } = useFetchUser();
@@ -32,11 +31,7 @@ const App = () => {
                         path="/"
                         element={
                             <>
-                                <Header />
-                                <div className="main-container d-flex align-items-center justify-content-center">
-                                    <Sidebar />
-                                    <HomePageMainContainer />
-                                </div>
+                                <HomePage />
                             </>
                         }
                     ></Route>
@@ -58,19 +53,11 @@ const App = () => {
                     ></Route>
                     <Route
                         path={user && `${user._id}/profile`}
-                        element={
-                            <>
-                                <Profile />
-                            </>
-                        }
+                        element={<Profile />}
                     ></Route>
                     <Route
                         path="*"
-                        element={
-                            <>
-                                <NotFound />
-                            </>
-                        }
+                        element={<NotFound />}
                     ></Route>
                 </Routes>
             </BrowserRouter>

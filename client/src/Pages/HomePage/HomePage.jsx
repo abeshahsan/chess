@@ -1,36 +1,51 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { HOME_PAGE_OPTIONS } from "./HomePageOptions.js";
 
 import NewGameModal from "./NewGameModal.jsx";
 
 import LoginFullScreenModal from "../../Components/Auth/LoginModal.jsx";
 
 import { UserContext } from "../../Contexts/UserContext.jsx";
+import { Header } from "../../Components/Header/Header.jsx";
+import { Sidebar } from "../../Components/sidebar.jsx";
+import { FlagsContext } from "../../Contexts/FlagsContext.jsx";
 
-export default function HomePageMainContainer() {
+export default function HomePage() {
+    return (
+        <>
+            <Header />
+            <div className="main-container d-flex align-items-center justify-content-center">
+                <Sidebar />
+                <HomePageMainContainer />
+            </div>
+        </>
+    );
+}
+
+function HomePageMainContainer() {
     let { user } = useContext(UserContext);
 
-    const [currentOption, setCurrentOption] = useState(0);
+    const [gameModalOpen, setGameModalOpen] = useState(false);
 
-    function onClickStart() {
+    let { setLoginModalOpen } = useContext(FlagsContext);
+
+    const onClickStart = () => {
         if (user?.loggedIn) {
-            setCurrentOption(HOME_PAGE_OPTIONS.NEW_GAME_MODAL);
+            setGameModalOpen(true);
+            setLoginModalOpen(false);
         } else {
-            setCurrentOption(HOME_PAGE_OPTIONS.LOGIN);
+            setGameModalOpen(false);
+            setLoginModalOpen(true);
         }
-    }
+    };
 
     return (
         <>
             <NewGameModal
-                open={currentOption === HOME_PAGE_OPTIONS.NEW_GAME_MODAL}
-                setOpen={setCurrentOption}
+                open={gameModalOpen}
+                setOpen={setGameModalOpen}
             />
-            <LoginFullScreenModal
-                loginModalOpen={currentOption === HOME_PAGE_OPTIONS.LOGIN}
-                setLoginModalOpen={setCurrentOption}
-            />
+            <LoginFullScreenModal />
 
             <div className="container w-100 h-100 d-flex align-items-center justify-items-center">
                 <Button

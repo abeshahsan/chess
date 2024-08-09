@@ -1,13 +1,12 @@
-const WebSocket = require('ws');
+const WebSocket = require("ws");
 
+const allGameCodes = new Map();
 
 const createServerWebSocket = (server) => {
     const wss = new WebSocket.Server({ server });
 
-    wss.on('connection', (ws) => {
-        console.log('New client connected');
-
-        ws.on('message', (event) => {
+    wss.on("connection", (ws) => {
+        ws.on("message", (event) => {
             const receivedData = event;
 
             // Handle ArrayBuffer
@@ -15,21 +14,58 @@ const createServerWebSocket = (server) => {
 
             parsedMessage = JSON.parse(message);
 
-            // Broadcast the message to all clients
-            wss.clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({
-                        data: parsedMessage.data,
-                        timestamp: new Date().toISOString()
-                    }));
-                }
-            });
+            switch (parsedMessage.type) {
+                case "generate-game-code":
+                    let gameCode = Math.random().toString(36).substring(2, 10);
+                    allGameCodes.set(gameCode, parsedMessage.data.userID);
+
+                    ws.userID = parsedMessage.data.userID;
+                    ws.gameCode = gameCode;
+
+                    ws.send(
+                        JSON.stringify({
+                            type: "generate-game-code",
+                            data: {
+                                gameCode: gameCode,
+                            },
+                        })
+                    );
+
+                    break;
+                case "match-game-code":
+                    let c = allGameCodes.get(parsedMessage.data.gameCode);
+                    if ( c &&
+                        c !==
+                        parsedMessage.data.userID
+                    ) {
+                        ws.send(
+                            JSON.stringify({
+                                type: "match-game-code",
+                                data: {
+                                    status: 1,
+                                },
+                            })
+                        );
+                    } else {
+                        ws.send(
+                            JSON.stringify({
+                                type: "match-game-code",
+                                data: {
+                                    status: 0,
+                                },
+                            })
+                        );
+                    }
+
+                    break;
+            }
+
         });
 
-        ws.on('close', () => {
-            console.log('Client disconnected');
+        ws.on("close", () => {
+            console.log("Client disconnected");
         });
     });
-}
+};
 
 module.exports = createServerWebSocket;

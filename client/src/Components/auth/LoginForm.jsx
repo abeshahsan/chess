@@ -91,7 +91,7 @@ const LoginForm = ({ setLoginModalOpen }) => {
             {loginError && <Alert variant="danger">{loginError}</Alert>}
             <Form.Group
                 className="mb-3"
-                controlId="loginFormBasicEmail"
+                controlId="loginFormEmail"
             >
                 <Form.Control
                     type="input"
@@ -109,7 +109,7 @@ const LoginForm = ({ setLoginModalOpen }) => {
             </Form.Group>
             <Form.Group
                 className="mb-3"
-                controlId="loginFormBasicPassword"
+                controlId="loginFormPassword"
             >
                 <Form.Control
                     type="password"

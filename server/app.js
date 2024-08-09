@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(expressSession({
-    secret: "kaane-kaane-boli-shuno", resave: true, saveUninitialized: true,
+    secret: "kaane-kaane-boli-shuno", resave: false, saveUninitialized: false,
 }));
 
 

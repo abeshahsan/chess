@@ -1,22 +1,49 @@
 import Modal from "react-bootstrap/Modal";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { Form, Button, InputGroup, Alert, Spinner } from "react-bootstrap";
 
 import PropTypes from "prop-types";
+import { UserContext } from "../../Contexts/UserContext";
+import { useWebsocketContext } from "../../Hooks/useWebsocketContext";
 
 const NewGameModal = ({ open, setOpen }) => {
-    NewGameModal.propTypes = {
-        open: PropTypes.bool.isRequired,
-        setOpen: PropTypes.func.isRequired,
-    };
+    const { user } = useContext(UserContext);
+    const [gameCode, setGameCode] = useState("");
+
+    const ws = useWebsocketContext();
+
+    useEffect(() => {
+        if (!ws || gameCode) return;
+
+        if (ws.readyState === 1) {
+            ws.send(
+                JSON.stringify({
+                    type: "generate-game-code",
+                    data: {
+                        userID: user._id,
+                    },
+                })
+            );
+        }
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+
+            console.log("Received message:", message.data);
+
+            setGameCode(message.data.gameCode);
+        };
+    }, [ws, user._id]);
 
     return (
         <Modal
             show={open}
             backdrop="static"
-            onHide={() => setOpen(false)}
+            onHide={() => {
+                setOpen(false);
+            }}
             size="md"
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -27,13 +54,16 @@ const NewGameModal = ({ open, setOpen }) => {
                 className="d-flex align-items-center justify-content-center no-select"
             >
                 <Modal.Title className="w-100 text-center">
-                    <div>Please Login or Register</div>
+                    <div>Start a new game</div>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="container d-flex align-items-center justify-content-center">
                     <div className="container">
-                        <NewGameForm setOpen={setOpen} />
+                        <NewGameForm
+                            setOpen={setOpen}
+                            gameCode={gameCode}
+                        />
                     </div>
                 </div>
             </Modal.Body>
@@ -42,34 +72,61 @@ const NewGameModal = ({ open, setOpen }) => {
     );
 };
 
-function NewGameForm({ setOpen }) {
+function NewGameForm({ setOpen, gameCode }) {
     NewGameForm.propTypes = {
         setOpen: PropTypes.func.isRequired,
     };
 
     return (
         <>
-            <CopyGameCodeForm setOpen={setOpen} />
+            <CopyGameCodeForm
+                setOpen={setOpen}
+                gameCode={gameCode}
+            />
             <NewGameCodeForm setOpen={setOpen} />
         </>
     );
 }
 
 const NewGameCodeForm = ({ setOpen }) => {
-    NewGameCodeForm.propTypes = {
-        setOpen: PropTypes.func.isRequired,
-    };
-
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitSuccessful },
     } = useForm();
 
-    const [newGameCodeError] = useState("");
+    let controller = new AbortController();
+    let signal = controller.signal;
 
-    function onSubmit() {
-        setOpen(false);
+    const [newGameCodeError, setNewGameCodeError] = useState("");
+
+    const ws = useWebsocketContext();
+    const { user } = useContext(UserContext);
+
+    function onSubmit(data) {
+        if (!ws) return;
+
+        ws.send(
+            JSON.stringify({
+                type: "match-game-code",
+                data: {
+                    userID: user._id,
+                    gameCode: data.gameCode,
+                },
+            })
+        );
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+
+            console.log("Received message:", message);
+
+            if (message.data.status === 1) {
+                setOpen(false);
+            } else {
+                setNewGameCodeError("Invalid game code");
+            }
+        };
     }
 
     return (
@@ -88,10 +145,6 @@ const NewGameCodeForm = ({ setOpen }) => {
                         placeholder="Game Code"
                         {...register("gameCode", {
                             required: "Game Code is required",
-                            pattern: {
-                                value: /^[a-zA-Z0-9]{6}$/,
-                                message: "Invalid Game Code",
-                            },
                         })}
                         isInvalid={!!errors.gameCode}
                     />
@@ -116,14 +169,13 @@ const NewGameCodeForm = ({ setOpen }) => {
     );
 };
 
-const CopyGameCodeForm = () => {
+const CopyGameCodeForm = ({ gameCode }) => {
     CopyGameCodeForm.propTypes = {
         setOpen: PropTypes.func.isRequired,
     };
 
     const [newGameCodeError, setNewGameCodeError] = useState("");
     const [copySuccess, setCopySuccess] = useState(false);
-    const gameCode = "Game Code";
 
     const handleCopy = () => {
         navigator.clipboard
@@ -145,7 +197,7 @@ const CopyGameCodeForm = () => {
             {newGameCodeError && <Alert variant="danger">{newGameCodeError}</Alert>}
             <Form.Group
                 className="mb-3"
-                controlId="joinGameFormBasicGameCode"
+                controlId="joinGameFormBasicGameCodeCopy"
             >
                 <InputGroup>
                     <Form.Control
