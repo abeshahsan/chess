@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../Contexts/UserContext";
 import { Header } from "../Components/Header/Header";
-import { Sidebar } from "../Components/sidebar";
+import { Sidebar } from "../Components/Sidebar";
 
 import { useFetchAllUsers } from "../Hooks/useFetchAllUsers";
 

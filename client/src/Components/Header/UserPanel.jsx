@@ -40,11 +40,7 @@ export default function UserPanel() {
 
                 <Dropdown.Item onClick={() => navigate(`/${user._id}/profile`)}>Profile</Dropdown.Item>
                 <Dropdown.Item>Settigs</Dropdown.Item>
-                <Dropdown.Item
-                    onClick={handleOnLogout}
-                >
-                    Logout
-                </Dropdown.Item>
+                <Dropdown.Item onClick={handleOnLogout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>
     );

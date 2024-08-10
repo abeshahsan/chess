@@ -5,7 +5,7 @@ import "./global.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Header } from "./Components/Header/Header";
-import { Sidebar } from "./Components/sidebar.jsx";
+import { Sidebar } from "./Components/Sidebar.jsx";
 import LoginFullScreenModal from "./Components/Auth/LoginModal.jsx";
 
 import Profile from "./Pages/Profile.jsx";

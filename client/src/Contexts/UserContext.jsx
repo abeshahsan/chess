@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { EMPTY_USER } from "./constants";
 
 const UserContext = React.createContext({
+    _id: "",
     user: { ...EMPTY_USER },
     setUser: () => {},
     fetchingUser: true,

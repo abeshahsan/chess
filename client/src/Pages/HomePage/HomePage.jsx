@@ -7,7 +7,7 @@ import LoginFullScreenModal from "../../Components/Auth/LoginModal.jsx";
 
 import { useUserContext } from "../../Contexts/UserContext.jsx";
 import { Header } from "../../Components/Header/Header.jsx";
-import { Sidebar } from "../../Components/sidebar.jsx";
+import { Sidebar } from "../../Components/Sidebar.jsx";
 import { FlagsContext } from "../../Contexts/FlagsContext.jsx";
 
 export default function HomePage() {
