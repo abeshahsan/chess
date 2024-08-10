@@ -1,11 +1,10 @@
 import PropTypes from "prop-types";
 import { Header } from "../Components/Header/Header";
 import { Sidebar } from "../Components/sidebar";
-import { useContext } from "react";
-import { UserContext } from "../Contexts/UserContext";
+import { useUserContext } from "../Contexts/UserContext";
 
 export default function Profile() {
-    const { currentUser } = useContext(UserContext);
+    const { user } = useUserContext();
 
     return (
         <>
@@ -13,7 +12,7 @@ export default function Profile() {
             <div className="main-container d-flex align-items-center justify-content-center">
                 <Sidebar />
                 <div className="container game-container">
-                    <ProfileCard user={currentUser}></ProfileCard>
+                    <ProfileCard user={user}></ProfileCard>
                 </div>
             </div>
         </>

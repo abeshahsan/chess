@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import PropTypes from "prop-types";
 
-import { UserContext } from "../../Contexts/UserContext";
+import { useUserContext } from "../../Contexts/UserContext";
 
 /**
  * Renders the login form component.
@@ -36,7 +36,7 @@ const LoginForm = ({ setLoginModalOpen }) => {
         formState: { errors, isSubmitSuccessful },
     } = useForm();
 
-    const { setUser } = useContext(UserContext);
+    const { setUser } = useUserContext();
     const [loginError, setLoginError] = useState("");
 
     const onSubmit = (data) => {

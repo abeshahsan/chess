@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Form, Button, InputGroup, Alert, Spinner } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-import { UserContext } from "../../Contexts/UserContext";
+import { useUserContext } from "../../Contexts/UserContext";
 
 /**
  * Enum representing the steps in the registration process.
@@ -366,7 +366,7 @@ const PasswordForm = ({ setLoginModalOpen, email }) => {
 
     const [passwordStepError, setPasswordStepError] = useState("");
 
-    let [, setUser] = useContext(UserContext);
+    let [, setUser] = useUserContext();
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);

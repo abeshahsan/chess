@@ -5,7 +5,7 @@ import NewGameModal from "./NewGameModal.jsx";
 
 import LoginFullScreenModal from "../../Components/Auth/LoginModal.jsx";
 
-import { UserContext } from "../../Contexts/UserContext.jsx";
+import { useUserContext } from "../../Contexts/UserContext.jsx";
 import { Header } from "../../Components/Header/Header.jsx";
 import { Sidebar } from "../../Components/sidebar.jsx";
 import { FlagsContext } from "../../Contexts/FlagsContext.jsx";
@@ -23,7 +23,7 @@ export default function HomePage() {
 }
 
 function HomePageMainContainer() {
-    let { user } = useContext(UserContext);
+    let { user } = useUserContext();
 
     const [gameModalOpen, setGameModalOpen] = useState(false);
 

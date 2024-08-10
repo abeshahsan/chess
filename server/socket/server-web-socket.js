@@ -1,4 +1,4 @@
-import WebSocket, { WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 
 const allGameCodes = new Map();
 

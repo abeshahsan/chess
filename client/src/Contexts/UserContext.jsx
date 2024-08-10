@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { EMPTY_USER } from "./constants";
 
-export const UserContext = React.createContext({
+const UserContext = React.createContext({
     user: { ...EMPTY_USER },
     setUser: () => {},
     fetchingUser: true,
@@ -21,4 +21,8 @@ export default function UserContextProvider({ children }) {
     return (
         <UserContext.Provider value={{ user, setUser, fetchingUser, setFetchingUser }}>{children}</UserContext.Provider>
     );
+}
+
+export function useUserContext() {
+    return React.useContext(UserContext);
 }

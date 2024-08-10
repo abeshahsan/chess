@@ -6,11 +6,11 @@ import UserPanel from "./UserPanel";
 /**CSS imports */
 import "./Header.css";
 import { useContext } from "react";
-import { UserContext } from "../../Contexts/UserContext.jsx";
+import { useUserContext } from "../../Contexts/UserContext.jsx";
 import { FlagsContext } from "../../Contexts/FlagsContext.jsx";
 
 export function Header() {
-    let { user, fetchingUser: loading } = useContext(UserContext);
+    let { user, fetchingUser: loading } = useUserContext();
     let { setLoginModalOpen } = useContext(FlagsContext);
 
     return (

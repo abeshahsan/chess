@@ -5,11 +5,11 @@ import { useForm } from "react-hook-form";
 import { Form, Button, InputGroup, Alert, Spinner } from "react-bootstrap";
 
 import PropTypes from "prop-types";
-import { UserContext } from "../../Contexts/UserContext";
+import { useUserContext } from "../../Contexts/UserContext";
 import { useWebsocketContext } from "../../Hooks/useWebsocketContext";
 
 const NewGameModal = ({ open, setOpen }) => {
-    const { user } = useContext(UserContext);
+    const { user } = useUserContext();
     const [gameCode, setGameCode] = useState("");
 
     const ws = useWebsocketContext();
@@ -108,7 +108,7 @@ const NewGameCodeForm = ({ setOpen }) => {
     const [newGameCodeError, setNewGameCodeError] = useState("");
 
     const ws = useWebsocketContext();
-    const { user } = useContext(UserContext);
+    const { user } = useUserContext();
 
     function onSubmit(data) {
         if (!ws) return;

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "../Contexts/UserContext";
+import { useUserContext } from "../Contexts/UserContext";
 import { Header } from "../Components/Header/Header";
 import { Sidebar } from "../Components/sidebar";
 
@@ -27,7 +27,7 @@ function UsersContainer({ users }) {
         users: PropTypes.array.isRequired,
     };
 
-    const { user: currentUser } = useContext(UserContext);
+    const { user: currentUser } = useUserContext();
 
     return (
         <ul className="container h-100 p-5 mt-1 list-group">

@@ -2,7 +2,7 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useContext } from "react";
-import { UserContext } from "../Contexts/UserContexts";
+import { useUserContext } from "../Contexts/UserContexts";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import PropTypes from "prop-types";
@@ -15,7 +15,7 @@ export default function GoogleSiginIn({ setError }) {
         setError: PropTypes.func.isRequired
     }
 
-    let { setUser } = useContext(UserContext);
+    let { setUser } = useUserContext();
 
     navigate = useNavigate();
     location = useLocation();

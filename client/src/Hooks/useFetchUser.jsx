@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "../Contexts/UserContext";
+import { useUserContext } from "../Contexts/UserContext";
 
 export function useFetchUser(dependencies = []) {
-    const { user, setUser, fetchingUser: loading, setFetchingUser: setLoading } = useContext(UserContext);
+    const { user, setUser, fetchingUser: loading, setFetchingUser: setLoading } = useUserContext();
 
     const [error, setError] = useState(null);
 

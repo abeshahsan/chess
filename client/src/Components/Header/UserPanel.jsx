@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { UserContext } from "../../Contexts/UserContext";
+import { useUserContext } from "../../Contexts/UserContext";
 import { EMPTY_USER } from "../../Contexts/constants";
 import { useNavigate } from "react-router-dom";
 
 import { Dropdown } from "react-bootstrap";
 
 export default function UserPanel() {
-    let { user, setUser } = useContext(UserContext);
+    let { user, setUser } = useUserContext();
 
     let navigate = useNavigate();
 
