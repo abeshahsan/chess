@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { EMPTY_USER } from "./constants";
 
 const UserContext = React.createContext({
-    _id: "",
     user: { ...EMPTY_USER },
     setUser: () => {},
     fetchingUser: true,
@@ -12,10 +11,6 @@ const UserContext = React.createContext({
 });
 
 export default function UserContextProvider({ children }) {
-    UserContextProvider.propTypes = {
-        children: PropTypes.node.isRequired,
-    };
-
     const [user, setUser] = useState({ ...EMPTY_USER });
     const [fetchingUser, setFetchingUser] = useState(true);
 

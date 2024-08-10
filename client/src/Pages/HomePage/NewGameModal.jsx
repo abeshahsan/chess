@@ -12,7 +12,7 @@ const NewGameModal = ({ open, setOpen }) => {
     const { user } = useUserContext();
     const [gameCode, setGameCode] = useState("");
 
-    const ws = useWebsocketContext();
+    const { socket: ws } = useWebsocketContext();
 
     useEffect(() => {
         if (!ws || gameCode) return;

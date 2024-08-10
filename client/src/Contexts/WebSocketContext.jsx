@@ -1,8 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserContext } from "./UserContext";
 
 // Create the WebSocket context
-export const WebSocketContext = React.createContext(null);
+export const WebSocketContext = React.createContext({
+    socket: null,
+    setSocket: () => {},
+});
 
 export function WebSocketContextProvider({ children }) {
     const [socket, setSocket] = useState(null);
@@ -18,17 +21,22 @@ export function WebSocketContextProvider({ children }) {
             ws.onopen = () => {
                 ws.send(
                     JSON.stringify({
-                        type: "register",
+                        type: "register-user",
                         data: {
-                            user: user
+                            user: user,
                         },
                     })
                 );
+            };
+
+            ws.onclose = () => {
+                console.log("Client disconnected");
+                setSocket(null);
             };
 
             return ws;
         });
     }, [user._id]);
 
-    return <WebSocketContext.Provider value={socket}>{children}</WebSocketContext.Provider>;
+    return <WebSocketContext.Provider value={{ socket, setSocket }}>{children}</WebSocketContext.Provider>;
 }

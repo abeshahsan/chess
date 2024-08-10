@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Header } from "../Components/Header/Header";
 import { Sidebar } from "../Components/Sidebar";
 import { useUserContext } from "../Contexts/UserContext";
@@ -20,10 +19,6 @@ export default function Profile() {
 }
 
 function ProfileCard({ user }) {
-    ProfileCard.propTypes = {
-        user: PropTypes.object.isRequired,
-    };
-
     return (
         <>
             <div
