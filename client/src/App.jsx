@@ -52,7 +52,7 @@ const App = () => {
                         element={<Users></Users>}
                     ></Route>
                     <Route
-                        path={user && `${user._id}/profile`}
+                        path={user._id && `/${user._id}/profile`}
                         element={<Profile />}
                     ></Route>
                     <Route

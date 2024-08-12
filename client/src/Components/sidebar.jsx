@@ -17,22 +17,6 @@ export function Sidebar() {
             <ul className="nav nav-pills flex-column">
                 <li className="nav-item">
                     <Link
-                        to={`/${user._id}/profile`}
-                        className={`nav-link mb-1 ${pathName.endsWith("/profile") ? "active" : "link-body-emphasis"} `}
-                        aria-current="page"
-                    >
-                        <svg
-                            className="bi pe-none me-2"
-                            width="16"
-                            height="16"
-                        >
-                            <use xlinkHref="#person"></use>
-                        </svg>
-                        Profile
-                    </Link>
-                </li>
-                <li className="nav-item">
-                    <Link
                         to="/"
                         className={`nav-link mb-1 ${pathName == "/" ? "active" : "link-body-emphasis"} `}
                         aria-current="page"
@@ -45,6 +29,22 @@ export function Sidebar() {
                             <use xlinkHref="#home"></use>
                         </svg>
                         Home
+                    </Link>
+                </li>
+                <li className="nav-item">
+                    <Link
+                        to={`/${user._id}/profile`}
+                        className={`nav-link mb-1 ${pathName.endsWith("/profile") ? "active" : "link-body-emphasis"} `}
+                        aria-current="page"
+                    >
+                        <svg
+                            className="bi pe-none me-2"
+                            width="16"
+                            height="16"
+                        >
+                            <use xlinkHref="#person"></use>
+                        </svg>
+                        Profile
                     </Link>
                 </li>
                 <li>

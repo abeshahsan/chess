@@ -1,23 +1,25 @@
 import Modal from "react-bootstrap/Modal";
-import { useContext, useEffect, useState } from "react";
-
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, Button, InputGroup, Alert, Spinner } from "react-bootstrap";
-
 import PropTypes from "prop-types";
 import { useUserContext } from "../../Contexts/UserContext";
-import { useWebsocketContext } from "../../Hooks/useWebsocketContext";
+import { useWebsocketContext } from "../../Contexts/WebSocketContext";
+import { useNavigate } from "react-router-dom";
 
 const NewGameModal = ({ open, setOpen }) => {
+    const navigate = useNavigate();
     const { user } = useUserContext();
     const [gameCode, setGameCode] = useState("");
-
-    const { socket: ws } = useWebsocketContext();
+    const { subscribe, socket: ws } = useWebsocketContext();
+    const unsubscribe = [];
 
     useEffect(() => {
-        if (!ws || gameCode) return;
+        if (!ws) return;
 
         if (ws.readyState === 1) {
+            console.log("Generating game code");
+
             ws.send(
                 JSON.stringify({
                     type: "generate-game-code",
@@ -28,29 +30,35 @@ const NewGameModal = ({ open, setOpen }) => {
             );
         }
 
-        ws.onmessage = (event) => {
-            const message = JSON.parse(event.data);
+        unsubscribe.push(
+            subscribe("generate-game-code", (message) => {
+                console.log("Game code: ", message.data.gameCode);
 
-            switch (message.type) {
-                case "generate-game-code":
-                    setGameCode(message.data.gameCode);
-                    break;
-                case "match-game-code":
+                setGameCode(message.data.gameCode);
+            })
+        );
+
+        unsubscribe.push(
+            subscribe("match-game-code", (message) => {
+                if (message.data.status === 1) {
+                    navigate(`/game/${gameCode}`); // Redirect to game page
                     setOpen(false);
-                    break;
-                default:
-                    break;
-            }
+                } else {
+                    console.error("Failed to match game code");
+                }
+            })
+        );
+
+        return () => {
+            unsubscribe.forEach((unsub) => unsub());
         };
-    }, [ws?.readyState, user._id]);
+    }, [ws, ws?.readyState, user._id]);
 
     return (
         <Modal
             show={open}
             backdrop="static"
-            onHide={() => {
-                setOpen(false);
-            }}
+            onHide={() => setOpen(false)}
             size="md"
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -86,32 +94,31 @@ function NewGameForm({ setOpen, gameCode }) {
 
     return (
         <>
-            <CopyGameCodeForm
+            <CopyGameCodeForm gameCode={gameCode} />
+            <NewGameCodeForm
                 setOpen={setOpen}
                 gameCode={gameCode}
             />
-            <NewGameCodeForm setOpen={setOpen} />
         </>
     );
 }
 
-const NewGameCodeForm = ({ setOpen }) => {
+const NewGameCodeForm = ({ setOpen, gameCode }) => {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitSuccessful },
     } = useForm();
 
-    let controller = new AbortController();
-    let signal = controller.signal;
-
     const [newGameCodeError, setNewGameCodeError] = useState("");
-
-    const ws = useWebsocketContext();
+    const { subscribe, socket: ws } = useWebsocketContext();
     const { user } = useUserContext();
 
-    function onSubmit(data) {
+    const onSubmit = (data) => {
         if (!ws) return;
+
+        const unsubscribe = [];
 
         ws.send(
             JSON.stringify({
@@ -123,18 +130,21 @@ const NewGameCodeForm = ({ setOpen }) => {
             })
         );
 
-        ws.onmessage = (event) => {
-            const message = JSON.parse(event.data);
+        unsubscribe.push(
+            subscribe("match-game-code", (message) => {
+                if (message.data.status === 1) {
+                    setOpen(false);
+                    navigate(`/game/${gameCode}`); // Redirect to game page
+                } else {
+                    setNewGameCodeError("Invalid game code");
+                }
+            })
+        );
 
-            console.log("Received message:", message);
-
-            if (message.data.status === 1) {
-                setOpen(false);
-            } else {
-                setNewGameCodeError("Invalid game code");
-            }
+        return () => {
+            unsubscribe();
         };
-    }
+    };
 
     return (
         <Form
@@ -177,12 +187,10 @@ const NewGameCodeForm = ({ setOpen }) => {
 };
 
 const CopyGameCodeForm = ({ gameCode }) => {
-    CopyGameCodeForm.propTypes = {
-        setOpen: PropTypes.func.isRequired,
-    };
+    const navigate = useNavigate();
 
-    const [newGameCodeError, setNewGameCodeError] = useState("");
     const [copySuccess, setCopySuccess] = useState(false);
+    const [newGameCodeError, setNewGameCodeError] = useState("");
 
     const handleCopy = () => {
         navigator.clipboard

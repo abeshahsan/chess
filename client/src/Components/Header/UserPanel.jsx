@@ -4,7 +4,7 @@ import { EMPTY_USER } from "../../Contexts/constants";
 import { useNavigate } from "react-router-dom";
 
 import { Dropdown } from "react-bootstrap";
-import { useWebsocketContext } from "../../Hooks/useWebsocketContext";
+import { useWebsocketContext } from "../../Contexts/WebSocketContext";
 
 export default function UserPanel() {
     let { user, setUser } = useUserContext();
