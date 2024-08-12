@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, Button, InputGroup, Alert, Spinner } from "react-bootstrap";
 import PropTypes from "prop-types";
@@ -12,14 +12,12 @@ const NewGameModal = ({ open, setOpen }) => {
     const { user } = useUserContext();
     const [gameCode, setGameCode] = useState("");
     const { subscribe, socket: ws } = useWebsocketContext();
-    const unsubscribe = [];
+    const subscriptionsRef = useRef([]);
 
     useEffect(() => {
         if (!ws) return;
 
         if (ws.readyState === 1) {
-            console.log("Generating game code");
-
             ws.send(
                 JSON.stringify({
                     type: "generate-game-code",
@@ -30,7 +28,7 @@ const NewGameModal = ({ open, setOpen }) => {
             );
         }
 
-        unsubscribe.push(
+        subscriptionsRef.current.push(
             subscribe("generate-game-code", (message) => {
                 console.log("Game code: ", message.data.gameCode);
 
@@ -38,7 +36,7 @@ const NewGameModal = ({ open, setOpen }) => {
             })
         );
 
-        unsubscribe.push(
+        subscriptionsRef.current.push(
             subscribe("match-game-code", (message) => {
                 if (message.data.status === 1) {
                     navigate(`/game/${gameCode}`); // Redirect to game page
@@ -50,7 +48,7 @@ const NewGameModal = ({ open, setOpen }) => {
         );
 
         return () => {
-            unsubscribe.forEach((unsub) => unsub());
+            subscriptionsRef.current.forEach((unsub) => unsub());
         };
     }, [ws, ws?.readyState, user._id]);
 
@@ -88,14 +86,10 @@ const NewGameModal = ({ open, setOpen }) => {
 };
 
 function NewGameForm({ setOpen, gameCode }) {
-    NewGameForm.propTypes = {
-        setOpen: PropTypes.func.isRequired,
-    };
-
     return (
         <>
             <CopyGameCodeForm gameCode={gameCode} />
-            <NewGameCodeForm
+            <JoinGameForm
                 setOpen={setOpen}
                 gameCode={gameCode}
             />
@@ -103,7 +97,7 @@ function NewGameForm({ setOpen, gameCode }) {
     );
 }
 
-const NewGameCodeForm = ({ setOpen, gameCode }) => {
+const JoinGameForm = ({ setOpen, gameCode }) => {
     const navigate = useNavigate();
     const {
         register,
@@ -111,14 +105,13 @@ const NewGameCodeForm = ({ setOpen, gameCode }) => {
         formState: { errors, isSubmitSuccessful },
     } = useForm();
 
-    const [newGameCodeError, setNewGameCodeError] = useState("");
+    const [gameCodeError, setGameCodeError] = useState("");
     const { subscribe, socket: ws } = useWebsocketContext();
     const { user } = useUserContext();
+    const subscriptionsRef = useRef([]);
 
     const onSubmit = (data) => {
         if (!ws) return;
-
-        const unsubscribe = [];
 
         ws.send(
             JSON.stringify({
@@ -130,28 +123,30 @@ const NewGameCodeForm = ({ setOpen, gameCode }) => {
             })
         );
 
-        unsubscribe.push(
+        subscriptionsRef.current.push(
             subscribe("match-game-code", (message) => {
                 if (message.data.status === 1) {
                     setOpen(false);
                     navigate(`/game/${gameCode}`); // Redirect to game page
                 } else {
-                    setNewGameCodeError("Invalid game code");
+                    setGameCodeError("Invalid game code");
                 }
             })
         );
-
-        return () => {
-            unsubscribe();
-        };
     };
+
+    useEffect(() => {
+        return () => {
+            subscriptionsRef.current.forEach((unsub) => unsub());
+        };
+    }, []);
 
     return (
         <Form
             className="mt-3"
             onSubmit={handleSubmit(onSubmit)}
         >
-            {newGameCodeError && <Alert variant="danger">{newGameCodeError}</Alert>}
+            {gameCodeError && <Alert variant="danger">{gameCodeError}</Alert>}
             <Form.Group
                 className="mb-3"
                 controlId="joinGameFormBasicGameCode"
@@ -168,9 +163,9 @@ const NewGameCodeForm = ({ setOpen, gameCode }) => {
                     <Button
                         variant="primary"
                         type="submit"
-                        disabled={isSubmitSuccessful && !newGameCodeError}
+                        disabled={isSubmitSuccessful && !gameCodeError}
                     >
-                        {isSubmitSuccessful && !newGameCodeError ? (
+                        {isSubmitSuccessful && !gameCodeError ? (
                             <Spinner
                                 animation="border"
                                 role="status"
@@ -222,7 +217,7 @@ const CopyGameCodeForm = ({ gameCode }) => {
                     <Button
                         variant="primary"
                         onClick={handleCopy}
-                        style={copySuccess ? { backgroundColor: "green" } : {}}
+                        className={copySuccess ? "btn-success" : ""}
                     >
                         {copySuccess ? "Copied!" : "Copy"}
                     </Button>
