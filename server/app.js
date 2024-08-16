@@ -4,8 +4,13 @@ import { fileURLToPath } from "url";
 import { join, dirname } from "path";
 import cookieParser from "cookie-parser";
 import expressSession from "express-session";
-import requestsRouter from "./api/requests.js";
 import dotenv from "dotenv";
+
+//import routers
+import requestsRouter from "./api/requests.js";
+import chessboardRouter from "./api/Chessboard.js";
+import registerRouter from "./api/auth/register.js";
+import loginRouter from "./api/auth/login.js";
 
 dotenv.config({ path: "./.env" });
 
@@ -15,7 +20,7 @@ var app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.set("views", join(__dirname, "views"));
-// app.set('view engine', 'jade');
+app.set("view engine", "ejs");
 
 // app.use(logger('dev'));
 app.use(json());
@@ -32,7 +37,16 @@ app.use(
 
 app.use(express.static(join(__dirname, "public")));
 
-app.use("/api", requestsRouter);
+app.use("/", loginRouter);
+app.use("/", requestsRouter);
+app.use("/", chessboardRouter);
+app.use("/", registerRouter);
+
+app.post("*", async (_req, res, _next) => {
+    return res.send({
+        status: "no url",
+    });
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

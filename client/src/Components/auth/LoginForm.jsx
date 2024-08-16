@@ -67,6 +67,8 @@ const LoginForm = ({ setLoginModalOpen }) => {
         // If it was, set the user and close the login modal
         // If it wasn't, display an error message
         let checkSuccessfulLogin = (data) => {
+            console.log(data);
+
             if (data.status) {
                 setLoginError("");
                 setUser(() => {

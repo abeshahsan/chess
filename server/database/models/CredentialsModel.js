@@ -33,4 +33,4 @@ const userSchema = new mongoose.Schema({
 
 const schema = mongoose.models.credentials || mongoose.model('credentials', userSchema);
 
-export default schema
+export default schema;

@@ -20,7 +20,7 @@ async function getCredentials() {
     try {
         const data = await CredentialsModel.find();
 
-        return { data };
+        return { ...data };
     } catch (error) {
         return { errMsg: error.message };
     }
@@ -36,7 +36,7 @@ async function findUserByEmail(email) {
     try {
         const data = await CredentialsModel.find({ email });
 
-        return { data };
+        return { ...data };
     } catch (error) {
         throw new Error(error.message);
     }
