@@ -16,7 +16,7 @@ import CredentialsModel from "./models/CredentialsModel.js";
  * @returns {Promise<Object>} - A promise that resolves to the retrieved credentials data.
  * @throws {Error} - If there is an error during the retrieval process.
  */
-async function getCredentials() {
+export async function getCredentials() {
     try {
         const data = await CredentialsModel.find();
 
@@ -32,7 +32,7 @@ async function getCredentials() {
  * @returns {Promise<Object>} - A promise that resolves to the retrieved user data.
  * @throws {Error} - If there is an error during the retrieval process.
  */
-async function findUserByEmail(email) {
+export async function findUserByEmail(email) {
     try {
         const data = await CredentialsModel.find({ email });
 
@@ -48,7 +48,7 @@ async function findUserByEmail(email) {
  * @returns {Promise<Object>} - A promise that resolves to an object indicating if the email exists.
  * @throws {Error} - If there is an error during the check process.
  */
-async function checkIfEmailExists(email) {
+export async function checkIfEmailExists(email) {
     try {
         const data = await CredentialsModel.findOne({ email });
 
@@ -64,7 +64,7 @@ async function checkIfEmailExists(email) {
  * @returns {Promise<Object>} - A promise that resolves to the inserted user data.
  * @throws {Error} - If there is an error during the insertion process.
  */
-async function insertUser(user) {
+export async function insertUser(user) {
     try {
         const cred = new CredentialsModel({ ...user });
 
@@ -90,7 +90,7 @@ async function insertUser(user) {
  * @returns {Promise<Object>} - A promise that resolves to the retrieved users data.
  * @throws {Error} - If there is an error during the retrieval process.
  */
-async function getAllUsers() {
+export async function getAllUsers() {
     try {
         const data = await CredentialsModel.find();
 
@@ -100,5 +100,3 @@ async function getAllUsers() {
         throw new Error(error.message);
     }
 }
-
-export { getCredentials, findUserByEmail, insertUser, getAllUsers, checkIfEmailExists };

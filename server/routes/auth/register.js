@@ -1,29 +1,34 @@
 import { Router } from "express";
-import { findUserByEmail } from "../../database/data-fetch.js";
-import { sendEmailWithOTP } from "../mailer.js";
+import { checkIfEmailExists } from "../../database/data-fetch.js";
+import { sendEmailWithOTP } from "../../utils/mailer.js";
 
 const router = Router();
 
+
 const emailStep = async (req, res, next) => {
     try {
-        let queryResult = await findUserByEmail(req.body.email);
+        let { exists } = await checkIfEmailExists(req.body.email);
 
-        let user;
+        console.log(exists);
 
-        if (queryResult?.length) {
-            user = queryResult[0];
-
-            req.session.user = user;
+        if (exists) {
             return res.send({
-                status: 1, // user exists
-            });
-        } else {
-            return res.send({
-                status: 0, // user does not exist
+                status: 2,
             });
         }
+
+        let { otp } = await sendEmailWithOTP(req.body.email);
+        console.log(otp);
+        req.session.otp = otp;
+        req.session.email = req.body.email;
+
+        console.log("email sent");
+
+        return res.send({
+            status: 1,
+        });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.send({
             status: 0,
             error: error.message,
@@ -40,7 +45,7 @@ const resendOtpStep = async (req, res, next) => {
             status: 1,
         });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.send({
             status: 0,
             error: error.message,
@@ -62,13 +67,8 @@ const otpStep = async (req, res, next) => {
 
 const passwordStep = async (req, res, next) => {
     try {
-        const updatedUser = {
-            ...req.session.user,
-            password: req.body.password,
-        };
-
-        await insertUser(updatedUser);
-        req.session.user = { ...updatedUser };
+        await insertUser({ ...req.body });
+        req.session.user = { ...req.body };
         return res.send({
             status: 1,
         });
@@ -95,7 +95,7 @@ const STEP_HANDLERS = {
     [STEPS.PASSWORD]: passwordStep,
 };
 
-router.post("/forgot-password", async (req, res, next) => {
+router.post("/register", async function (req, res, next) {
     try {
         let { step } = req.body;
 

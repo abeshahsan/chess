@@ -7,10 +7,10 @@ import expressSession from "express-session";
 import dotenv from "dotenv";
 
 //import routers
-import requestsRouter from "./api/requests.js";
-import chessboardRouter from "./api/Chessboard.js";
-import registerRouter from "./api/auth/register.js";
-import loginRouter from "./api/auth/login.js";
+import requestsRouter from "./routes/requests.js";
+import chessboardRouter from "./routes/Chessboard.js";
+import registerRouter from "./routes/auth/register.js";
+import loginRouter from "./routes/auth/login.js";
 
 dotenv.config({ path: "./.env" });
 
