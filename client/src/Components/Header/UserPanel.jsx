@@ -65,6 +65,7 @@ function logout(navigate, setUser, ws) {
             setUser(() => {
                 return { ...EMPTY_USER };
             });
+            localStorage.removeItem("user");
             ws.close();
             navigate("/");
         })

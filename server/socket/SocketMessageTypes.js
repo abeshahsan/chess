@@ -1,16 +1,4 @@
-const SOCKET_MESSAGE_TYPES = {
-    REGISTER_USER: "register-user",
-    GENERATE_GAME_CODE: "generate-game-code",
-    MATCH_GAME_CODE: "match-game-code",
-};
-
-export const SOCKET_MESSAGE_HANDLERS = {
-    [SOCKET_MESSAGE_TYPES.REGISTER_USER]: registerUser,
-    [SOCKET_MESSAGE_TYPES.GENERATE_GAME_CODE]: generateGameCode,
-    [SOCKET_MESSAGE_TYPES.MATCH_GAME_CODE]: matchGameCode,
-};
-
-function registerUser({ws, parsedMessage}) {
+function registerUser({ ws, parsedMessage }) {
     try {
         ws.user = parsedMessage.data.user;
 
@@ -34,7 +22,7 @@ function registerUser({ws, parsedMessage}) {
     }
 }
 
-function generateGameCode({ws, allGameCodes}) {
+function generateGameCode({ ws, allGameCodes }) {
     let gameCode = Math.random().toString(36).substring(2, 10);
     allGameCodes.set(gameCode, ws);
 
@@ -50,7 +38,7 @@ function generateGameCode({ws, allGameCodes}) {
     );
 }
 
-function matchGameCode({ws, parsedMessage, allGameCodes}) {
+function matchGameCode({ ws, parsedMessage, allGameCodes }) {
     let client = allGameCodes.get(parsedMessage.data.gameCode);
 
     if (client && client !== parsedMessage.data.userID) {
@@ -89,3 +77,21 @@ function matchGameCode({ws, parsedMessage, allGameCodes}) {
         );
     }
 }
+
+export const SOCKET_MESSAGE_HANDLERS = {
+    "register-user": registerUser,
+    "generate-game-code": generateGameCode,
+    "match-game-code": matchGameCode,
+};
+
+/**
+ *
+ * @property {Object} SOCKET_MESSAGE_TYPES
+ * @property {string} SOCKET_MESSAGE_TYPES.REGISTER_USER
+ * @property {string} SOCKET_MESSAGE_TYPES.GENERATE_GAME_CODE
+ * @property {string} SOCKET_MESSAGE_TYPES.MATCH_GAME_CODE
+ */
+export const SOCKET_MESSAGE_TYPES = Object.keys(SOCKET_MESSAGE_HANDLERS).reduce((acc, key) => {
+    acc[key.toUpperCase().replace(/-/g, "_")] = key;
+    return acc;
+}, {});

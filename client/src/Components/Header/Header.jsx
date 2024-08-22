@@ -40,7 +40,7 @@ export function Header() {
                     <ul className="nav col-10 col-md-auto justify-content-center mb-md-0"></ul>
 
                     {!loading &&
-                        (user?.loggedIn ? (
+                        (user?._id ? (
                             <UserPanel></UserPanel>
                         ) : (
                             <LoginPanel setLoginModalOpen={setLoginModalOpen}></LoginPanel>

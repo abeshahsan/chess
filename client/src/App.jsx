@@ -17,14 +17,15 @@ import Users from "./Pages/Users.jsx";
 import { useFetchUser } from "./Hooks/useFetchUser.jsx";
 import PageLoading from "./Components/ErrorsAndPlaceHolders/PageLoading.jsx";
 import HomePage from "./Pages/HomePage/HomePage.jsx";
+import { useUserContext } from "./Contexts/UserContext.jsx";
 
 const App = () => {
-    let { user, loading } = useFetchUser();
+    let { user, fetchingUser } = useUserContext();
 
     return (
         <>
             <LoginFullScreenModal />
-            {loading && <PageLoading />}
+            {fetchingUser && <PageLoading />}
             <BrowserRouter>
                 <Routes>
                     <Route

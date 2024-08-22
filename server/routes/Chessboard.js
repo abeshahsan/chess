@@ -4,20 +4,67 @@ import { CreateNewBoard, UpdateBoard } from "../database/Chessboard.js";
 
 const router = Router();
 
-router.get("/chessboard", async (req, res, next) => {
+const createNewBoard = async (req, res, next) => {
     try {
-        await UpdateBoard("66be59c7477757724e0e573d", "e2", "e4");
-        res.send({
-            message: "Chessboard API",
+        let board = await CreateNewBoard();
+        return res.send({
             status: 1,
+            board,
         });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res.send({
-            error: error.message,
             status: 0,
+            error: error.message,
         });
     }
+};
+
+const updateBoard = async (req, res, next) => {
+    try {
+        let { boardId, from, to } = req.body;
+        let board = await UpdateBoard(boardId, from, to);
+        return res.send({
+            status: 1,
+            board,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.send({
+            status: 0,
+            error: error.message,
+        });
+    }
+};
+
+const deleteBoard = async (req, res, next) => {
+    console.error("Delete board not implemented");
+};
+
+const GAME_COMMAND_HANDLER = {
+    create: createNewBoard,
+    update: updateBoard,
+    delete: deleteBoard,
+};
+
+router.post("/game", async (req, res, next) => {
+    let { command } = req.body;
+
+    if (!command) {
+        return res.send({
+            status: 0,
+            error: "No command provided",
+        });
+    }
+
+    if (GAME_COMMAND_HANDLER[command]) {
+        return GAME_COMMAND_HANDLER[command](req, res, next);
+    }
+
+    return res.send({
+        status: 0,
+        error: "Invalid command",
+    });
 });
 
 export default router;
