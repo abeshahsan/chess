@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getAllUsers } from "../database/data-fetch.js";
+import { GameIDGenerator } from "../utils/GameIDGenerator.js";
 
 const router = Router();
 
@@ -23,6 +24,17 @@ router.get("/get-all-users", async (res) => {
             status: 0,
         });
     }
+});
+
+router.get("/new-game-link/:userID", (req, res, _next) => {
+    const { userID } = req.params;
+
+    const gameID = GameIDGenerator(userID);
+    const link = `${req.protocol}://${req.get("host")}/game/${gameID}`;
+
+    return res.send({
+        link: link,
+    });
 });
 
 router.post("/logout", (req, res, _next) => {

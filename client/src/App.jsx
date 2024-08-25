@@ -18,6 +18,7 @@ import { useFetchUser } from "./Hooks/useFetchUser.jsx";
 import PageLoading from "./Components/ErrorsAndPlaceHolders/PageLoading.jsx";
 import HomePage from "./Pages/HomePage/HomePage.jsx";
 import { useUserContext } from "./Contexts/UserContext.jsx";
+import Game from "./Pages/Game.jsx";
 
 const App = () => {
     let { user, fetchingUser } = useUserContext();
@@ -38,15 +39,7 @@ const App = () => {
                     ></Route>
                     <Route
                         path="/game"
-                        element={
-                            <>
-                                <Header />
-                                <div className="main-container d-flex align-items-center justify-content-center">
-                                    <Sidebar />
-                                    <Chessboard />
-                                </div>
-                            </>
-                        }
+                        element={<Game />}
                     ></Route>
                     <Route
                         path="/users"

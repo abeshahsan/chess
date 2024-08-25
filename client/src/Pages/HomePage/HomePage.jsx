@@ -9,6 +9,7 @@ import { useUserContext } from "../../Contexts/UserContext.jsx";
 import { Header } from "../../Components/Header/Header.jsx";
 import { Sidebar } from "../../Components/Sidebar.jsx";
 import { FlagsContext } from "../../Contexts/FlagsContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
     return (
@@ -23,28 +24,22 @@ export default function HomePage() {
 }
 
 function HomePageMainContainer() {
-    let { user } = useUserContext();
+    const navigate = useNavigate();
 
-    const [gameModalOpen, setGameModalOpen] = useState(false);
+    let { user } = useUserContext();
 
     let { setLoginModalOpen } = useContext(FlagsContext);
 
     const onClickStart = () => {
-        if (user?.loggedIn) {
-            setGameModalOpen(true);
-            setLoginModalOpen(false);
-        } else {
-            setGameModalOpen(false);
+        if (!user.loggedIn) {
             setLoginModalOpen(true);
+            return;
         }
+        navigate("/game");
     };
 
     return (
         <>
-            <NewGameModal
-                open={gameModalOpen}
-                setOpen={setGameModalOpen}
-            />
             <LoginFullScreenModal />
 
             <div className="container w-100 h-100 d-flex align-items-center justify-items-center">

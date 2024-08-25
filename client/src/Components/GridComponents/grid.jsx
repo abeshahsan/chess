@@ -5,92 +5,53 @@ import { checkForCheck, checkForCheckMate, findValidMoves } from "../../GameLogi
 
 const Grid = ({ gridMatrix, setGridMatrix }) => {
     let [selectedCell, setSelectedCell] = useState([false, 1, 1]);
-
-    let [isAnyCellSelected, selectedRow, selectedCol] = selectedCell;
-
     let [validMoves, setValidMoves] = useState({});
-
-    // let moveFromPosition = useRef({
-    //     row: null,
-    //     col: null,
-    // });
-    // let moveToPosition = useRef({
-    //     row: null,
-    //     col: null,
-    // });
-
     let flyingCarpetRef = useRef(null);
-
     let [movingPiece] = useState(null);
 
-    // const updateGridMatrix = (row, col, piece) => {
-    //     let newGridMatrix = [...gridMatrix];
-    //     newGridMatrix[row][col] = piece
-    //     setGridMatrix(newGridMatrix);
-    // };
-
-    let onClickCell = (event) => {
-        let s = event.target.className.split(" ")[0];
-
-        // const rect = event.target.getBoundingClientRect();
-
-        let previousRow = selectedRow;
-        let previousCol = selectedCol;
-
-        selectedRow = parseInt(s[0]);
-        selectedCol = parseInt(s[1]);
-
-        if (isAnyCellSelected) {
-            // Update grid with a new copy
-            setGridMatrix((prevGridMatrix) => {
-                const newGridMatrix = [...prevGridMatrix]; // Create a copy
-
-                if (validMoves[`${selectedRow}${selectedCol}`]) {
-                    // Update cells based on valid move
-                    newGridMatrix[selectedRow][selectedCol] = newGridMatrix[previousRow][previousCol];
-                    newGridMatrix[previousRow][previousCol] = null;
-                    newGridMatrix[selectedRow][selectedCol].row = selectedRow;
-                    newGridMatrix[selectedRow][selectedCol].col = selectedCol;
-                }
-
-                return newGridMatrix;
-            });
-
-            // Perform checks after grid update
-            console.log(`White: ${checkForCheck(gridMatrix, "white")}`);
-            console.log(`Black: ${checkForCheck(gridMatrix, "black")}`);
-            console.log(`White in checkmate: ${checkForCheckMate(gridMatrix, "white")}`);
-            console.log(`Black in checkmate: ${checkForCheckMate(gridMatrix, "black")}`);
-        } else {
-            isAnyCellSelected = true;
-            selectedRow = parseInt(s[0]);
-            selectedCol = parseInt(s[1]);
-            if (!gridMatrix[selectedRow][selectedCol]) isAnyCellSelected = false;
-            else {
-                let pieceLogic = gridMatrix[selectedRow][selectedCol].pieceLogic;
-                let validMoves = findValidMoves[pieceLogic](gridMatrix, selectedRow, selectedCol);
-                setValidMoves(validMoves);
+    const handleCellClick = (row, col) => {
+        const cellHasPiece = gridMatrix[row][col];
+        if (selectedCell[0]) {
+            // Handle piece movement
+            if (validMoves[`${row}${col}`]) {
+                const newGridMatrix = [...gridMatrix];
+                newGridMatrix[row][col] = newGridMatrix[selectedCell[1]][selectedCell[2]];
+                newGridMatrix[selectedCell[1]][selectedCell[2]] = null;
+                newGridMatrix[row][col].row = row;
+                newGridMatrix[row][col].col = col;
+                setGridMatrix(newGridMatrix);
             }
+            // Clear the selection
+            setSelectedCell([false, 1, 1]);
+            setValidMoves({});
+        } else if (cellHasPiece) {
+            // Select the piece and calculate valid moves
+            const pieceLogic = gridMatrix[row][col].pieceLogic;
+            const validMoves = findValidMoves[pieceLogic](gridMatrix, row, col);
+            setSelectedCell([true, row, col]);
+            setValidMoves(validMoves);
         }
+    };
 
-        setSelectedCell([isAnyCellSelected, selectedRow, selectedCol]);
+    const onClickCell = (event) => {
+        const cellClass = event.target.className.split(" ")[0];
+        const row = parseInt(cellClass[0]);
+        const col = parseInt(cellClass[1]);
+        handleCellClick(row, col);
     };
 
     return (
         <>
             {gridMatrix.map((row, r) => (
-                <div
-                    key={r}
-                    className="grid-row"
-                >
+                <div key={r} className="grid-row">
                     {row.map((item, c) => (
                         <div
                             key={c}
                             onClick={onClickCell}
                             className={`${r}${c} grid-column casper-cell
-                        ${isAnyCellSelected && r == selectedRow && c == selectedCol ? "active" : ""}
-                        ${isAnyCellSelected && validMoves[`${r}${c}`] ? "valid" : ""}
-                        ${(r + c) % 2 == 0 ? "black" : "white"}`}
+                                ${selectedCell[0] && r === selectedCell[1] && c === selectedCell[2] ? "active" : ""}
+                                ${selectedCell[0] && validMoves[`${r}${c}`] ? "valid" : ""}
+                                ${(r + c) % 2 === 0 ? "black" : "white"}`}
                         >
                             {item && item.pieceComponent}
                         </div>
@@ -104,7 +65,6 @@ const Grid = ({ gridMatrix, setGridMatrix }) => {
                 style={{
                     position: "absolute",
                     pointerEvents: "none",
-                    // backgroundColor: "transparent",
                 }}
             >
                 {movingPiece && movingPiece.pieceComponent}

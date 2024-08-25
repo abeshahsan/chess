@@ -5,6 +5,7 @@ import { useUserContext } from "./UserContext";
 const WebSocketContext = React.createContext({
     socket: null,
     setSocket: () => {},
+    subscribe: () => {},
 });
 
 export function useWebsocketContext() {
