@@ -3,8 +3,7 @@ import { useUserContext } from "./UserContext";
 
 // Create the WebSocket context
 const WebSocketContext = React.createContext({
-    socket: null,
-    setSocket: () => {},
+    socket: new WebSocket(""), // Default value
     subscribe: () => {},
 });
 
@@ -33,9 +32,6 @@ export function WebSocketContextProvider({ children }) {
 
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
-
-            console.log("Received message", message);
-
 
             // Notify all subscribers
             const subscriberCallbacks = subscribers.current[message.type] || [];

@@ -10,6 +10,8 @@ import { Header } from "../../Components/Header/Header.jsx";
 import { Sidebar } from "../../Components/Sidebar.jsx";
 import { FlagsContext } from "../../Contexts/FlagsContext.jsx";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setNavigatedProgrammatically } from "../../.redux/features/navigation/NavigationSlice.js";
 
 export default function HomePage() {
     return (
@@ -27,14 +29,16 @@ function HomePageMainContainer() {
     const navigate = useNavigate();
 
     let { user } = useUserContext();
-
     let { setLoginModalOpen } = useContext(FlagsContext);
+
+    const dispatch = useDispatch();
 
     const onClickStart = () => {
         if (!user.loggedIn) {
             setLoginModalOpen(true);
             return;
         }
+        localStorage.setItem("isNavigatedProgrammatically", true);
         navigate("/game/creating-new-game");
     };
 

@@ -97,9 +97,6 @@ export default function UserContextProvider({ children }) {
                 (async () => {
                     let storedUser = JSON.parse(localStorage.getItem("user"));
 
-                    console.log(storedUser);
-
-
                     if (storedUser) {
                         let storedUserVerified = await verifyUser(storedUser);
                         if (storedUserVerified) {
@@ -128,8 +125,6 @@ export default function UserContextProvider({ children }) {
             let storedUser = await setUserFromLocalStorage();
 
             if (!storedUser?._id) {
-                console.log("lol");
-
                 await setUserByFetching();
             }
         }

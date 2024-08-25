@@ -5,11 +5,13 @@ import { useUserContext } from "../../Contexts/UserContext";
 import { useWebsocketContext } from "../../Contexts/WebSocketContext";
 import { useNavigate } from "react-router-dom";
 
-const NewGameModal = ({ open, setOpen, gameCode, setGameCode }) => {
+const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }) => {
     const navigate = useNavigate();
     const { user } = useUserContext();
     const { subscribe, socket: ws } = useWebsocketContext();
     const subscriptionsRef = useRef([]);
+
+    // console.log(player1, player2);
 
     return (
         <Modal
@@ -33,6 +35,12 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode }) => {
                             setOpen={setOpen}
                             gameCode={gameCode}
                         />
+                        <div>
+                            {player1?.username}
+                        </div>
+                        <div>
+                            {player2?.username}
+                            </div>  
                     </div>
                 </div>
             </Modal.Body>
