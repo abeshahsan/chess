@@ -1,3 +1,5 @@
+import { GameIDGenerator } from "../utils/GameIDGenerator.js";
+
 function registerUser({ ws, parsedMessage }) {
     try {
         ws.user = parsedMessage.data.user;
@@ -22,11 +24,20 @@ function registerUser({ ws, parsedMessage }) {
     }
 }
 
-function generateGameCode({ ws, allGameCodes }) {
-    let gameCode = Math.random().toString(36).substring(2, 10);
-    allGameCodes.set(gameCode, ws);
+function generateGameCode({ ws, parsedMessage, allGameCodes }) {
+    console.log("Generating game code");
 
-    ws.gameCode = gameCode;
+    let gameCode = ws.gameCode;
+
+    if (!gameCode) {
+        const userID = parsedMessage.data?.userID;
+
+        gameCode = GameIDGenerator(userID);
+
+        allGameCodes.set(gameCode, ws);
+
+        ws.gameCode = gameCode;
+    }
 
     ws.send(
         JSON.stringify({
@@ -41,7 +52,7 @@ function generateGameCode({ ws, allGameCodes }) {
 function matchGameCode({ ws, parsedMessage, allGameCodes }) {
     let client = allGameCodes.get(parsedMessage.data.gameCode);
 
-    if (client && client !== parsedMessage.data.userID) {
+    if (client) {
         ws.send(
             JSON.stringify({
                 type: SOCKET_MESSAGE_TYPES.MATCH_GAME_CODE,
@@ -60,14 +71,6 @@ function matchGameCode({ ws, parsedMessage, allGameCodes }) {
         );
     } else {
         ws.send(
-            JSON.stringify({
-                type: SOCKET_MESSAGE_TYPES.MATCH_GAME_CODE,
-                data: {
-                    status: 0,
-                },
-            })
-        );
-        client.send(
             JSON.stringify({
                 type: SOCKET_MESSAGE_TYPES.MATCH_GAME_CODE,
                 data: {

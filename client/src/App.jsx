@@ -2,59 +2,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./global.css";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import { Header } from "./Components/Header/Header";
-import { Sidebar } from "./Components/Sidebar.jsx";
 import LoginFullScreenModal from "./Components/Auth/LoginModal.jsx";
 
-import Profile from "./Pages/Profile.jsx";
-import NotFound from "./Pages/NotFound.jsx";
-
-import Chessboard from "./Components/Chessboard";
-
-import Users from "./Pages/Users.jsx";
-import { useFetchUser } from "./Hooks/useFetchUser.jsx";
-import PageLoading from "./Components/ErrorsAndPlaceHolders/PageLoading.jsx";
-import HomePage from "./Pages/HomePage/HomePage.jsx";
-import { useUserContext } from "./Contexts/UserContext.jsx";
-import Game from "./Pages/Game.jsx";
+import Layout from "./Routes/Layout.jsx";
 
 const App = () => {
-    let { user, fetchingUser } = useUserContext();
-
     return (
         <>
             <LoginFullScreenModal />
-            {fetchingUser && <PageLoading />}
-            <BrowserRouter>
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <>
-                                <HomePage />
-                            </>
-                        }
-                    ></Route>
-                    <Route
-                        path="/game"
-                        element={<Game />}
-                    ></Route>
-                    <Route
-                        path="/users"
-                        element={<Users></Users>}
-                    ></Route>
-                    <Route
-                        path={user._id && `/${user._id}/profile`}
-                        element={<Profile />}
-                    ></Route>
-                    <Route
-                        path="*"
-                        element={<NotFound />}
-                    ></Route>
-                </Routes>
-            </BrowserRouter>
+            <Layout />
         </>
     );
 };

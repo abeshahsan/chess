@@ -26,17 +26,6 @@ router.get("/get-all-users", async (res) => {
     }
 });
 
-router.get("/new-game-link/:userID", (req, res, _next) => {
-    const { userID } = req.params;
-
-    const gameID = GameIDGenerator(userID);
-    const link = `${req.protocol}://${req.get("host")}/game/${gameID}`;
-
-    return res.send({
-        link: link,
-    });
-});
-
 router.post("/logout", (req, res, _next) => {
     req.session.user = undefined;
     return res.send({

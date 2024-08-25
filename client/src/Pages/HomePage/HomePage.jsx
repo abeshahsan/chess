@@ -35,7 +35,7 @@ function HomePageMainContainer() {
             setLoginModalOpen(true);
             return;
         }
-        navigate("/game");
+        navigate("/game/creating-new-game");
     };
 
     return (
