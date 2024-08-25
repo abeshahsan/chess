@@ -16,7 +16,7 @@ const createServerWebSocket = (server) => {
             const parsedMessage = JSON.parse(message);
 
             if (SOCKET_MESSAGE_HANDLERS[parsedMessage.type]) {
-                SOCKET_MESSAGE_HANDLERS[parsedMessage.type]({ws, parsedMessage, allGameCodes});
+                SOCKET_MESSAGE_HANDLERS[parsedMessage.type]({ wss, ws, parsedMessage, allGameCodes });
             } else {
                 console.log("Message type not found");
             }

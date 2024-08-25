@@ -15,13 +15,13 @@ export default function GameCreatingNew() {
         if (ws?.readyState == 1) {
             ws.send(
                 JSON.stringify({
-                    type: "generate-game-code",
+                    type: "invite-to-game",
                     data: { userID: user?._id },
                 })
             );
         }
 
-        const unsub = subscribe("generate-game-code", (msg) => {
+        const unsub = subscribe("invite-to-game", (msg) => {
             navigate(`/game/${msg.data.gameCode}`);
         });
 

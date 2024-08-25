@@ -36,11 +36,11 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
                             gameCode={gameCode}
                         />
                         <div>
-                            {player1?.username}
+                            {"Player 1: " + player1?.username}
                         </div>
                         <div>
-                            {player2?.username}
-                            </div>  
+                            {"Player 2: " + player2?.username}
+                            </div>
                     </div>
                 </div>
             </Modal.Body>

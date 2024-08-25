@@ -24,87 +24,56 @@ function registerUser({ ws, parsedMessage }) {
     }
 }
 
-function generateGameCode({ ws, parsedMessage, allGameCodes }) {
+function inviteToGame({ ws, parsedMessage, allGameCodes }) {
     let gameCode = ws.gameCode;
+    const { userID } = parsedMessage.data;
 
     if (!gameCode) {
-        const userID = parsedMessage.data?.userID;
-
         gameCode = GameIDGenerator(userID);
-
         allGameCodes.set(gameCode, ws);
-
-        ws.gameCode = gameCode;
     }
 
     ws.send(
         JSON.stringify({
-            type: SOCKET_MESSAGE_TYPES.GENERATE_GAME_CODE,
-            data: {
-                gameCode: gameCode,
-            },
+            type: "invite-to-game",
+            data: { gameCode },
         })
     );
 }
 
-function inviteToGame({ ws, parsedMessage, allGameCodes }) {
-    const gameCode = parsedMessage.data?.gameCode;
-    const invitee = parsedMessage.data?.invitee;
-
-    const inviteeWS = allGameCodes.get(gameCode);
-
-    if (inviteeWS) {
-        inviteeWS.send(
-            JSON.stringify({
-                type: "invite-to-game",
-                data: {
-                    inviter: ws.user,
-                    gameCode: gameCode,
-                },
-            })
-        );
-    } else {
-        ws.send(
-            JSON.stringify({
-                type: "invite-to-game",
-                data: {
-                    error: "Game not found",
-                },
-            })
-        );
-    }
-}
-
-function joinGame({ ws, parsedMessage, allGameCodes }) {
+function joinGame({ wss, ws, parsedMessage, allGameCodes }) {
     const gameCode = parsedMessage.data?.gameCode;
 
     const gameHost = allGameCodes.get(gameCode);
 
+    const successMsg = JSON.stringify({
+        type: "join-game",
+        status: "success",
+        data: {
+            host: gameHost.user,
+            invitee: ws.user,
+            gameCode: gameCode,
+        },
+    });
+
+    const errorMsg = JSON.stringify({
+        type: "join-game",
+        status: "error",
+        data: {
+            error: "Game not found",
+        },
+    });
+
     if (gameHost) {
-        gameHost.send(
-            JSON.stringify({
-                type: "join-game",
-                data: {
-                    invitee: ws.user,
-                    gameCode: gameCode,
-                },
-            })
-        );
+        gameHost.send(successMsg);
+        ws.send(successMsg);
     } else {
-        ws.send(
-            JSON.stringify({
-                type: "join-game",
-                data: {
-                    error: "Game not found",
-                },
-            })
-        );
+        ws.send(errorMsg());
     }
 }
 
 export const SOCKET_MESSAGE_HANDLERS = {
     "register-user": registerUser,
-    "generate-game-code": generateGameCode,
     "invite-to-game": inviteToGame,
     "join-game": joinGame,
 };

@@ -11,22 +11,39 @@ import PageLoading from "../Components/ErrorsAndPlaceHolders/PageLoading";
 export default function Game() {
     const [gameModalOpen, setGameModalOpen] = useState(true);
 
+    const [player1, setPlayer1] = useState(null);
+    const [player2, setPlayer2] = useState(null);
+
     const { user } = useUserContext();
     const { socket: ws, subscribe } = useWebsocketContext();
-    let { gameCode } = useParams();
+    let { gameID: gameCode } = useParams();
     const subscriptions = useRef([]);
 
     const isNavigatedProgrammatically = localStorage.getItem("isNavigatedProgrammatically");
 
     useEffect(() => {
         if (isNavigatedProgrammatically) {
-            subscriptions.current.push(
-                subscribe("invite-to-game", (data) => {
-                    console.log("invite-to-game", data);
-                })
-            );
-        } else {
+            setPlayer1(user);
+            console.log("waiting for player 2 to join");
             if (ws && ws.readyState === ws.OPEN) {
+                subscriptions.current.push(
+                    subscribe("join-game", (msg) => {
+                        console.log("Player 2 joined the game", msg.data);
+                        setPlayer2(msg.data.invitee);
+                    })
+                );
+            }
+        } else {
+            // This player is the invitee
+            if (ws && ws.readyState === ws.OPEN) {
+                subscriptions.current.push(
+                    subscribe("join-game", (msg) => {
+                        console.log("join-game", msg.data);
+                        setPlayer1(msg.data.host);
+                        setPlayer2(msg.data.invitee);
+                    })
+                );
+
                 ws.send(
                     JSON.stringify({
                         type: "join-game",
@@ -34,11 +51,6 @@ export default function Game() {
                     })
                 );
             }
-            subscriptions.current.push(
-                subscribe("join-game", (data) => {
-                    console.log("join-game", data);
-                })
-            );
         }
 
         return () => {
@@ -59,10 +71,10 @@ export default function Game() {
                     <NewGameModal
                         open={gameModalOpen}
                         setOpen={setGameModalOpen}
-                        gameCode={"null"}
+                        gameCode={window.origin + "/game/" + gameCode}
                         setGameCode={() => "null"}
-                        player1={user}
-                        player2={{ username: "Player 2" }}
+                        player1={player1}
+                        player2={player2}
                     />
                     <Header />
                     <div className="main-container d-flex align-items-center justify-content-center">
