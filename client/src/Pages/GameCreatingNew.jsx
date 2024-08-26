@@ -22,7 +22,7 @@ export default function GameCreatingNew() {
         }
 
         const unsub = subscribe("invite-to-game", (msg) => {
-            navigate(`/game/${msg.data.gameCode}`);
+            navigate(`/game/${msg.data.gameCode}`, { replace: true });
         });
 
         return () => {

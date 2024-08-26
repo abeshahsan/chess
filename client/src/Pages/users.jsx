@@ -23,10 +23,6 @@ export default function Users() {
 }
 
 function UsersContainer({ users }) {
-    UsersContainer.propTypes = {
-        users: PropTypes.array.isRequired,
-    };
-
     const { user: currentUser } = useUserContext();
 
     return (
@@ -40,7 +36,7 @@ function UsersContainer({ users }) {
                                 className="list-group-item list-group-item-action"
                                 key={user._id}
                             >
-                                {user.name}
+                                {user.username}
                             </Link>
                         )
                 )}

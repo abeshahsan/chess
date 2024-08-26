@@ -1,4 +1,6 @@
-import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 import "./App.css";
 import "./global.css";
 

@@ -1,4 +1,8 @@
 .ch-sidebar {
-    width: 20%;
+    min-width: 15%;
     height: 100%;
+}
+
+.nav-link.active {
+    background-color: red;
 }

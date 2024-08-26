@@ -22,7 +22,7 @@ export default function UserPanel() {
             <Dropdown.Toggle
                 variant="success"
                 id="header-dropdown-toggle"
-                style={{ width: "43px", height: "43px", border: "none" }}
+                style={{ width: "50px", height: "50px", border: "none" }}
                 className="custom-dropdown-toggle btn btn-sm bg-light rounded-circle d-flex align-items-center justify-content-center"
                 data-toggle="dropdown"
                 aria-haspopup="true"
@@ -30,7 +30,7 @@ export default function UserPanel() {
             >
                 <img
                     className="rounded-circle"
-                    style={{ width: "35px", height: "35px" }}
+                    style={{ width: "40px", height: "40px" }}
                     src={`/user-default-pfp.png`}
                 />
             </Dropdown.Toggle>

@@ -12,7 +12,7 @@ export function useFetchAllUsers() {
         fetch("/api/get-all-users", { signal })
             .then((res) => res.json())
             .then((data) => {
-                setUsers(...data);
+                setUsers(() => [...data.users]);
                 setLoading(false);
             })
             .catch((error) => {

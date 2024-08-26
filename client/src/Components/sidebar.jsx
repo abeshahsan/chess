@@ -1,6 +1,8 @@
 import { useUserContext } from "../Contexts/UserContext";
-import "./Sidebar.css";
 import { Link, useLocation } from "react-router-dom";
+import { House, PersonCircle as Person, People, Controller, Gear } from "react-bootstrap-icons";
+
+import "./Sidebar.css";
 
 export function Sidebar() {
     const pathName = useLocation()["pathname"];
@@ -18,48 +20,49 @@ export function Sidebar() {
                 <li className="nav-item">
                     <Link
                         to="/"
-                        className={`nav-link mb-1 ${pathName == "/" ? "active" : "link-body-emphasis"} `}
+                        className={`nav-link mb-1 ${
+                            pathName == "/" ? "active" : "link-body-emphasis"
+                        } d-flex `}
                         aria-current="page"
                     >
-                        <svg
+                        <House
                             className="bi pe-none me-2"
-                            width="16"
-                            height="16"
-                        >
-                            <use xlinkHref="#home"></use>
-                        </svg>
-                        Home
+                            width="22"
+                            height="22"
+                        />
+                        <span className="d-none d-md-inline">Home</span>
                     </Link>
                 </li>
                 <li className="nav-item">
                     <Link
                         to={`/${user._id}/profile`}
-                        className={`nav-link mb-1 ${pathName.endsWith("/profile") ? "active" : "link-body-emphasis"} `}
+                        className={`nav-link mb-1 ${
+                            pathName.endsWith("/profile") ? "active" : "link-body-emphasis"
+                        } d-flex `}
                         aria-current="page"
                     >
-                        <svg
+                        <Person
                             className="bi pe-none me-2"
-                            width="16"
-                            height="16"
-                        >
-                            <use xlinkHref="#person"></use>
-                        </svg>
-                        Profile
+                            width="22"
+                            height="22"
+                        />
+                        <span className="d-none d-md-inline">Profile</span>
                     </Link>
                 </li>
                 <li>
                     <Link
                         to="/users"
-                        className={`nav-link mb-1 ${pathName == "/users" ? "active" : "link-body-emphasis"} `}
+                        className={`nav-link mb-1 ${
+                            pathName == "/users" ? "active" : "link-body-emphasis"
+                        } d-flex `}
+                        aria-current="page"
                     >
-                        <svg
+                        <People
                             className="bi pe-none me-2"
-                            width="16"
-                            height="16"
-                        >
-                            <use xlinkHref="#speedometer2"></use>
-                        </svg>
-                        Users
+                            width="22"
+                            height="22"
+                        />
+                        <span className="d-none d-md-inline">Users</span>
                     </Link>
                 </li>
                 <li>
@@ -68,16 +71,16 @@ export function Sidebar() {
                         onClick={(e) => {
                             e.preventDefault();
                         }}
-                        className={`nav-link mb-1 ${pathName == "/games" ? "active" : "link-body-emphasis"} `}
+                        className={`nav-link mb-1 ${
+                            pathName == "/games" ? "active" : "link-body-emphasis"
+                        } d-flex `}
                     >
-                        <svg
+                        <Controller
                             className="bi pe-none me-2"
-                            width="16"
-                            height="16"
-                        >
-                            <use xlinkHref="#table"></use>
-                        </svg>
-                        Games
+                            width="22"
+                            height="22"
+                        />
+                        <span className="d-none d-md-inline">Games</span>
                     </Link>
                 </li>
                 <li>
@@ -86,16 +89,16 @@ export function Sidebar() {
                         onClick={(e) => {
                             e.preventDefault();
                         }}
-                        className={`nav-link mb-1 ${pathName == "/settings" ? "active" : "link-body-emphasis"} `}
+                        className={`nav-link mb-1 ${
+                            pathName == "/settings" ? "active" : "link-body-emphasis"
+                        } d-flex `}
                     >
-                        <svg
+                        <Gear
                             className="bi pe-none me-2"
-                            width="16"
-                            height="16"
-                        >
-                            <use xlinkHref="#grid"></use>
-                        </svg>
-                        Settings
+                            width="22"
+                            height="22"
+                        />
+                        <span className="d-none d-md-inline">Settings</span>
                     </Link>
                 </li>
             </ul>

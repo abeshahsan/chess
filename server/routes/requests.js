@@ -10,7 +10,7 @@ router.get("/current-user", (req, res, next) => {
     });
 });
 
-router.get("/get-all-users", async (res) => {
+router.get("/get-all-users", async (req, res) => {
     try {
         let { data: users } = await getAllUsers();
 

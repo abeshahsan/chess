@@ -17,7 +17,7 @@ export function Header() {
         <>
             <div
                 className="container-fluid py-2 sticky-top bg-body border-bottom shadow-sm"
-                style={{ zIndex: "5" }}
+                style={{ zIndex: "5", maxHeight: "60px" }}
             >
                 <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
                     <div className="col-md-3 mb-2 mb-md-0">
@@ -25,15 +25,11 @@ export function Header() {
                             to="/"
                             className="d-inline-flex a-body-emphasis text-decoration-none"
                         >
-                            <svg
-                                className="bi"
-                                width="40"
-                                height="32"
-                                role="img"
-                                aria-label="Bootstrap"
-                            >
-                                <use xlinkHref={"#bootstrap"}></use>
-                            </svg>
+                            <img
+                                src="/logo.jpg"
+                                className="border rounded-circle p-1"
+                                width={50}
+                            />
                         </Link>
                     </div>
 

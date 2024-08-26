@@ -72,7 +72,6 @@ export default function Game() {
                         open={gameModalOpen}
                         setOpen={setGameModalOpen}
                         gameCode={window.origin + "/game/" + gameCode}
-                        setGameCode={() => "null"}
                         player1={player1}
                         player2={player2}
                     />
