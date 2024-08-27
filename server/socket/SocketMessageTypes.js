@@ -1,5 +1,5 @@
-import { CreateNewBoard } from "../database/Chessboard.js";
-import { CreateNewMatch } from "../database/Match.js";
+import { CreateNewBoard, UpdateBoard } from "../database/Chessboard.js";
+import { CreateNewMatch, UpdateMatch } from "../database/Match.js";
 import { GameIDGenerator } from "../utils/GameIDGenerator.js";
 import { ActiveMatches } from "./ActiveMatches.js";
 
@@ -17,7 +17,7 @@ function registerUser({ ws, parsedMessage }) {
         );
     } catch (error) {
         console.log(error);
-        sendErrorMsg({ msgType: "register-user", ws, error });
+        sendErrorMsg(ws, "register-user", error);
     }
 }
 
@@ -39,7 +39,7 @@ function inviteToGame({ ws, parsedMessage, allGameCodes }) {
         );
     } catch (error) {
         console.log(error);
-        sendErrorMsg({ msgType: "invite-to-game", ws, error });
+        sendErrorMsg(ws, "invite-to-game", error);
     }
 }
 
@@ -48,41 +48,45 @@ function joinGame({ wss, ws, parsedMessage, allGameCodes }) {
 
     const gameHost = allGameCodes.get(gameCode);
 
-    const successMsg = JSON.stringify({
-        type: "join-game",
-        status: "success",
-        data: {
-            host: gameHost.user,
-            invitee: ws.user,
-            gameCode: gameCode,
-        },
-    });
-
-    const errorMsg = JSON.stringify({
-        type: "join-game",
-        status: "error",
-        data: {
-            error: "Game not found",
-        },
-    });
-
-    if (gameHost) {
-        gameHost.send(successMsg);
-        ws.send(successMsg);
-    } else {
-        ws.send(errorMsg());
+    try {
+        if (gameHost) {
+            sendResponse(gameHost, "join-game", { invitee: ws.user, host: gameHost.user });
+            sendResponse(ws, "join-game", { invitee: ws.user, host: gameHost.user });
+        } else {
+            throw new Error("Game not found!");
+        }
+    } catch (error) {
+        console.log(error);
+        sendErrorMsg(ws, "join-game", error);
     }
 }
 
 async function startMatch({ wss, ws, parsedMessage }) {
     try {
+        console.log(wss.clients);
+
         const { gameCode, player1, player2 } = parsedMessage.data;
+
+        console.log(player1, player2);
+
 
         if (ActiveMatches.has(gameCode)) return;
 
         // find the sockets of the players
-        const player1Socket = wss.clients.find((client) => client.user._id === player1._id);
-        const player2Socket = wss.clients.find((client) => client.user._id === player2._id);
+        let player1Socket = null;
+        let player2Socket = null;
+
+        for (const client of wss.clients) {
+            if (client.user._id === player1._id) {
+                player1Socket = client;
+            }
+            if (client.user._id === player2._id) {
+                player2Socket = client;
+            }
+            if (player1Socket && player2Socket) {
+                break;
+            }
+        }
 
         if (!player1Socket || !player2Socket) {
             throw new Error("One or more players are not connected!");
@@ -95,49 +99,52 @@ async function startMatch({ wss, ws, parsedMessage }) {
 
         console.log(newMatch);
 
-        ws.send(
-            JSON.stringify({
-                type: "start-match",
-                data: {
-                    status: "success",
-                    gameCode,
-                    player1,
-                    player2,
-                },
-            })
-        );
+        ActiveMatches.get(gameCode).forEach((player) => {
+            sendResponse(player, "start-match", newMatch);
+        });
     } catch (error) {
         console.log(error);
-        sendErrorMsg({ msgType: "start-match", ws, error });
+        sendErrorMsg(ws, "start-match", error);
     }
 }
 
-function updateMatch({ ws, parsedMessage }) {
+async function updateMatch({ ws, parsedMessage }) {
     try {
         const { gameCode, updatedMatch } = parsedMessage.data;
 
         if (!ActiveMatches.has(gameCode)) return;
 
+        if (updatedMatch.updateBoard) {
+            const { move } = updatedMatch.updateBoard;
+            // update the board state
+            await UpdateBoard(updatedMatch.boardID, move.from, move.to);
+            delete updatedMatch.updateBoard;
+            const updatedMatch = await UpdateMatch(gameCode, updatedMatch);
+        }
+
         ActiveMatches.get(gameCode).forEach((player) => {
-            player.send(
-                JSON.stringify({
-                    type: "update-match",
-                    data: {
-                        gameCode,
-                        updatedMatch,
-                    },
-                })
-            );
+            sendResponse(player, "update-match", updatedMatch);
         });
     } catch (error) {
         console.log(error);
-        sendErrorMsg({ msgType: "update-match", ws, error });
+        sendErrorMsg(ws, "update-match", error);
     }
 }
 
-const sendErrorMsg = ({ msgType, ws, error }) => {
+const sendResponse = (ws, msgType, payload) => {
     ws.send(
         JSON.stringify({
+            status: "success",
+            type: msgType,
+            data: payload,
+        })
+    );
+};
+
+const sendErrorMsg = (ws, msgType, error) => {
+    ws.send(
+        JSON.stringify({
+            status: "error",
             type: msgType,
             data: {
                 error: error.message,

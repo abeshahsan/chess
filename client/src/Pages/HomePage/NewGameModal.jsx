@@ -10,6 +10,7 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
     const { user } = useUserContext();
     const { subscribe, socket: ws } = useWebsocketContext();
     const subscriptionsRef = useRef([]);
+    const [errorAlert, setErrorAlert] = useState("");
 
     const [matchStarting, setMatchStarting] = useState(false);
 
@@ -18,6 +19,11 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
             subscriptionsRef.current.push(
                 subscribe("start-match", (msg) => {
                     console.log("start-match", msg.data);
+                    if (msg.data.error) {
+                        setErrorAlert("An error occurred while starting the match");
+                    } else {
+                        setOpen(false);
+                    }
                     setMatchStarting(false);
                 })
             );
@@ -27,6 +33,8 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
                     type: "start-match",
                     data: {
                         gameCode: gameCode,
+                        player1,
+                        player2,
                     },
                 })
             );
@@ -50,11 +58,12 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                <Alert variant="danger" show={!!errorAlert} >{errorAlert}</Alert>
                 <div className="container d-flex flex-column align-items-center justify-content-center">
                     <div className="container">
                         <NewGameForm
                             setOpen={setOpen}
-                            gameCode={gameCode}
+                            gameCode={window.origin + "/game/" + gameCode}
                         />
                         <div>Player 1: {player1?.username}</div>
                         <div>Player 2: {player2?.username}</div>

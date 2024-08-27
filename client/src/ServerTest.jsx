@@ -7,21 +7,19 @@ export default function ServerTest() {
 
     useEffect(() => {
         const handleOpen = () => {
-            console.log("Sending start-match message");
+            console.log("Sending message");
 
-            unsub = subscribe("update-match", (data) => {
+            unsub = subscribe("start-match", (data) => {
                 console.log("Received start-match message: ", data);
             });
 
             ws.send(
                 JSON.stringify({
-                    type: "update-match",
+                    type: "start-match",
                     data: {
                         gameCode: "1234",
-                        updatedMatch: {
-                            status: "2",
-                            winner: "white",
-                        },
+                        player1: "player1",
+                        player2: "player2",
                     },
                 })
             );

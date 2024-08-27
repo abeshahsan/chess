@@ -77,7 +77,7 @@ export default function Game() {
                     <NewGameModal
                         open={gameModalOpen}
                         setOpen={setGameModalOpen}
-                        gameCode={window.origin + "/game/" + gameCode}
+                        gameCode={gameCode}
                         player1={player1}
                         player2={player2}
                     />
