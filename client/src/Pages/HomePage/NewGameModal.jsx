@@ -14,20 +14,20 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
 
     const [matchStarting, setMatchStarting] = useState(false);
 
+    subscriptionsRef.current.push(
+        subscribe("start-match", (msg) => {
+            console.log("start-match", msg.data);
+            if (msg.data.error) {
+                setErrorAlert("An error occurred while starting the match");
+            } else {
+                setOpen(false);
+            }
+            setMatchStarting(false);
+        })
+    );
+
     const startMatch = () => {
         if (ws && ws.readyState === ws.OPEN) {
-            subscriptionsRef.current.push(
-                subscribe("start-match", (msg) => {
-                    console.log("start-match", msg.data);
-                    if (msg.data.error) {
-                        setErrorAlert("An error occurred while starting the match");
-                    } else {
-                        setOpen(false);
-                    }
-                    setMatchStarting(false);
-                })
-            );
-
             ws.send(
                 JSON.stringify({
                     type: "start-match",
@@ -58,7 +58,12 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Alert variant="danger" show={!!errorAlert} >{errorAlert}</Alert>
+                <Alert
+                    variant="danger"
+                    show={!!errorAlert}
+                >
+                    {errorAlert}
+                </Alert>
                 <div className="container d-flex flex-column align-items-center justify-content-center">
                     <div className="container">
                         <NewGameForm
