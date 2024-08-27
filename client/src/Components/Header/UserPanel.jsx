@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useUserContext } from "../../Contexts/UserContext";
 import { EMPTY_USER } from "../../Contexts/constants";
 import { useNavigate } from "react-router-dom";
+import { Box, BoxArrowRight, Gear, PersonCircle } from "react-bootstrap-icons";
 
 import { Dropdown } from "react-bootstrap";
 import { useWebsocketContext } from "../../Contexts/WebSocketContext";
@@ -26,7 +27,7 @@ export default function UserPanel() {
                 className="custom-dropdown-toggle btn btn-sm bg-light rounded-circle d-flex align-items-center justify-content-center"
                 data-toggle="dropdown"
                 aria-haspopup="true"
-                aria-expanded="false"
+
             >
                 <img
                     className="rounded-circle"
@@ -35,15 +36,33 @@ export default function UserPanel() {
                 />
             </Dropdown.Toggle>
 
-            <Dropdown.Menu className="border shadow p-1">
-                <div className="border rounded d-flex align-items-center flex-column justify-content-center m-2 p-2 shadow-sm bg-light">
+            <Dropdown.Menu className="border shadow p-1" >
+                <div className="border rounded d-flex align-items-center flex-column m-2 p-2 shadow-sm bg-light">
                     <span style={{ fontSize: 13, fontWeight: "bold" }}>{user.username}</span>
                     <span style={{ fontSize: 11 }}>{user.email}</span>
                 </div>
 
-                <Dropdown.Item onClick={() => navigate(`/${user._id}/profile`)}>Profile</Dropdown.Item>
-                <Dropdown.Item>Settigs</Dropdown.Item>
-                <Dropdown.Item onClick={handleOnLogout}>Logout</Dropdown.Item>
+                <Dropdown.Item onClick={() => navigate(`/${user._id}/profile`)}>
+                    <PersonCircle
+                        size={24}
+                        className="me-2"
+                    />
+                    <span>Profile</span>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                    <Gear
+                        size={24}
+                        className="me-2"
+                    />
+                    <span>Settings</span>
+                </Dropdown.Item>
+                <Dropdown.Item onClick={handleOnLogout}>
+                    <BoxArrowRight
+                        size={24}
+                        className="me-2"
+                    />
+                    <span>Logout</span>
+                </Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>
     );

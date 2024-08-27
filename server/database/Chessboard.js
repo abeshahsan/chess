@@ -2,13 +2,20 @@ import { Error } from "mongoose";
 import ChessBoard from "./models/ChessboardModel.js";
 
 export async function CreateNewBoard() {
-    const newBoard = new ChessBoard({
-        boardState: "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
-        currentPlayer: "white",
-        moveHistory: [],
-    });
+    try {
+        const newBoard = new ChessBoard({
+            boardState: "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+            currentPlayer: "white",
+            moveHistory: [],
+        });
 
-    newBoard.save();
+        const board = await newBoard.save();
+
+        return board;
+    } catch (err) {
+        console.error("Failed to create new board: ", err);
+        return null;
+    }
 }
 
 export async function GetBoardById(boardId) {

@@ -3,9 +3,6 @@ const { Schema, model, models } = pkg;
 
 const chessBoardSchema = new Schema(
     {
-        _id: {
-            type: String,
-        },
         boardState: {
             type: String,
             required: true,

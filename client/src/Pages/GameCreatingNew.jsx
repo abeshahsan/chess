@@ -12,7 +12,7 @@ export default function GameCreatingNew() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (ws?.readyState == 1) {
+        if (ws && ws.readyState == ws.OPEN) {
             ws.send(
                 JSON.stringify({
                     type: "invite-to-game",

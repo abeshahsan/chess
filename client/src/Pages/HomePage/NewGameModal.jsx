@@ -11,7 +11,28 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
     const { subscribe, socket: ws } = useWebsocketContext();
     const subscriptionsRef = useRef([]);
 
-    // console.log(player1, player2);
+    const [matchStarting, setMatchStarting] = useState(false);
+
+    const startMatch = () => {
+        if (ws && ws.readyState === ws.OPEN) {
+            subscriptionsRef.current.push(
+                subscribe("start-match", (msg) => {
+                    console.log("start-match", msg.data);
+                    setMatchStarting(false);
+                })
+            );
+
+            ws.send(
+                JSON.stringify({
+                    type: "start-match",
+                    data: {
+                        gameCode: gameCode,
+                    },
+                })
+            );
+            setMatchStarting(true);
+        }
+    };
 
     return (
         <Modal
@@ -29,22 +50,34 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className="container d-flex align-items-center justify-content-center">
+                <div className="container d-flex flex-column align-items-center justify-content-center">
                     <div className="container">
                         <NewGameForm
                             setOpen={setOpen}
                             gameCode={gameCode}
                         />
-                        <div>
-                            {"Player 1: " + player1?.username}
-                        </div>
-                        <div>
-                            {"Player 2: " + player2?.username}
-                            </div>
+                        <div>Player 1: {player1?.username}</div>
+                        <div>Player 2: {player2?.username}</div>
                     </div>
                 </div>
             </Modal.Body>
-            <Modal.Footer className="d-flex align-items-center justify-content-center"></Modal.Footer>
+            <Modal.Footer className="d-flex align-items-center justify-content-center">
+                <Button
+                    variant={!player2?._id || matchStarting ? "secondary" : "success"}
+                    style={{ width: "40%", opacity: "0.8", fontSize: "1.2rem", padding: "5px" }}
+                    disabled={matchStarting || !player2?._id}
+                    onClick={startMatch}
+                >
+                    {matchStarting ? (
+                        <Spinner
+                            animation="border"
+                            size="sm"
+                        />
+                    ) : (
+                        "Start"
+                    )}
+                </Button>
+            </Modal.Footer>
         </Modal>
     );
 };

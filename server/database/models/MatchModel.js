@@ -1,6 +1,7 @@
-import { mongoose } from "../mongoose";
+import pkg from "mongoose";
+const { Schema, model, models } = pkg;
 
-const MatchSchema = new mongoose.Schema(
+const MatchSchema = new Schema(
     {
         _id: {
             type: String,
@@ -27,6 +28,6 @@ const MatchSchema = new mongoose.Schema(
     { collection: "matches" }
 );
 
-const Matches = mongoose.models.matches || mongoose.model("matches", MatchSchema);
+const Matches = models.matches || model("matches", MatchSchema);
 
 export default Matches;

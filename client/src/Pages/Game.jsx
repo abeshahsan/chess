@@ -7,6 +7,8 @@ import NewGameModal from "./HomePage/NewGameModal";
 import { useWebsocketContext } from "../Contexts/WebSocketContext";
 import { Navigate, useParams } from "react-router-dom";
 import PageLoading from "../Components/ErrorsAndPlaceHolders/PageLoading";
+import { useSelector } from "react-redux";
+import { setNavigatedProgrammatically } from "../.redux/features/navigation/NavigationSlice.js";
 
 export default function Game() {
     const [gameModalOpen, setGameModalOpen] = useState(true);
@@ -19,9 +21,12 @@ export default function Game() {
     let { gameID: gameCode } = useParams();
     const subscriptions = useRef([]);
 
-    const isNavigatedProgrammatically = localStorage.getItem("isNavigatedProgrammatically");
+    const { isNavigatedProgrammatically } = useSelector((state) => state.navigation);
 
     useEffect(() => {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
         if (isNavigatedProgrammatically) {
             setPlayer1(user);
             console.log("waiting for player 2 to join");
@@ -57,8 +62,9 @@ export default function Game() {
             subscriptions.current.forEach((unsubscribe) => {
                 unsubscribe();
             });
+            abortController.abort();
         };
-    }, [isNavigatedProgrammatically, gameCode, subscribe, ws?.readyState]);
+    }, [ws?.readyState]);
 
     return (
         <>

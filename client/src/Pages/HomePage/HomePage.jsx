@@ -38,7 +38,8 @@ function HomePageMainContainer() {
             setLoginModalOpen(true);
             return;
         }
-        localStorage.setItem("isNavigatedProgrammatically", true);
+
+        dispatch(setNavigatedProgrammatically(true));
         navigate("/game/creating-new-game");
     };
 

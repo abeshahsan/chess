@@ -2,6 +2,7 @@ import { Router } from "express";
 import { findUserByEmail } from "../../database/data-fetch.js";
 import { verify } from "argon2";
 
+
 const router = Router();
 
 router.post("/login", async (req, res, _next) => {

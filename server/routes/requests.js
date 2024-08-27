@@ -33,4 +33,18 @@ router.post("/logout", (req, res, _next) => {
     });
 });
 
+router.post("/set-flags", (req, res, next) => {
+    try {
+        req.session.flags = req.body.flags;
+        console.log(req.session.flags);
+
+        return res.send({
+            message: "flags set",
+        });
+    } catch (error) {
+        console.log(error);
+    }
+    next();
+});
+
 export default router;

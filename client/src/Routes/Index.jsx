@@ -6,6 +6,7 @@ import Profile from "../Pages/Profile";
 import NotFound from "../Pages/NotFound";
 import { useUserContext } from "../Contexts/UserContext";
 import GameCreatingNew from "../Pages/GameCreatingNew.jsx";
+import ServerTest from "../ServerTest.jsx";
 
 export default function Index() {
     let { user } = useUserContext();
@@ -39,6 +40,10 @@ export default function Index() {
                         element={<Profile />}
                     />
                 )}
+                <Route
+                    path="/server-test"
+                    element={<ServerTest />}
+                />
                 <Route
                     path="*"
                     element={<NotFound />}
