@@ -1,12 +1,11 @@
-import { GridMatrixContextProvider, PiecesInfoContextProvider } from '../Contexts/ChessboardContext';
+import { GridMatrixContextProvider, PiecesInfoContextProvider } from "../Contexts/ChessboardContext";
 
-export default function Chessboard() {
+export default function Chessboard({ match }) {
     return (
         <>
             <div className="container game-container">
                 <PiecesInfoContextProvider>
-                    <GridMatrixContextProvider>
-                    </GridMatrixContextProvider>
+                    <GridMatrixContextProvider match={match} />
                 </PiecesInfoContextProvider>
             </div>
         </>

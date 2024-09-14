@@ -1,4 +1,6 @@
 import React, { useRef, useState } from "react";
+import { stringTo2DGrid } from "../utils/BoardStateTranslator";
+
 import {
     BlackBishop,
     BlackKing,
@@ -355,7 +357,43 @@ export function PiecesInfoContextProvider({ children }) {
     );
 }
 
-export function GridMatrixContextProvider() {
+export function GridMatrixContextProvider({match}) {
+    let grid = stringTo2DGrid(match?.board.boardState);
+
+    for(let i = 0; i < 8; i++) {
+        for(let j = 0; j < 8; j++) {
+            let piece = grid[i][j];
+            if(piece === "p") {
+                grid[i][j] = <BlackPawn />;
+            } else if(piece === "r") {
+                grid[i][j] = <BlackRook />;
+            } else if(piece === "n") {
+                grid[i][j] = <BlackKnight />;
+            } else if(piece === "b") {
+                grid[i][j] = <BlackBishop />;
+            } else if(piece === "q") {
+                grid[i][j] = <BlackQueen />;
+            } else if(piece === "k") {
+                grid[i][j] = <BlackKing />;
+            } else if(piece === "P") {
+                grid[i][j] = <WhitePawn />;
+            } else if(piece === "R") {
+                grid[i][j] = <WhiteRook />;
+            } else if(piece === "N") {
+                grid[i][j] = <WhiteKnight />;
+            } else if(piece === "B") {
+                grid[i][j] = <WhiteBishop />;
+            } else if(piece === "Q") {
+                grid[i][j] = <WhiteQueen />;
+            } else if(piece === "K") {
+                grid[i][j] = <WhiteKing />;
+            } else {
+                grid[i][j] = null;
+            }
+        }
+    }
+
+
     let [gridMatrix, setGridMatrix] = useState(new Array(8).fill().map(() => new Array(8).fill().map(() => null)));
 
     for (let index in whitePieces) {

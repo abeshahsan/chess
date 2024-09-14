@@ -67,9 +67,6 @@ async function startMatch({ wss, ws, parsedMessage }) {
 
         const { gameCode, player1, player2 } = parsedMessage.data;
 
-        console.log(player1, player2);
-
-
         if (ActiveMatches.has(gameCode)) return;
 
         // find the sockets of the players

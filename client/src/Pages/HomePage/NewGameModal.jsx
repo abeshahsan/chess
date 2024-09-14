@@ -1,11 +1,12 @@
 import Modal from "react-bootstrap/Modal";
 import { useEffect, useRef, useState } from "react";
-import { Form, Button, InputGroup, Alert, Spinner } from "react-bootstrap";
+import { Button, InputGroup, Alert, Spinner } from "react-bootstrap";
 import { useUserContext } from "../../Contexts/UserContext";
 import { useWebsocketContext } from "../../Contexts/WebSocketContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }) => {
+const NewGameModal = ({ open, setOpen, player1, player2, setPlayer1, setPlayer2, setMatch }) => {
     const navigate = useNavigate();
     const { user } = useUserContext();
     const { subscribe, socket: ws } = useWebsocketContext();
@@ -14,12 +15,18 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
 
     const [matchStarting, setMatchStarting] = useState(false);
 
+    let { gameID: gameCode } = useParams();
+    const subscriptions = useRef([]);
+
+    const { isNavigatedProgrammatically } = useSelector((state) => state.navigation);
+
     subscriptionsRef.current.push(
         subscribe("start-match", (msg) => {
-            console.log("start-match", msg.data);
-            if (msg.data.error) {
+            // console.log("start-match", msg.data);
+            if (msg.status === "error") {
                 setErrorAlert("An error occurred while starting the match");
             } else {
+                setMatch(msg.data);
                 setOpen(false);
             }
             setMatchStarting(false);
@@ -33,14 +40,57 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
                     type: "start-match",
                     data: {
                         gameCode: gameCode,
-                        player1,
-                        player2,
+                        player1: { ...player1, color: "white" },
+                        player2: { ...player2, color: "black" },
                     },
                 })
             );
             setMatchStarting(true);
         }
     };
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        if (isNavigatedProgrammatically) {
+            setPlayer1(user);
+            // console.log("waiting for player 2 to join");
+            if (ws && ws.readyState === ws.OPEN) {
+                subscriptions.current.push(
+                    subscribe("join-game", (msg) => {
+                        // console.log("Player 2 joined the game", msg.data);
+                        setPlayer2(msg.data.invitee);
+                    })
+                );
+            }
+        } else {
+            // This player is the invitee
+            if (ws && ws.readyState === ws.OPEN) {
+                subscriptions.current.push(
+                    subscribe("join-game", (msg) => {
+                        // console.log("join-game", msg.data);
+                        setPlayer1(msg.data.host);
+                        setPlayer2(msg.data.invitee);
+                    })
+                );
+
+                ws.send(
+                    JSON.stringify({
+                        type: "join-game",
+                        data: { gameCode: gameCode },
+                    })
+                );
+            }
+        }
+
+        return () => {
+            subscriptions.current.forEach((unsubscribe) => {
+                unsubscribe();
+            });
+            abortController.abort();
+        };
+    }, [ws?.readyState, matchStarting, isNavigatedProgrammatically]);
 
     return (
         <Modal
@@ -96,17 +146,7 @@ const NewGameModal = ({ open, setOpen, gameCode, setGameCode, player1, player2 }
     );
 };
 
-function NewGameForm({ setOpen, gameCode }) {
-    return (
-        <>
-            <CopyGameCodeForm gameCode={gameCode} />
-        </>
-    );
-}
-
-const CopyGameCodeForm = ({ gameCode }) => {
-    const navigate = useNavigate();
-
+function NewGameForm({ gameCode }) {
     const [copySuccess, setCopySuccess] = useState(false);
     const [newGameCodeError, setNewGameCodeError] = useState("");
 
@@ -126,19 +166,25 @@ const CopyGameCodeForm = ({ gameCode }) => {
     };
 
     return (
-        <Form className="mt-3">
-            {newGameCodeError && <Alert variant="danger">{newGameCodeError}</Alert>}
-            <Form.Group
+        <div className="mt-3">
+            <Alert
+                variant="danger"
+                show={!!newGameCodeError}
+            >
+                {newGameCodeError}
+            </Alert>
+            <div
                 className="mb-3"
-                controlId="joinGameFormBasicGameCodeCopy"
+                id="joinGameFormBasicGameCodeCopy"
             >
                 <InputGroup>
-                    <Form.Control
+                    <input
+                        type="text"
                         disabled
                         readOnly
                         value={gameCode}
-                        style={{ fontSize: "12px", color: "blue" }}
-                        className="bg-light"
+                        style={{ fontSize: "10px", color: "blue" }}
+                        className="form-control bg-light"
                     />
                     <Button
                         variant="primary"
@@ -148,9 +194,9 @@ const CopyGameCodeForm = ({ gameCode }) => {
                         {copySuccess ? "Copied!" : "Copy"}
                     </Button>
                 </InputGroup>
-            </Form.Group>
-        </Form>
+            </div>
+        </div>
     );
-};
+}
 
 export default NewGameModal;
